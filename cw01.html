@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+    <div id="wrapper">
+        <header id="main-header">
+            <h1>Ćwiczenia 1</h1>
+            <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki UAM.</h2>
+        </header>
+        <article id="cw01">
+            <h1>Sesja powłoki</h1>
+
+            <p>Zanim możliwe będzie korzystanie z systemu, należy rozpocząć <i>sesję powłoki</i>, identyfikując się jako uprawniony użytkownik. <i>Powłoka</i> to program, który pośredniczy między użytkownikiem a jądrem systemu operacyjnego, udostępniając narzędzia ułatwiające korzystanie z aplikacji. W ramach tych ćwiczeń korzystać będziemy wyłącznie z powłoki tekstowej Bash, która dostępna jest w praktycznie wszystkich instalacjach systemów *NIX.</p>
+
+            <div class="exercise">
+                <p>Korzystając z internetu dowiedz się, czym jest system uniksopodobny (*NIX) oraz jak rozwijały się systemy z tej rodziny.</p>
+            </div>
+
+            <div class="exercise exercise-star">
+                <p>Znajdź podstawowe informacje o jądrze systemu Linux (ang. <i>Linux kernel</i>). Za co ono odpowiada?</p>
+
+                <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+                <div class="answer">
+                    <p>Jądro systemu operacyjnego odpowiada za komunikację pomiędzy aplikacjami a urządzeniami fizycznymi. Jądro systemów uniksopodobnych (monolityczne) odpowiada za tę komunikację w całości.</p>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <p>Znajdź informacje o innych dostępnych programach powłoki, np. <code>sh</code>, <code>csh</code> lub <code>ksh</code>. Jak myślisz, dlaczego nie istnieje tylko jeden program tego typu?</p>
+            </div>
+
+            <h2>Logowanie lokalne</h2>
+
+            <div class="howitworks howitworks-star">
+                <p>Gdy jądro systemu zostanie poprawnie załadowane, wywoływany jest program o nazwie <code>init</code>, który odpowiada za uruchomienie aplikacji niezbędnych do poprawnego działania systemu. Jedną z nich jest program <code>getty</code><sup>[1]</sup>, który jest uruchamiany tak wiele razy, jak wiele <i>wirtualnych konsol</i> udostępnia system<sup>[2]</sup>. Gdy <code>getty</code> wykryje aktywność, wywołuje program <code>login</code>, odpowiedzialny za zweryfikowanie tożsamości użytkownika, a jeśli weryfikacja ta przebiegnie pomyślnie, za uruchomienie odpowiedniej powłoki. Po zakończeniu sesji (np. wskutek wylogowania) program powłoki i program <code>login</code> są zamykane, a <code>getty</code> powraca do nasłuchiwania.</p>
+                <p class="footnote">[1] W różnych systemach może to działać odrobinę różnie, dlatego warto zapoznać się z tym, jak jest to w przypadku tego, którego sami używamy.</p>
+                <p class="footnote">[2] Zwykle jest to 6 wirtualnych konsol oznaczanych symbolami od <code>tty1</code> do <code>tty6</code>.</p>
+            </div>
+
+            <p>Aby rozpocząć sesję powłoki, wystarczy wprowadzić w odpowiednim momencie swój login i hasło. Poprawne logowanie zakończy się pojawieniem <i>znaku zachęty</i>, np.:</p>
+
+            <pre><code class="bash">s123456@shell:~$</code></pre>
+
+            <p>Nazwa znaku zachęty pochodzi od przeznaczenia tego ciągu. W tych materiałach będziemy oznaczać znak zachęty symbolem <code>$</code>, choć w zależności od okoliczności może on przyjmować różne postacie. Ma on zachęcać użytkownika do wprowadzenia jakiegoś <i>polecenia</i>. Jednym z takich poleceń jest <code>logout</code>, kończące sesję powłoki.</p>
+
+            <p>W przypadku systemów z powłoką graficzną (np. <i>Ubuntu</i>), sposób logowania może być niemalże dowolny (z automatycznym logowaniem włącznie). Zwykle jednak wirtualne konsole pozostają dostępne.</p>
+
+            <div class="exercise">
+                <p>Uruchom system Ubuntu zainstalowany na komputerze w laboratorium wydziałowym. Zanim się zalogujesz korzystając z graficznego interfejsu, przejdź przez wirtualne konsole korzystając z kombinacji klawiszy od <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>F1</kbd> do <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>F6</kbd>.</p>
+            </div>
+
+            <div class="exercise">
+                <p>Zaloguj się w wybranej konsoli wirtualnej. Zapoznaj się z wyglądem znaku zachęty, a następnie sprawdź, czy logowanie objęło też inne konsole. Wyloguj się, korzystając z polecenia <code>logout</code>.</p>
+            </div>
+
+            <div class="exercise">
+                <p>Powróć do trybu graficznego, korzystając z kombinacji klawiszy <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>F7</kbd>. Zaloguj się, a następnie uruchom dostępną aplikację <i>Terminal</i> lub podobną (taki program nazywamy <i>emulatorem konsoli</i>). Spróbuj intuicyjnie odpowiedzieć na pytanie, dlaczego nie musisz ponownie podawać danych logowania.</p>
+            </div>
+
+            <div class="test">
+              <p><a href="#" class="button button-gold" rel="question">Pokaż pytanie kontrolne</a></p>
+              <div class="question">
+                <p>Bash to:</p>
+                <ul>
+                  <li><input type="radio" name="q1a" id="q1aa" /> <label for="q1aa">konsola wirtualna</label></li>
+                  <li><input type="radio" name="q1a" id="q1ab" /> <label for="q1ab">znak zachęty</label></li>
+                  <li><input type="radio" name="q1a" id="q1ac" class="correct" /> <label for="q1ac">powłoka tekstowa</label></li>
+                  <li><input type="radio" name="q1a" id="q1ad" /> <label for="q1ad">emulator konsoli</label></li>
+                </ul>
+                <p><a href="#" class="button button-grey" rel="testcheck">Sprawdź odpowiedź</a></p>
+              </div>
+            </div>
+        </article>
+        <footer id="main-footer">
+            <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+            <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+        </footer>
+    </div>
+</body>
+</html>
