@@ -268,10 +268,23 @@ article code{
 }
 
 article kbd{
-  font-family: "Courier New";
-  background-color: #FFF;
-  padding: 0.2em 0.3em;
-  border: 0.1em solid #EEE;
+  -moz-border-radius: 0.3em;
+  -moz-box-shadow: 0 0.1em 0 rgba(0,0,0,0.2),0 0 0 0.2em #fff inset;
+  -webkit-border-radius: 3px;
+  -webkit-box-shadow: 0 0.1em 0 rgba(0,0,0,0.2),0 0 0 0.2em #fff inset;
+  background-color: #f7f7f7;
+  border: 0.1em solid #ccc;
+  border-radius: 0.3em;
+  box-shadow:0 0.1em 0 rgba(0,0,0,0.2),0 0 0 0.2em #fff inset;
+  color: #333;
+  display: inline-block;
+  font-family: "Oxygen", sans-serif;
+  line-height: 1.4em;
+  margin: 0 0.1em;
+  padding: 0.1em 0.6em;
+  text-shadow: 0 0.1em 0 #fff;
+  font-size: 0.85em;
+  vertical-align: top;
 }
 
 article pre{
