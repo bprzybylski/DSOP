@@ -1,0 +1,1116 @@
+<!DOCTYPE HTML>
+<html moznomarginboxes mozdisallowselectionprint>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Ćwiczenia 2</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
+
+    <article id="cw02">
+
+        <h1>Uprawnienia do plików i katalogów</h1>
+
+        <p>Systemy uniksopodobne wywodzą się z systemu Unix, którego głównym założeniem była możliwość współdzielenia zasobów przez użytkowników. Wymusiło to wprowadzenie mechanizmów ochrony dostępów do elementów takich jak pliki, katalogi, czy urządzenia.</p>
+
+        <div class="howitworks">
+          <p>Jednym z popularniejszych powiedzeń związanych z systemami uniksopodobnymi jest: <i>wszystko jest plikiem</i>. Konstrukcja systemu sprawia, że rzeczywiste pliki z danymi, katalogi, ale także urządzenia fizyczne, takie jak modemy, dyski, klawiatury czy drukarki, oraz wirtualne, takie jak konsole wirtualne, są dostępne w strukturze plików. Korzystanie z nich (np. zapis do pliku, pisanie przy użyciu klawiatury, wyświetlenie danych w konsoli, wydruk dokumentu) opiera się na przesłaniu strumienia bajtów do odpowiedniego <i>pliku</i>.</p>
+        </div>
+
+        <div class="notice">
+          <p>Od tej pory pod pojęciem <i>pliku</i> rozumieć będziemy <i>element struktury plików</i>, będący regularnym plikiem, katalogiem, ale też dowolnym innym elementem, do którego można się odwoływać jak do pliku. Jeśli wymagane będzie rozróżnienie, zostanie to wyraźnie zaznaczone.</p>
+        </div>
+
+        <p>Korzystanie z elementów struktury plików wymaga od użytkownika posiadania odpowiednich uprawnień. Spójrzmy na przykładowy efekt wywołania polecenia <code>ls -l</code>:</p>
+        <pre><code class="no-highlight"><!--
+       -->total 36
+<!--   -->-rw-rw---- 1 adam   studenci     52 Jul 30 18:17 ges
+<!--   -->lrw----rw- 1 tomasz studenci     11 Jul 30 18:17 kaczka
+<!--   -->drwx-w---- 2 piotr  doktorzy   4096 Jul 30 18:18 kon
+<!--   -->drwx--x--x 2 adam   magistrzy  4096 Jul 30 18:16 krowa
+<!--   -->drwx--x--x 2 adam   pracownicy 4096 Jul 30 18:16 malpa
+<!--   -->drwx---r-- 2 tomasz doktorzy   4096 Jul 30 18:16 slon
+<!--   -->drwx-wx-w- 2 tomasz magistrzy  4096 Jul 30 18:16 swinia
+<!--   -->-rw----rwx 1 adam   pracownicy 3893 Jul 30 18:17 zebra
+<!--   -->-rw--w---- 1 stefan studenci    384 Jul 30 18:17 zyrafa
+<!--   --></code></pre>
+        <p>Opcja <code>-l</code> polecenia <code>ls</code> umożliwia nam uzyskanie dostępu do rozbudowanych informacji o&nbsp;plikach znajdujących się w katalogu, na którym operujemy, opisujących kolejno:</p>
+        <ul>
+          <li>uprawnienia do pliku,</li>
+          <li>liczbę dowiązań stałych do pliku,</li>
+          <li>nazwę właściciela,</li>
+          <li>nazwę grupy,</li>
+          <li>rozmiar pliku w bajtach,</li>
+          <li>datę ostatniej modyfikacji pliku,</li>
+          <li>nazwę pliku.</li>
+        </ul>
+
+        <h2>Jak czytać uprawniania?</h2>
+
+        <p>W systemach uniksopodobnych wyróżniamy następujące typy plików:</p>
+        <ul>
+          <li>regularny plik, oznaczany symbolem <code>-</code>,</li>
+          <li>katalog, oznaczany symbolem <code>d</code>,</li>
+          <li>dowiązanie symboliczne, oznaczane symbolem <code>l</code>,</li>
+          <li>$\color{gray!40}{\bigstar}$ urządzenie znakowe, oznaczane symbolem <code>c</code>,</li>
+          <li>$\color{gray!40}{\bigstar}$ urządzenie blokowe, oznaczane symbolem <code>b</code>,</li>
+          <li>$\color{gray!40}{\bigstar}$ gniazdo, oznaczane symbolem <code>s</code>,</li>
+          <li>$\color{gray!40}{\bigstar}$ potok (ang. <i>pipe</i>), oznaczany symbolem <code>p</code>,</li>
+          <li>$\color{gray!40}{\bigstar}$ drzwi, oznaczane symbolem <code>D</code>.</li>
+        </ul>
+
+        <p>Pierwszy znak opisu uprawnień określa rodzaj pliku. Pozostałych 9 znaków opisuje uprawnienia do pliku nadane, odpowiednio, właścicielowi pliku, członkom grupy związanej z plikiem i&nbsp;innym użytkownikom. Mogą oni, niezależnie od siebie, posiadać prawa do:</p>
+        <ul>
+          <li>odczytu (<code>r</code>),</li>
+          <li>zapisu (<code>w</code>),</li>
+          <li>wykonania (<code>x</code>),</li>
+        </ul>
+        <p>pliku. Zbiór pełnych uprawnień do pliku opisujemy ciągiem <code>rwx</code>, a jeśli któreś z uprawnień nie występuje, jego symbol zastąpiony jest znakiem <code>-</code>. Tym samym możemy opisać zbiór uprawnień do pliku w jeden z następujących sposobów: <code>---</code>, <code>r--</code>, <code>-w-</code>, <code>--x</code>, <code>rw-</code>, <code>r-x</code>, <code>-wx</code> lub <code>rwx</code>.</p>
+
+        <div class="howitworks">
+          <p>O ile w przypadku regularnych plików dość intuicyjnie można zrozumieć znaczenie poszczególnych uprawnień, o tyle w przypadku katalogów uprawnienia te należy interpretować następująco:</p>
+          <ul>
+            <li>prawo odczytu (<code>r</code>) daje możliwość <i>odczytania</i> katalogu, to znaczy wypisania zawartości tego katalogu,</li>
+            <li>prawo zapisu (<code>w</code>) daje możliwość tworzenia, modyfikacji i usuwania elementów wewnątrz tego katalogu, jeśli istnieje prawo wykonania (<code>x</code>), inaczej nie ma znaczenia,</li>
+            <li>prawo wykonania (<code>x</code>) daje możliwość dostępu do katalogu i plików znajdujących się wewnątrz.</li>
+          </ul>
+        </div>
+
+        <div class="exercise">
+          <p>Spójrz raz jeszcze na efekt działania programu <code>ls</code>:</p>
+          <pre><code class="no-highlight"><!--
+       -->total 36
+<!--   -->-rw-rw---- 1 adam   studenci     52 Jul 30 18:17 ges
+<!--   -->-rw----rw- 1 tomasz studenci     11 Jul 30 18:17 kaczka
+<!--   -->drwx-w---- 2 piotr  doktorzy   4096 Jul 30 18:18 kon
+<!--   -->drwx--x--x 2 adam   magistrzy  4096 Jul 30 18:16 krowa
+<!--   -->drwx--x--x 2 adam   pracownicy 4096 Jul 30 18:16 malpa
+<!--   -->drwx---r-- 2 tomasz doktorzy   4096 Jul 30 18:16 slon
+<!--   -->drwx-wx-w- 2 tomasz magistrzy  4096 Jul 30 18:16 swinia
+<!--   -->-rw----rwx 1 adam   pracownicy 3893 Jul 30 18:17 zebra
+<!--   -->-rw--w---- 1 stefan studenci    384 Jul 30 18:17 zyrafa
+<!--   --></code></pre>
+          <p>Określ, które elementy listy są katalogami, a które plikami. Następnie odpowiedz na pytanie, jakie uprawnienia do poszczególnych pozycji listy będzie miał:</p>
+          <ul>
+            <li>użytkownik <code>adam</code>, będący członkiem grupy <code>studenci</code>,</li>
+            <li>użytkownik <code>tomasz</code>, będący członkiem grup <code>doktorzy</code> i <code>pracownicy</code>,</li>
+            <li>użytkownik <code>piotr</code>, będący członkiem grupy <code>magistrzy</code>,</li>
+            <li>użytkownik <code>stefan</code>, będący członkiem grup <code>pracownicy</code> oraz <code>magistrzy</code>,</li>
+          </ul>
+          <p>Jakie musiały być uprawnienia do każdego z katalogów nadrzędnych, aby możliwe było uzyskanie zaprezentowanej listy?</p>
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Każdy z katalogów nadrzędnych musiał mieć prawo do wykonania, a katalog, którego zawartość odczytujemy, także prawo do odczytu. Jeśli katalog, którego zawartość odczytujemy nie ma praw do wykonania, a jedynie do odczytu, wówczas możemy wypisać listę elementów tego katalogu, ale nie uzyskamy dostępu do informacji innych niż nazwy elementów znajdujących się wewnątrz.</p>
+          </div>
+        </div>
+
+        <div class="titbit titbit-star">
+          <p>W momencie zalogowania się w konsoli wirtualnej lub przez interfejs pseudoterminala, zalogowanemu użytkownikowi nadawane są odpowiednie uprawnienia (w szczególności własność) do odpowiedniego <i>pliku</i>, reprezentującego to urządzenie.</p>
+          <div class="exercise exercise-star">
+            <p>Zaloguj się do serwera <code>students.wmi.amu.edu.pl</code>, korzystając z protokołu <code>ssh</code>. Sprawdź nazwę swojego terminala (<code>who</code>), a następnie zweryfikuj i zinterpretuj uprawnienia do plików w katalogu <code>/dev/pts</code>.</p>
+          </div>
+        </div>
+
+        <div class="titbit titbit-star-star">
+          <p>Tak naprawdę uprawnienia do plików mogą być o wiele bardziej rozbudowane. Zaawansowane listy dostępu do plików można tworzyć i analizować przy użyciu programów <code>setfacl</code> oraz <code>getfacl</code>. Fakt, że takie listy obowiązują w przypadku wybranego pliku, można rozpoznać po dodatkowym symbolu <code>+</code>, znajdującym się za opisem uprawnień do wybranego pliku.</p>
+          <p>Czasem zdarza się też, że zamiast symbolu <code>x</code>, oznaczającego uprawnienia do wykonania pliku, obserwuje się symbol <code>s</code> lub <code>S</code> (w przypadku uprawnień właściciela i grupy) oraz <code>t</code> lub <code>T</code> (w przypadku innych użytkowników). Symbole te są związane ze specjalnymi uprawnieniami do plików i katalogów, w tym z&nbsp;tak zwanym <i>sticky bit</i>. Więcej informacji można znaleźć na stronach:</p>
+          <ul>
+            <li><a href="http://linuxnix.com/2011/12/suid-set-suid-linuxunix.html">http://linuxnix.com/2011/12/suid-set-suid-linuxunix.html</a>,</li>
+            <li><a href="http://linuxnix.com/2011/12/sgid-set-sgid-linuxunix.html">http://linuxnix.com/2011/12/sgid-set-sgid-linuxunix.html</a>,</li>
+            <li><a href="http://linuxnix.com/2012/01/sticky-bit-set-linux.html">http://linuxnix.com/2012/01/sticky-bit-set-linux.html</a>.</li>
+          </ul>
+        </div>
+
+        <h2>Zmiana uprawnień &ndash; polecenie <code>chmod</code></h2>
+
+        <p>Uprawnienia do plików można modyfikować przy użyciu polecenia <code>chmod</code>, przy czym na taki przywilej może sobie pozwolić jedynie właściciel pliku i superużytkownik <code>root</code>.</p>
+
+        <div class="exercise">
+          <p>Utwórz w swoim katalogu domowym plik o nazwie <code>sop.txt</code> oraz katalog o&nbsp;nazwie <code>sop</code>. Wykonaj następujące polecenia i sprawdź uzyskane efekty:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ chmod u-x sop
+<!--     -->$ chmod g=rw,o+r sop sop.txt
+<!--     -->$ chmod u+X sop sop.txt
+<!--     -->$ chmod g=rwx sop.txt
+<!--     -->$ chmod u+X sop sop.txt
+<!--     -->$ chmod go-r sop sop.txt
+<!--     --></code></pre>
+          <p>Jak działa uprawnienie <code>X</code>? Korzystając z przedstawionej wyżej notacji symbolicznej:</p>
+          <ol style="list-style-type: lower-latin;">
+            <li>odbierz grupie uprawnienia do wykonania pliku <code>sop.txt</code>,</li>
+            <li>wykonując jedno polecenie, dodaj grupie i innym użytkownikom prawo do odczytu pliku <code>sop.txt</code> oraz katalogu <code>sop</code>,</li>
+            <li>odbierz właścicielowi prawo wykonania pliku <code>sop.txt</code>.</li>
+          </ol>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Uprawnienie <code>X</code> obejmuje tylko katalogi oraz pliki, które posiadają już jakiekolwiek prawo do wykonywania.</p>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Sprawdź, czy polecenia <code>cp</code> oraz <code>mv</code> zachowują domyślnie uprawnienia do plików i katalogów. Jeśli nie, to jak sobie z tym poradzić?</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Polecenie <code>mv</code> zachowuje uprawnienia, a polecenie <code>cp</code> nie. Aby to zmienić, należy wywołać polecenie <code>cp</code> z opcją <code>-p</code>.</p>
+          </div>
+        </div>
+
+        <p>Jak już zauważyliśmy, uprawnienia opisuje się oddzielnie dla właściciela (<code>user</code>), grupy (<code>group</code>) oraz innych użytkowników (<code>other</code>). Jeśli rozpatrzyć uprawnienia jako trzybitowe liczby, moglibyśmy zauważyć następującą zależność:</p>
+
+        <table>
+          <thead>
+            <tr><th>Uprawnienia</th><th>Binarnie</th><th>Ósemkowo</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="center"><code>---</code></td><td>000</td><td>0</td></tr>
+            <tr><td class="center"><code>--x</code></td><td>001</td><td>1</td></tr>
+            <tr><td class="center"><code>-w-</code></td><td>010</td><td>2</td></tr>
+            <tr><td class="center"><code>-wx</code></td><td>011</td><td>3</td></tr>
+            <tr><td class="center"><code>r--</code></td><td>100</td><td>4</td></tr>
+            <tr><td class="center"><code>r-x</code></td><td>101</td><td>5</td></tr>
+            <tr><td class="center"><code>rw-</code></td><td>110</td><td>6</td></tr>
+            <tr><td class="center"><code>rwx</code></td><td>111</td><td>7</td></tr>
+          </tbody>
+        </table>
+
+        <p>Uprawnienia do pliku możemy więc zapisać w postaci ciągu trzech cyfr ósemkowych (lub po prostu trzycyfrowej liczby ósemkowej).</p>
+
+        <div class="exercise">
+          <p>Zapisz uprawnienia do plików z listingu<p>
+          <pre><code class="no-highlight"><!--
+       -->total 36
+<!--   -->-rw-rw---- 1 adam   studenci     52 Jul 30 18:17 ges
+<!--   -->-rw----rw- 1 tomasz studenci     11 Jul 30 18:17 kaczka
+<!--   -->drwx-w---- 2 piotr  doktorzy   4096 Jul 30 18:18 kon
+<!--   -->drwx--x--x 2 adam   magistrzy  4096 Jul 30 18:16 krowa
+<!--   -->drwx--x--x 2 adam   pracownicy 4096 Jul 30 18:16 malpa
+<!--   -->drwx---r-- 2 tomasz doktorzy   4096 Jul 30 18:16 slon
+<!--   -->drwx-wx-w- 2 tomasz magistrzy  4096 Jul 30 18:16 swinia
+<!--   -->-rw----rwx 1 adam   pracownicy 3893 Jul 30 18:17 zebra
+<!--   -->-rw--w---- 1 stefan studenci    384 Jul 30 18:17 zyrafa
+<!--   --></code></pre>
+          <p>w postaci ciągu ósemkowej. Przykładowo, <code>rw-rw----</code> można zapisać równoważnie jako <code>660</code>.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając z notacji liczbowej, nadaj uprawnienia <code>rw-r----</code> do pliku tekstowego <code>sop.txt</code>. W tym celu wykonaj polecenie</p>
+          <pre><code class="no-highlight">$ chmod 640 sop.txt</code></pre>
+          <p>Analogicznie, nadaj:</p>
+          <ol style="list-style-type: lower-latin;">
+            <li>uprawnienia <code>rwxrwxr--</code> do pliku <code>sop.txt</code>,</li>
+            <li>uprawnienia <code>r-x-wx-wx</code> do pliku <code>sop.txt</code>,</li>
+            <li>uprawnienia <code>-w---x---</code> do pliku <code>sop.txt</code>,</li>
+            <li>uprawnienia <code>r-x------</code> do katalogu <code>sop</code>,</li>
+          </ol>
+        </div>
+
+        <div class="exercise">
+          <p>Utwórz w katalogu <code>sop</code> pliki <code>a</code> i <code>b</code> oraz katalog <code>c</code>, wewnątrz którego utwórz plik <code>d</code>. W tym celu nadaj sobie odpowiednie uprawnienia do katalogu <code>sop</code>. Wykonując <i>jednokrotnie</i> polecenie <code>chmod</code>, nadaj innym użytkownikom (<code>other</code>) prawo odczytu wszystkich elementów tej struktury oraz prawo wykonania tylko do katalogów w tej strukturze. Skorzystaj z opcji <code>-R</code> polecenia <code>chmod</code>.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">$ chmod -R o=rX sop</code></pre>
+          </div>
+        </div>
+
+        <h2>Zmiana właściciela &ndash; polecenia <code>chown</code> i <code>chgrp</code></h2>
+
+        <div class="howitworks">
+          <p>Każdy użytkownik systemu posiada swoją unikalną nazwę (login) oraz jedną grupę (group), z którą jest związany. Ponadto, każdy użytkownik może być przypisany do dowolnej liczby innych grup i traktowany jak ich członek.</p>
+          <div class="exercise">
+            <p>Korzystając z polecenia <code>id</code> dowiedz się, jakich grup jesteś członkiem.</p>
+          </div>
+        </div>
+
+        <p>Gdy plik jest tworzony, system nadaje status właściciela temu kontu, które go utworzyło. Przypisuje też do pliku główną grupę związaną z właścicielem. Użytkownik posiadający uprawnienia superużytkownika (<code>root</code>) może zmienić właściciela dowolnego pliku przy użyciu polecenia <code>chown</code> oraz grupę związaną z plikiem przy użyciu polecenia <code>chgrp</code>. W nowszych systemach program <code>chown</code> pozwala na jednoczesną zmianę właściciela i grupy.</p>
+
+        <div class="exercise">
+          <p>Dlaczego tylko użytkownik <code>root</code> może zmienić właściciela pliku?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Zapoznaj się z konstrukcją poleceń <code>chown</code> oraz <code>chgrp</code>. Jeśli masz dostęp do komputera, na którym możesz uzyskać uprawnienia użytkownika <code>root</code>, przetestuj działanie tych poleceń.</p>
+        </div>
+
+        <div class="howitworks">
+          <p>Wiemy już, że użytkownik może być członkiem wielu grup, a uprawnienia do plików mogą być związane z członkostwem w grupie przypisanej do nich. Nic nie stoi więc na przeszkodzie, aby utworzyć w systemie wiele grup i, operując uprawnieniami, uzależnić dostęp do pewnych zasobów systemowych (np. drukarek, urządzeń audio itp.) od członkostwa w danej grupie. To dosyć częste podejście.</p>
+        </div>
+
+        <h2>Domyślne uprawnienia &ndash; <code>umask</code></h2>
+
+        <p>Kiedy tworzony jest katalog, domyślnie przypisywane są do niego uprawnienia <code>777</code>. W przypadku plików jest to <code>666</code>, ponieważ uprawnienia do wykonywania plików powinny być zawsze nadawane ręcznie. Polecenie <code>umask</code> pozwala na ustawienie maski dopełnień <code>mmm</code>, dzięki której domyślne uprawnienia będą równe <code>777 &amp; ~mmm</code> dla katalogów i <code>666 &amp; ~mmm</code> dla pozostałych plików.</p>
+
+        <div class="exercise">
+          <p>Wykonując polecenie</p>
+          <pre><code class="no-highlight">$ umask</code></pre>
+          <p>określ, jaka maska dopełnień jest stosowana dla katalogów i plików tworzonych przez Ciebie.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Jeśli maska dopełnień jest równa <code>014</code>, to uprawnienia do nowo tworzonych katalogów będą równe</p>
+          <pre><code class="no-highlight"><!--
+         -->777 &amp; ~014 = 111111111 &amp; ~000001100
+<!--     -->           = 111111111 &amp; 111110011
+<!--     -->           = 111110011
+<!--     -->           = 763
+<!--     --></code></pre>
+          <p>a do plików</p>
+          <pre><code class="no-highlight"><!--
+         -->666 &amp; ~014 = 110110110 &amp; ~000001100
+<!--     -->           = 110110110 &amp; 111110011
+<!--     -->           = 110110010
+<!--     -->           = 662
+<!--     --></code></pre>
+          <p>Określ, jakie będą uprawnienia do nowo utworzonych plików i katalogów, jeśli maska dopełnień jest równa: <code>000</code>, <code>022</code>, <code>777</code> lub <code>002</code>.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Wykonując polecenie</p>
+          <pre><code class="no-highlight">$ umask 002</code></pre>
+          <p>zmień stosowaną maskę dopełnień na <code>002</code>. Sprawdź, w jaki sposób wpływa to na uprawnienia do tworzonych plików i katalogów.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Sprawdź, co się stanie, jeśli wykonasz polecenia</p>
+          <pre><code class="no-highlight"><!--
+         -->$ umask u=,go=wx
+<!--     -->$ umask u+r
+<!--     --></code></pre>
+          <p>Jaka maska będzie stosowana po pierwszym, a jaka po drugim wywołaniu? Jakie wnioski można z tego wynieść?</p>
+        </div>
+
+        <h1>Dowiązania</h1>
+
+        <div class="howitworks">
+          <p>Do każdego elementu, w momencie tworzenia go w danym systemie plików, przypisuje się rekord zwany <i>inode</i> (ang. <i>index node</i>, i-węzeł). Rekord ten zawiera informacje o pliku, w tym te zwiazane z jego położeniem na fizycznym nośniku, takim jak partycja dysku twardego. Poszczególne i-węzły są związane z jednoznacznie identyfikującą je liczbą, zwaną <i>numerem i-węzła</i>. Katalog jest <i>plikiem</i> (bo wszystko jest plikiem...) zawierającym listę elementów w postaci <code>&lt;nazwa, numer i-węzła&gt;</code>. Nazwa pliku lub katalogu odnosi się więc do określonego węzła w określonym systemie plików.</p>
+
+          <p>I-węzeł zawiera wiele informacji o pliku &ndash; najkrócej można powiedzieć, że wszystkie, poza jego nazwą i zawartością. Szczegółowe omówienie tych zagadnień jednak znacząco wykracza poza materiał tego przedmiotu.<sup>[1]</sup></p>
+
+          <div class="exercise exercise-star">
+            <p>Korzystając z opcji <code>-i</code> polecenia <code>ls</code>, poznaj numery i-węzłów, do których odwołują się pliki w Twoim katalogu domowym.</p>
+          </div>
+
+          <p class="footnote">[1] Osoby zainteresowane mogą przeczytać więcej na temat struktury i-węzła na stronie <a href="https://pl.wikipedia.org/wiki/I-węzeł">https://pl.wikipedia.org/wiki/I-węzeł</a>.</p>
+        </div>
+
+        <h2>Dowiązania stałe</h2>
+
+        <p>Jako że element katalogu jest uporzadkowanym zbiorem elementów postaci <code>&lt;nazwa, numer i-węzła&gt;</code>, nic nie stoi na przeszkodzie, aby z dwóch miejsc wewnątrz danego systemu plików odwoływać się do tego samego i-węzła. Takie odwołanie nazywamy <i>dowiązaniem stałym</i> (ang. <i>hard link</i>). Właściciel pliku (lub superużytkownik) może je utworzyć przy pomocy polecenia <code>ln</code>.</p>
+
+        <div class="exercise">
+          <p>Zapoznaj się z dokumentacją polecenia <code>ln</code>. Następnie utwórz w swoim katalogu domowym plik <code>a.txt</code> oraz dowiązanie stałe do związanego z nim i-węzła &ndash; nazwij je <code>b.txt</code>. Sprawdź, jak zmieniła się liczba dowiązań stałych wyświetlana przy obu plikach po wywołaniu polecenia <code>ls -l</code>.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Sprawdź, jak zmieni się zawartość:</p>
+          <ol style="list-style-type: lower-latin;">
+            <li>pliku <code>a.txt</code>, jeśli zmienisz zawartość pliku <code>b.txt</code>,</li>
+            <li>pliku <code>b.txt</code>, jeśli zmienisz zawartość pliku <code>a.txt</code>.</li>
+          </ol>
+          <p>Dlaczego tak jest?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Sprawdź, jak zmienią się uprawnienia:</p>
+          <ol style="list-style-type: lower-latin;">
+            <li>do pliku <code>a.txt</code>, jeśli zmienisz uprawnienia do pliku <code>b.txt</code>,</li>
+            <li>do pliku <code>b.txt</code>, jeśli zmienisz uprawnienia do pliku <code>a.txt</code>.</li>
+          </ol>
+          <p>Dlaczego tak jest?</p>
+        </div>
+
+        <div class="titbit">
+          <p>Usuwanie pliku w systemie plików opartym na i-węzłach to nic innego jak usunięcie dowiązania stałego do pliku (stąd usuwanie plików określa się niekiedy pojęciem <i>unlink</i>).</p>
+        </div>
+
+        <div class="exercise exercise-star">
+          <p>Utwórz w swoim katalogu domowym dowolny katalog. Dlaczego są do niego dwa dowiązania stałe? Jak zmieni się liczba dowiązań stałych do katalogu, jeśli w jego wnętrzu utworzysz: (a) plik, (b) katalog? Dlaczego tak jest?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Spróbuj utworzyć dowiazanie stałe do wybranego katalogu. Czy jest to możliwe? Sprawdź w&nbsp;dokumentacji programu <code>ln</code>, jak to zrobić i kto może wykonać taką operację.</p>
+        </div>
+
+        <h2>Dowiązania symboliczne</h2>
+
+        <p>Użytkownicy systemów z rodziny Windows przyzwyczajeni są do <i>skrótów</i>, które odwołują się do elementów zlokalizowanych w dowolnym miejscu struktury plików. W systemach uniksopodobnych rolę skrótów przejmują <i>dowiązania symboliczne</i>. Dowiązanie takie jest plikiem zawierającym ścieżkę do elementu docelowego.</p>
+
+        <div class="exercise">
+          <p>Korzystając z opcji <code>-s</code> polecenia <code>ln</code> utwórz w swoim katalogu domowym dowiązanie symboliczne do pliku <code>/etc/passwd</code> i nazwij je <code>dowiazanie</code>. Czy możesz utworzyć dowiązanie stałe do tego samego pliku? Dlaczego?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Po wyświetleniu szczegółowej listy plików w katalogu domowym okaże się, że plik <code>dowiazanie</code> ma rozmiar 11 bajtów. Od czego zależy ten rozmiar? Utwórz kilka dowiązań symbolicznych (z wykorzystaniem ścieżek względnych i bezwzględnych) i porównaj otrzymane wyniki.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Utwórz dowiązanie symboliczne do dowolnego katalogu. Spróbuj zmienić nań katalog roboczy wykorzystując polecenie <code>cd</code>. W jaki sposób zachowuje się powłoka?</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Powłoka traktuje dowiązanie symboliczne tak jak element istniejący w systemie plików.</p>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Sprawdź, jakie uprawnienia posiadasz do utworzonych dowiązań symbolicznych. Jak zinterpretować te uprawnienia? Jak się do tego ma maska ustawiona przy użyciu polecenia <code>umask</code>?</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Uprawnienia do utworzonych dowiązań symbolicznych są równe <code>777</code>, aby pokryć wszelkie potencjalne uprawnienia elementu docelowego. Odwołanie się do dowiązania symbolicznego, do którego nie mamy prawa odczytu, zakończy się niepowodzeniem, nawet jeśli posiadamy odpowiednie uprawnienia do elementu docelowego.</p>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Spróbuj utworzyć dowiązanie symboliczne do elementu, który nie istnieje. Czy jest to możliwe?</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Tak, chociaż powłoka może zwrócić na to uwagę, np. kolorując na czerwono nazwę tego dowiązania na szczegółowej liście elementów zawartych w katalogu.</p>
+          </div>
+        </div>
+
+        <h1>Wejście i wyjście</h1>
+
+        <p>Kiedy w systemie uniksopodobnym uruchamiany jest program, tworzone są trzy kanały komunikacji pomiędzy tym programem a środowiskiem, w którym jest on uruchamiany (zwykle terminalem). Kanały te to:</p>
+        <ul>
+          <li>standardowy strumień wejścia (ang. <i>standard input</i>, <code>stdin</code>),</li>
+          <li>standardowy strumień wyjścia (ang. <i>standard output</i>, <code>stdout</code>),</li>
+          <li>standardowy strumień błędów (ang. <i>standard error</i>, <code>stderr</code>).</li>
+        </ul>
+        <p>Relacja pomiędzy programem a powyższymi strumieniami zaprezentowana została na poniższym rysunku.</p>
+
+        <div class="image">
+          <img src="pictures/cw02-strumienie.svg" />
+        </div>
+
+        <div class="howitworks">
+          <p>Gdy program uruchamia się, otwierany jest kanał komunikacji pomiędzy nim a standardowymi strumieniami. Program odwołuje się do nich przez unikalny identyfikator, będący liczbą całkowitą. Identyfikator ten nazywamy <i>deskryptorem pliku</i>. Po uruchomieniu programu zdefiniowane są trzy deskryptory plików:</p>
+          <ul>
+            <li>0, dla strumienia <code>stdin</code>,</li>
+            <li>1, dla strumienia <code>stdout</code>,</li>
+            <li>2, dla strumienia <code>stderr</code>.</li>
+          </ul>
+          <div class="exercise exercise-star">
+            <p>Sprawdź, do czego odwołują się pliki urządzeń: <code>/dev/stdin</code>, <code>/dev/stdout</code> oraz <code>/dev/stderr</code>.</p>
+          </div>
+          <div class="exercise exercise-star-star">
+            <p>Sprawdź, jak działają funkcje systemowe języka C: <code>open</code>, <code>read</code> oraz <code>write</code>. Co zwraca funkcja <code>open</code>? W jaki sposób deskryptor pliku wiąże się z&nbsp;funkcjami <code>read</code> oraz <code>write</code>?</p>
+          </div>
+        </div>
+
+        <p>Domyślnie, zarówno standardowe wejście, jak i oba wyjścia związane są z terminalem (konsolą lub wirtualną konsolą). W praktyce oznacza to, że do strumienia standardowego wejścia trafią wszystkie znaki wprowadzane za pomocą klawiatury,<sup>*</sup> a każdy znak przesłany przez program do standardowego strumienia wyjścia lub strumienia błędów zostanie wyświetlony w terminalu.
+
+        <p class="footnote">* Zaawansowani użytkownicy zdają sobie pewnie sprawę z tego, że to stwierdzenie nie jest do końca poprawne. W rzeczywistości większość programów powłoki <i>buforuje</i> dane przed przesłaniem ich do standardowego wejścia, czekając na znak końca linii lub końca pliku.</p>
+
+        <h2>Potoki i polecenie <code>tee</code></h2>
+
+        <p>Czasem zachodzi potrzeba, aby standardowe wyjście jednego z programów było traktowane jako standardowe wejście drugiego. Idea ta została zwizualizowana na poniższym rysunku. Taki przepływ danych nazywamy <i>potokiem</i>.</p>
+
+        <div class="image">
+          <img src="pictures/cw02-potoki.svg" />
+        </div>
+
+        <p>W powłoce Bash potok wprowadza się przy użyciu symbolu <code>|</code>.</p>
+
+        <div class="exercise">
+          <p>Korzystając z mechanizmu potokowania, wyświetl przy pomocy programu <code>less</code> (poznanego przy okazji eksplorowania podręczników programów) szczegółową listę elementów znajdujących się w katalogu <code>/etc</code>. W tym celu wykonaj polecenie:</p>
+          <pre><code class="no-highlight">$ ls -l /etc | less</code></pre>
+        </div>
+
+        <div class="titbit titbit-star">
+          <p>Mechanizm potokowania nie czeka na zakończenie działania jednego programu przed uruchomieniem drugiego. Tak naprawdę przepływ danych pomiędzy odpowiednimi strumieniami <code>stdout</code> oraz <code>stdin</code> odbywa się w czasie rzeczywistym (buforowanym linia po linii, podobnie jak w przypadku standardowego wejścia z klawiatury). Łatwo to zweryfikować wykonując polecenie:</p>
+          <pre><code class="no-highlight">$ for I in {1..50}; do echo $I; sleep 0.2; done | less</code></pre>
+        </div>
+
+        <p>Wśród ciekawych programów związanych z obsługą potoków warto wymienić program o nazwie <code>tee</code>. Jego działanie jest następujące: dane ze standardowego wejścia przesyła on do standardowego wyjścia, zapisując je po drodze we wskazanym pliku.</p>
+
+        <div class="exercise">
+          <p>Zmodyfikuj polecenie z poprzedniego ćwiczenia tak, aby lista elementów z katalogu <code>/etc</code> została dodatkowo zapisana w pliku <code>lista-etc</code> w Twoim katalogu domowym.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">$ ls -l /etc | tee lista-etc | less</code></pre>
+          </div>
+        </div>
+
+        <h2>Łączenie plików &ndash; polecenia <code>cat</code> i <code>tac</code></h2>
+
+        <p>Polecenie <code>cat</code> wypisuje przez standardowy strumień wyjścia, bajt po bajcie, zawartość plików, których nazwy przekazane są do niego jako argumenty. Jeśli polecenie <code>cat</code> zostanie wywołane bez argumentów, wypisuje przez standardowy strumień wyjścia dane ze standardowego strumienia wejścia.</p>
+
+        <div class="exercise">
+          <p>Wykonaj polecenie:</p>
+          <pre><code class="no-highlight">$ cat ~/lista-etc /etc/passwd</code></pre>
+          <p>Zweryfikuj otrzymane efekty.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Wywołaj polecenie <code>cat</code> bez argumentów. Wprowadź kilka wierszy tekstu &ndash; każdy z nich zakończ wciśnięciem klawisza <kbd>Enter</kbd>. Wprowadzanie danych zakończ kombinacją klawiszy <kbd>Ctrl</kbd> + <kbd>D</kbd> (znak końca pliku). W jaki sposób zachowuje się program <code>cat</code>?</p>
+        </div>
+
+        <p>Polecenie <code>tac</code> ma działanie zbliżone do <code>cat</code> z tą różnicą, że wiersze plików, których nazwy przekazane są jako argumenty, wypisuje w odwrotnej kolejności (a więc od ostatniego do pierwszego). Jeśli polecenie <code>tac</code> zostanie wywołane bez argumentów, wypisze ono dane ze standardowego wejścia począwszy od ostatniego wiersza.</p>
+
+        <div class="exercise">
+          <p>Wykonaj polecenie:</p>
+          <pre><code class="no-highlight">$ tac ~/lista-etc /etc/passwd</code></pre>
+          <p>Zweryfikuj otrzymane efekty.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Wywołaj polecenie <code>tac</code> bez argumentów. Wprowadź kilka wierszy tekstu &ndash; każdy z nich zakończ wciśnięciem klawisza <kbd>Enter</kbd>. Wprowadzanie danych zakończ kombinacją klawiszy <kbd>Ctrl</kbd> + <kbd>D</kbd> (znak końca pliku). W jaki sposób zachowuje się program <code>tac</code>? Dlaczego, w przeciwieństwie do programu <code>cat</code>, dane są wysyłane do standardowego wyjścia dopiero po natrafieniu przez program <code>tac</code> na znak końca pliku?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Czy istnieje istotna różnica pomiędzy wywołaniami poniższych poleceń?</p>
+          <pre><code class="no-highlight"><!--
+         -->$ cat /etc/passwd | tac
+<!--     -->$ tac /etc/passwd | cat
+<!--     -->$ tac /etc/passwd
+<!--     --></code></pre>
+        </div>
+
+        <h2>Polecenia <code>head</code>, <code>tail</code>, <code>sort</code>, <code>grep</code> w potokach</h2>
+
+        <p>Istnieje cała gama programów, które wypisują na standardowym wyjściu przetworzoną lub przefiltrowaną zawartość wskazanych plików lub danych ze standardowego wejścia. Ta ostatnia własność ma dość praktyczne znaczenie w połączeniu z mechanizmem potoków.</p>
+
+        <div class="notice">
+          <p>O zachowaniu wymienionych dalej programów będziemy mówić w kontekście operowania na danych pochodzących ze standardowego wejścia. Każdy z nich radzi sobie jednak równie dobrze z plikami &ndash; wystarczy podać ich nazwy jako argumenty.</p>
+        </div>
+
+        <div class="command">
+          <p>Program <code>head</code> wypisuje 10 pierwszych linii ze standardowego wejścia. Przydatne opcje:</p>
+          <table class="noborder">
+            <tr><td><code>-c XX</code></td><td>wypisz <code>XX</code> pierwszych bajtów</td></tr>
+            <tr><td><code>-n XX</code></td><td>wypisz <code>XX</code> pierwszych linii</td></tr>
+            <tr><td><code>-c -XX</code></td><td>wypisz wszystkie poza ostatnimi <code>XX</code> bajtami</td></tr>
+            <tr><td><code>-n -XX</code></td><td>wypisz wszystkie poza ostatnimi <code>XX</code> liniami</td></tr>
+          </table>
+        </div>
+
+        <div class="exercise">
+          <p>Czy istnieje istotna różnica pomiędzy wywołaniami poniższych poleceń?</p>
+          <pre><code class="no-highlight"><!--
+        -->$ cat ~/lista-etc | head -n 5
+<!--    -->$ head -n 5 ~/lista-etc
+<!--    -->$ head ~/lista-etc -n 5
+<!--    --></code></pre>
+        </div>
+
+        <div class="exercise">
+          <p>Wypisz:</p>
+          <ol style="list-style-type: lower-latin;">
+            <li>cztery pierwsze linie pliku <code>~/.bash_history</code>,</li>
+            <li>pierwszych 13 bajtów pliku <code>~/lista-etc</code>,</li>
+            <li>wszystkie poza ostatnimi dwoma liniami pliku <code>/etc/passwd</code>.</li>
+          </ol>
+        </div>
+
+        <div class="command">
+          <p>Program <code>tail</code> wypisuje 10 ostatnich linii ze standardowego wejścia. Przydatne opcje:</p>
+          <table class="noborder">
+            <tr><td><code>-c XX</code></td><td>wypisz <code>XX</code> ostatnich bajtów</td></tr>
+            <tr><td><code>-n XX</code></td><td>wypisz <code>XX</code> ostatnich linii</td></tr>
+            <tr><td><code>-c -XX</code></td><td>wypisz wszystkie poza pierwszymi <code>XX</code> bajtami</td></tr>
+            <tr><td><code>-n -XX</code></td><td>wypisz wszystkie poza pierwszymi <code>XX</code> liniami</td></tr>
+            <tr><td><code>-c +XX</code></td><td>wypisz wszystkie bajty, począwszy od <code>XX</code>-tego</td></tr>
+            <tr><td><code>-n +XX</code></td><td>wypisz wszystkie linie, począwszy od <code>XX</code>-tej</td></tr>
+            <tr><td><code>-f</code></td><td>aktualizuj wynik w miarę jak dane spływają do standardowego wejścia</td></tr>
+          </table>
+        </div>
+
+        <div class="exercise">
+          <p>Wypisz czwartą i piątą linię pliku <code>~/lista-etc</code>. Zaproponuj kilka dróg do otrzymania pożądanego efektu.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight"><!--
+           -->$ cat lista-etc | head -n 5 | tail -n 2
+<!--       -->$ head -n 5 lista-etc | tail -n 2
+<!--       --></code></pre>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Jaki będzie efekt wywołania polecenia</p>
+          <pre><code class="no-highlight">$ head -n -2 plik | tail -n +3</code></pre>
+          <p>gdzie <code>plik</code> jest dowolnym plikiem?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Czy istnieje istotna różnica pomiędzy wywołaniami poniższych poleceń?</p>
+          <pre><code class="no-highlight"><!--
+           -->$ tail -n 5 -f ~/lista-etc
+<!--       -->$ tail --lines=5 --follow ~/lista-etc
+<!--       -->$ tail --lines=5 -f ~/lista-etc
+<!--       --></code></pre>
+        </div>
+
+        <div class="command">
+          <p>Program <code>sort</code> sortuje alfabetycznie (w kolejności rosnącej) linie tekstu ze standardowego wejścia. Przydatne opcje:</p>
+          <table class="noborder">
+            <tr><td><code>-f</code></td><td>traktuj małe i wielkie litery równoważnie</td></tr>
+            <tr><td><code>-n</code></td><td>traktuj linie jak liczby</td></tr>
+            <tr><td><code>-R</code></td><td>posortuj linie losowo</td></tr>
+            <tr><td><code>-r</code></td><td>sortuj malejąco</td></tr>
+            <tr><td><code>-k X</code></td><td>przy sortowaniu uwzględniaj dane od <code>X</code>-tej kolumny</td></tr>
+            <tr><td><code>-k X,Y</code></td><td>przy sortowaniu uwzględniaj dane z kolumn o indeksach od <code>X</code> do <code>Y</code></td></tr>
+            <tr><td><code>-t X</code></td><td>traktuj <code>X</code> jako separator kolumn</td></tr>
+          </table>
+        </div>
+
+        <div class="exercise">
+          <p>Wypisz informacje o ośmiu największych elementach, znajdujących się bezpośrednio w Twoim katalogu domowym.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">$ ls -l ~ | tail -n +2 | sort -k 5 -nr | head -n 8</code></pre>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Jaki będzie efekt wywołania polecenia</p>
+          <pre><code class="no-highlight">$ ls -l | tail -n +2 | sort -k 2 -n -r | head -n 3</code></pre>
+          <p>w dowolnym katalogu?</p>
+        </div>
+
+        <div class="command">
+          <p>Program <code>grep</code> wypisuje na wyjściu tylko te linie ze standardowego wejścia, które odpowiadają zadanemu wyrażeniu regularnemu. Przydatne opcje:</p>
+          <table class="noborder">
+            <tr><td><code>-i</code></td><td>traktuj małe i wielkie litery równoważnie</td></tr>
+            <tr><td><code>-v</code></td><td>wypisuj na wyjściu tylko te linie, które nie spełniają zadanego wyrażenia regularnego</td></tr>
+            <tr><td><code>-w</code></td><td>wypisuj na wyjściu tylko te linie, które zawierają słowo spełniające zadane wyrażenie regularne</td></tr>
+            <tr><td><code>-c</code></td><td>wypisz na wyjściu liczbę linii spełniających wyrażenie</td></tr>
+            <tr><td><code>-q</code></td><td>nic nie wypisuj i zwróć 0 w chwili znalezienia dopasowania</td></tr>
+          </table>
+          <p>Zasady konstrukcji wyrażeń regularnych:</p>
+          <table class="noborder">
+            <tr><td><code>.</code></td><td>dowolny znak, poza znakiem nowej linii</td></tr>
+            <tr><td><code>^</code></td><td>początek linii</td></tr>
+            <tr><td><code>$</code></td><td>koniec linii</td></tr>
+            <tr><td><code>[abc]</code></td><td>dowolny z wyliczonych znaków</td></tr>
+            <tr><td><code>[a-z]</code></td><td>dowolny znak ze zbioru</td></tr>
+            <tr><td><code>[^0-9]</code></td><td>dowolny znak z dopełnienia zbioru</td></tr>
+            <tr><td><code>[abc]*</code></td><td>ciąg znaków a, b i c dowolnej długości (również pusty)</td></tr>
+            <tr><td><code>[abc]+</code></td><td>ciąg znaków a, b i c dowolnej niezerowej długości</td></tr>
+            <tr><td><code>[abc]?</code></td><td>maksymalnie jednokrotne wystąpienie elementu a, b lub c</td></tr>
+            <tr><td><code>[abc]\{n\}</code></td><td>ciąg znaków a, b i c długości <code>n</code></td></tr>
+            <tr><td><code>[abc]\{n,\}</code></td><td>ciąg znaków a, b i c długości co najmniej <code>n</code></td></tr>
+            <tr><td><code>[abc]\{,m\}</code></td><td>ciąg znaków a, b i c długości co najwyżej <code>m</code></td></tr>
+            <tr><td><code>[abc]\{n,m\}</code></td><td>ciąg znaków a, b i c długości od <code>n</code> do <code>m</code></td></tr>
+            <tr><td><code>\|</code></td><td>alternatywa</td></tr>
+            <tr><td><code>\( \)</code></td><td>nawiasy grupujące</td></tr>
+          </table>
+        </div>
+
+        <div class="exercise">
+          <p>Jaki będzie efekt działania poniższego polecenia?</p>
+          <pre><code class="no-highlight">$ ls -l ~ | grep '^drwx\(r..\)\{2\}.*[a-zA-Z]\{5\}\(ry\|op\)$'</code></pre>
+        </div>
+
+        <div class="exercise">
+          <p>Wykonaj poniższe zadania. Posłuż się poznanymi dotąd poleceniami i metodami.</p>
+          <ol style="list-style-type: lower-latin;">
+            <li>Odpowiedz, ile elementów znajdujących się w katalogu <code>/dev</code> jest dowiązaniami symbolicznymi?</li>
+            <li>Plik <code>~/.bash_history</code> zawiera historię wykonywanych poleceń w kolejności od najdawniej wykonanego. Wypisz, począwszy od najświeższego, 3 wykonane ostatnio polecenia rozpoczynające się od słowa <code>cat</code> lub <code>ls</code>.<br /><i>Uwaga:</i> zawartość pliku <code>~/.bash_history</code> jest aktualizowana w momencie zakończenia sesji konsoli. Można to jednak zrobić ręcznie, wykonując polecenie <code>history -a</code>.</li>
+            <li>Wyświetl, posortowaną malejąco według nazw, szczegółową listę ośmiu największych elementów znajdujących się w katalogu <code>/bin</code>.</li>
+            <li>Posortuj szczegółową listę elementów z katalogu <code>/etc</code> malejąco według liczby dowiązań stałych. Jeśli dwa lub więcej elementów ma taką samą liczbę dowiązań stałych, powinny być posortowane według rozmiaru malejąco. Uwzględnij tylko te elementy, które mogą być odczytane przez osoby inne niż właściciel i członkowie wskazanej grupy.</li>
+          </ol>
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <ol style="list-style-type: lower-latin;">
+              <li><code>$ ls -l /dev | tail -n +2 | grep '^l' | wc -l</code></li>
+              <li><code>$ tac .bash_history | grep '^\(cat\|ls\)' | head -n 3</code></li>
+              <li><code>$ ls -l /bin | tail -n +2 | sort -k5 -rn | head -n8 | sort -k9 -r</code></li>
+              <li><code>$ ls -l /etc | tail -n +2 | sort -rn -k2 -k5 | grep '^.\{7\}r'</code></li>
+            </ol>
+          </div>
+        </div>
+
+        <h2>Przeadresowywanie wejścia/wyjścia</h2>
+
+        <p>Jak już wiemy, w momencie uruchamiania programu tworzone są trzy kanały komunikacyjne pomiędzy nim a środowiskiem, w którym jest wykonywany. Są to <code>stdin</code> (o numerze 0), <code>stdout</code> (o numerze 1) oraz <code>stderr</code> (o numerze 2). I choć domyślnie każdy z tych kanałów prowadzi do pliku urządzenia terminala, możemy &ndash; korzystając z funkcjonalności powłoki &ndash; <i>przekierować</i> (<i>przeadresować</i>) wejście/wyjście, wskazując inny plik. Służą do tego <i>metasymbole</i> powłoki: <code>&gt;</code>, <code>&gt;&gt;</code>, <code>&lt;</code> oraz <code>&lt;&lt;</code>. Pierwsze dwa służą do przekierowywania wyjścia, kolejne zaś do przeadresowywania wejścia.</p>
+
+        <p>Konstrukcja <code>N&gt;</code> pozwala przekierować dane wyjściowe związane z deskryptorem pliku o numerze <code>N</code> do dowolnego innego pliku w systemie. Jeśli <code>N</code> nie jest określone, przyjmuje się, że wynosi 1 (a więc jest związane z <code>stdout</code>). Jeśli plik docelowy nie istnieje, zostanie utworzony, jeśli zaś istnieje, zostanie nadpisany.</p>
+
+        <div class="exercise">
+          <p>Wykonaj w swoim katalogu domowym następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ ls -la 1> wynik.txt
+<!--     -->$ ls -l > wynik.txt
+<!--     --></code></pre>
+          <p>Skomentuj efekty.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Wykonaj w swoim katalogu domowym następujące polecenie:</p>
+          <pre><code class="no-highlight">$ ls -l | sort -k 5 -n | head -n 5 > wynik.txt</code></pre>
+          <p>Skomentuj efekty.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając z polecenia <code>cat</code> i przeadresowania wyjścia, utwórz w swoim katalogu domowym plik o dowolnej treści.</p>
+        </div>
+
+        <p>Łatwo się domyślić, że przekierowania danych przesyłanych do pliku określonego deskryptorem o numerze 2 (a więc <code>stderr</code>) można dokonać korzystając z konstrukcji <code>2></code>.</p>
+
+        <div class="exercise">
+          <p>Wykonaj w swoim katalogu domowym następujące polecenia:
+          <pre><code class="no-highlight"><!--
+         -->$ cat /etc/shadow > wynik.txt
+<!--     -->$ cat /etc/shadow > wynik.txt > wynikb.txt
+<!--     -->$ cat /etc/shadow 2> wynik.txt
+<!--     -->$ cat /etc/shadow /etc/passwd > wynik.txt 2> wynik.err
+<!--     -->$ cat /etc/shadow /etc/passwd 1> wynik.txt 2> wynik.err
+<!--     -->$ cat /etc/shadow /etc/passwd 2> wynik.err 1> wynik.txt
+<!--     --></code></pre>
+          <p>Skomentuj efekty.</p>
+        </div>
+
+        <p>Aby przekierować jednocześnie wszystkie dane wychodzące z programu, niezależnie od tego, z którym deskryptorem pliku są związane, można skorzystać z konstrukcji <code>&amp;&gt;</code>.</p>
+
+        <div class="exercise">
+          <p>Wykonaj w swoim katalogu domowym następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ cat /etc/shadow /etc/passwd 1> wynik.txt 2> wynik.err
+<!--     -->$ cat /etc/shadow /etc/passwd &amp;> wynik.txt
+<!--     --></code></pre>
+          <p>Skomentuj efekty.</p>
+        </div>
+
+        <p>Przesyłać dane można też pomiędzy plikami związanymi z różnymi deskryptorami. Wymaga to jednak poprzedzenia numeru deskryptora docelowego znakiem <code>&amp;</code>.</p>
+
+        <div class="exercise">
+          <p>Wykonaj w swoim katalogu domowym następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ cat /etc/shadow /etc/passwd 2>1
+<!--     -->$ cat /etc/shadow /etc/passwd 2>&amp;1
+<!--     -->$ cat /etc/shadow /etc/passwd 2>&amp;1 > wynik.txt
+<!--     -->$ cat /etc/shadow /etc/passwd 2>&amp;1 1> wynik.txt
+<!--     -->$ cat /etc/shadow /etc/passwd 1> wynik.txt 2>&amp;1
+<!--     --></code></pre>
+          <p>Skomentuj efekty.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Polecenie <code>cat /etc/shadow /etc/passwd 2>&amp;1 > wynik.txt</code> wypisuje na ekranie błąd, podczas gdy <code>cat /etc/shadow /etc/passwd 1> wynik.txt 2>&amp;1</code> przekierowuje wyjście zgodnie z oczekiwaniami.</p>
+          </div>
+        </div>
+
+        <p>Korzystając z metasymbolu powłoki <code><</code> możemy przekierować dane z dowolnego pliku do wejścia programu.</p>
+
+        <div class="exercise">
+          <p>Wykonaj w swoim katalogu domowym następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ cat < /etc/passwd
+<!--     -->$ cat 0< /etc/passwd
+<!--     -->$ cat < /etc/shadow
+<!--     -->$ cat < /etc/shadow 2> wynik.err
+<!--     -->$ cat 2> wynik.err < /etc/shadow
+<!--     --></code></pre>
+          <p>Skomentuj efekty. Co, według Twojej intuicji, oznacza konstrukcja <code>0<</code>?</p>
+        </div>
+
+        <p>Zastosowanie konstrukcji <code>N&gt;</code> do przeadresowania wyjścia związanego z deskryptorem o numerze <code>N</code> powodowało, że plik docelowy był nadpisywany. Zastosowanie w całości analogicznej konstrukcji <code>N&gt;&gt;</code> powoduje, że dane wyjściowe zostaną dopisane na końcu wskazanego pliku, chyba że ten nie istnieje &ndash; wówczas zostanie utworzony.</p>
+
+        <div class="exercise">
+          <p>Wykonaj w swoim katalogu domowym następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ ls ~ > lista.txt
+<!--     -->$ ls /home >> lista.txt
+<!--     --></code></pre>
+          <p>Skomentuj efekty.</p>
+        </div>
+
+        <div class="titbit titbit-star">
+          <p>Wynik działania polecenia <code>ls</code> będzie się różnił w zależności od tego, czy dane będą wypisywane w terminalu, czy przekierowane do pliku (lub innego programu przez mechanizm potokowania). Wynika to z faktu, że mechanizm przekierowania wejścia/wyjścia <i>modyfikuje</i> docelowe pliki związane z danymi deskryptorami. Tym samym program może weryfikować, czy dany deskryptor odwołuje się do pliku terminala.</p>
+
+          <p>W przypadku mechanizmu potokowania, dane wyjściowe przesyłane są do kolejnego programu w potoku za pośrednictwem pliku tymczasowego typu gniazdowego (ang. <i>socket</i>), a nie terminala. Dlatego też polecenia</p>
+          <pre><code class="no-highlight"><!--
+         -->$ ls
+<!--     -->$ ls | cat
+<!--     --></code></pre>
+          <p>dadzą inne rezultaty.</p>
+        </div>
+
+        <div class="exercise exercise-star">
+          <p>Konstrukcja <code>&lt;&lt;</code> nie działa tak, jak można by się spodziewać. Dowiedz się, jakie znaczenie ma ten metasymbol i przetestuj jego działanie.</p>
+
+          <p><i>Podpowiedź:</i> <a href="https://en.wikipedia.org/wiki/Here_document">https://en.wikipedia.org/wiki/Here_document</a>.</p>
+        </div>
+
+        <div class="exercise exercise-star">
+          <p>Dowiedz się, jakie znaczenie ma metasymbol <code>&lt;&lt;&lt;</code> i przetestuj jego działanie.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Metasymbol <code>&lt;&lt;&lt;</code> pozwala traktować przekazany ciąg znaków jako standardowe wejście.</p>
+          </div>
+        </div>
+
+        <div class="titbit titbit-star">
+          <p>Mechanizm przeadresowywania wyjścia pozwala także na przekazywanie wyjścia do innego terminala (bo terminal też jest plikiem).</p>
+          <div class="exercise exercise-star-star">
+            <p>Zaloguj się do dwóch terminali i odnajdź związane z nimi pliki w&nbsp;katalogu <code>/dev</code>. W jednej z konsol uruchom program <code>cat</code>, w drugiej wykonaj dowolne polecenie, a wynik przekieruj do pierwszej z konsol. Czy istnieje różnica pomiędzy zastosowaniem przekierowania z użyciem metasymbolu <code>&gt;&gt;</code> a <code>&gt;</code>?</p>
+          </div>
+        </div>
+
+        <h1>Kilka przypatnych poleceń</h1>
+
+        <div class="command">
+          <p>Program <code>bc</code> to proste narzędzie do wykonywania operacji arytmetycznych. Obsługuje wiele operatorów matematycznych, w tym operatory arytmetyczne i logiczne, funkcji matematycznych, instrukcji warunkowych i pętli. Konstrukcja wyrażeń jest zbliżona do tej znanej z języka C.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając z programu <code>bc</code> z opcją <code>-l</code> (dołącza biblioteki matematyczne), oblicz (z dokładnością do 10 miejsc po przecinku) wartość wyrażenia $e^{\sqrt{7}-1}+5e$.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">scale=10; e(sqrt(7)-1)+5*e(1)</code></pre>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając z programu <code>bc</code> z opcją <code>-l</code>, oblicz wartość liczby $\pi$ z dokładnością do 1000 miejsc po przecinku. Wykorzystaj fakt, że $\frac{\pi}{4} = \arctan(1)$.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">scale=1000; a(1)*4</code></pre>
+          </div>
+        </div>
+
+        <div class="command">
+          <p>Program <code>cal</code> pozwala na wyświetlenie kalendarza w formie tekstowej.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Zapoznaj się z podręcznikiem programu <code>cal</code>. Następnie wyświetl:</p>
+          <ol style="list-style-type: lower-latin;">
+            <li>kalendarz na rok 2016,</li>
+            <li>kalendarz trójdzielny dla miesiąca grudnia (listopad 2015, grudzień 2015 i styczeń 2016),</li>
+            <li>kalendarz dla bieżącego miesiąca i trzech poprzednich oraz pięciu kolejnych miesięcy.</li>
+          </ol>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>(a) <code>$ cal -y 2016</code>, (b) <code>$ cal -3 -d 2015-11</code>, (c) <code>$ cal -A 5 -B 3</code>.</p>
+          </div>
+        </div>
+
+        <div class="command">
+          <p>Program <code>clear</code> pozwala na oczyszczenie ekranu.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Przetestuj działanie programu <code>clear</code>.</p>
+        </div>
+
+        <div class="exercise exercise-star-star">
+          <p>Dowiedz się, jak działa program <code>clear</code>. W tym celu możesz sprawdzić, przekierowując potokiem do programu <code>hexdump</code> dane ze standardowego wyjścia programu <code>clear</code>, jakie znaki specjalne wypisuje on na wyjściu.</p>
+        </div>
+
+        <div class="command">
+          <p>Program <code>date</code> pozwala wyświetlić lub ustawić datę systemową. Przydatne opcje:</p>
+          <table class="noborder">
+            <tr><td><code>-d "X"</code></td><td>nadpisz bieżącą datę datą <code>X</code></td></tr>
+            <tr><td><code>-s "X"</code></td><td>ustaw bieżący czas na <code>X</code></td></tr>
+            <tr><td><code>-u</code></td><td>używaj czasu UTC</td></tr>
+          </table>
+          <p>Program obsługuje też wiele możliwości formatowania wyjścia, z którymi można się zapoznać w jego dokumentacji.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Wykonaj następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ date
+<!--     -->$ date -d '2 Nov'
+<!--     -->$ date -d '2 Nove'
+<!--     -->$ date -d '2 Nov 2013'
+<!--     -->$ date -d 'Nov 2 2014'
+<!--     -->$ date -d '2 Jan 2017 10:54'
+<!--     -->$ date -d 'Jan 2 2017 10:54:12'
+<!--     --></code></pre>
+          <p>Zastanów się nad efektami.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając z formatowania wyjścia, wyświetl datę zgodnie ze wzorami</p>
+          <pre><code class="no-highlight"><!--
+         -->Dzisiaj jest 215. dzien roku.
+<!--     -->20150803152847
+<!--     -->Biezacy rok to 20 stuleci i 15 lat.
+<!--     --></code></pre>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight"><!--
+           -->$ date +"Dzisiaj jest %j. dzien roku."
+<!--       -->$ date +"%Y%m%d%H%M%S"
+<!--       -->$ date +"Biezacy rok to %C stuleci i %y lat."
+<!--       --></code></pre>
+          </div>
+        </div>
+
+        <div class="exercise exercise-star">
+          <p>Ile sekund minęło od 12 stycznia 2013 r., godz. 10:23:17, do 10 września 2014 r., godz. 11:12:43?</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>52357766</p>
+            <pre><code class="no-highlight">$ echo `date -d "2014-09-10 11:12:43" +"%s"` - \
+<!--       -->       `date -d "2013-01-12 10:23:17" +"%s"` | bc</code></pre>
+          </div>
+        </div>
+
+        <h1>Procesy</h1>
+
+        <p>Na początku poprzednich ćwiczeń dowiedzieliśmy się już, co się dzieje, zanim rozpocznie się sesja powłoki i że w momencie poprawnego zalogowania uruchamiany jest program powłoki (np. <code>bash</code>). W systemach uniksopodobnych panuje hierarchiczna struktura procesów. Oznacza to, że każdy proces (program) ma dokładnie jednego rodzica (proces, który go wywołał), a&nbsp;procesem-korzeniem całej struktury jest <code>init</code>.</p>
+
+        <p>W praktyce oznacza to, że każdy program uruchamiany z poziomu powłoki staje się jej podprocesem, a jeśli ten uruchamia kolejne procesy, <i>drzewo procesów</i> się rozrasta.</p>
+
+        <p>Użytkownik systemu może dotrzeć do listy procesów uruchomionych aktualnie w systemie. W zależności od jego konfiguracji, może się okazać, że lista ta jest ograniczona jedynie do procesów, których właścicielem jest zalogowany użytkownik. Tak jest, procesy &ndash; podobnie jak pliki &ndash; mają właścicieli.</p>
+
+        <h2>Polecenia <code>ps</code> i <code>pstree</code></h2>
+
+        <div class="command">
+          <p>Program <code>ps</code> służy do wyświetlania listy aktualnie uruchomionych procesów. Obsługuje ono zarówno uniksowy (ze znakiem <code>-</code>), jak i pochodzący z BSD (bez znaku <code>-</code>) sposób przekazywania opcji. W przypadku tego programu stosuje się powszechnie styl BSD. Wynika to z faktu, że program <code>ps</code> nie przyjmuje argumentów innych niż opcje. Ważniejsze z nich to:</p>
+          <table class="noborder">
+            <tr><td><code>a</code></td><td>wyświetla tylko procesy związane z jakimś terminalem lub wszystkie procesy, jeśli połączone z opcją <code>x</code></td></tr>
+            <tr><td><code>x</code></td><td>wyświetla tylko procesy bieżącego użytkownika lub wszystkie procesy, jeśli połączone z opcją <code>a</code></td></tr>
+            <tr><td><code>u</code></td><td>wyświetl listę procesów w sposób szczegółowy</td></tr>
+          </table>
+        </div>
+
+        <div class="notice">
+          <p>Serwer <code>students.wmi.amu.edu.pl</code> nie pozwala uzyskać dostępu do informacji o procesach innych użytkowników. Należy więc obejść się smakiem.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając z dokumentacji programu <code>ps</code> dowiedz się, na czym polega notacja uniksowa, BSD i GNU związana z przekazywaniem opcji do programu. Gdzie spotkaliśmy się wcześniej z tym podziałem?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Rozpocznij kilka sesji powłoki na lokalnym komputerze lub za pośrednictwem protokołu <code>ssh</code>. Uruchom jakieś programy (np. <code>less</code> lub <code>sleep</code>), a następnie sprawdź działanie przedstawionych wyżej opcji programu <code>ps</code> wykonując polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ ps
+<!--     -->$ ps a
+<!--     -->$ ps au
+<!--     -->$ ps aux
+<!--     --></code></pre>
+        </div>
+
+        <p>Korzystając z polecenia <code>pstree</code> można obejrzeć drzewo procesów, a więc zależności pomiędzy poszczególnymi procesami aktualnie uruchomionymi w systemie.</p>
+
+        <div class="exercise">
+          <p>Zapoznaj się z poleceniem <code>pstree</code>. Przetestuj jego działanie. Wybierz samodzielnie, korzystając z dokumentacji programu, kilka opcji i sprawdź ich działanie w praktyce.</p>
+        </div>
+
+        <h2>Sygnały, procesy w tle i na pierwszym planie</h2>
+
+        <div class="howitworks">
+          <p>Każdy program uruchomiony w powłoce wykonuje się w tej powłoce na pierwszym planie (to znaczy absorbuje powłokę). Kiedy uruchamiamy program <code>cat</code>, wchodzi on z nami w&nbsp;interakcję na poziomie powłoki. Dopóki nie zakończy się jego działanie, nie możemy wykorzystać powłoki w inny sposób, np. aby uruchomić inny program.</p>
+
+          <p>W rzeczywistości zdecydowana większość programów obsługuje poprawnie tak zwane <i>sygnały</i>, które wpływają na zachowanie programu. Szczegóły dotyczące tej tematyki będą poruszane na wykładzie, nas jednak interesuje to, że z poziomu powłoki możemy takie sygnały wysłać.</p>
+
+          <p>Gdy program się wykonuje w powłoce, możemy wysłać do niego sygnał <code>SIGINT</code> (<i>interrupt</i>), korzystając z kombinacji klawiszy <kbd>Ctrl</kbd> + <kbd>C</kbd> (oznaczanej jako <code>^C</code>). Sygnał ten oznacza, że program powinien przerwać wykonywane zadanie i zakończyć się niezwłocznie. Podobnie, korzystając z kombinacji klawiszy <kbd>Ctrl</kbd> + <kbd>Z</kbd> (<code>^Z</code>), możemy wysłać do programu sygnał <code>SIGSTP</code> (<i>stop</i>), który powoduje wstrzymanie programu i powrót do powłoki. Proces taki nie kończy się jednak.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Uruchom dowolny program (np. <code>cat</code>), a następnie wciśnij kombinację klawiszy <kbd>Ctrl</kbd> + <kbd>C</kbd>. Sprawdź, jaki będzie efekt wywołania polecenia <code>ps</code>. Podobny eksperyment wykonaj dla kombinacji klawiszy <kbd>Ctrl</kbd> + <kbd>Z</kbd>. Zinterpretuj wyniki.</p>
+        </div>
+
+        <p>Można kontynuować wykonywanie wstrzymanego procesu. Polecenie <code>fg</code> powoduje, że ostatni wstrzymany proces powróci do powłoki i będzie w niej kontynuowany. Polecenie <code>bg</code> powoduje zaś, że ostatni wstrzymany proces zostanie przywrócony w tle. Polecenie <code>jobs</code> pozwala zobaczyć listę aktualnie wykonywanych programów wraz z ich statusami.</p>
+
+        <div class="exercise">
+          <p>Wykonaj następujące czynności i zaobserwuj efekty:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ sleep 100
+<!--     -->^Z
+<!--     -->$ sleep 90
+<!--     -->^Z
+<!--     -->$ sleep 80
+<!--     -->^Z
+<!--     -->$ jobs
+<!--     -->$ bg
+<!--     -->$ jobs
+<!--     -->$ fg %1
+<!--     -->^C
+<!--     -->$ jobs
+<!--     -->$ fg
+<!--     -->^C
+<!--     --></code></pre>
+          <p>Co oznacza polecenie <code>fg %1</code>? Wywołaj polecenie <code>jobs</code>, gdy wykonywanie polecenia <code>sleep 80</code> zakończy się. Wywołaj je ponownie. Co się stało?</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Przy pierwszym wywołaniu polecenia <code>jobs</code> po zakończeniu procesu z listy, wyświetli się informacja o jego zakończeniu (<code>Done</code>).</p>
+          </div>
+        </div>
+
+        <p>Proces można od razu uruchomić w tle. Wystarczy zakończyć jego wywołanie znakiem <code>&amp;</code>.</p>
+
+        <div class="exercise">
+          <p>Uruchom w tle program <code>sleep</code> z argumentem <code>240</code>. W tym celu wykonal polecenie</p>
+          <pre><code class="no-highlight">$ sleep 240 &amp;</code></pre>
+          <p>Sprawdź, co się stało, korzystając z poleceń <code>ps</code>, <code>pstree</code> oraz <code>jobs</code>. Przenieś uruchomiony program na pierwszy plan i zakończ, wysyłając sygnał <code>SIGINT</code>.</p>
+        </div>
+
+        <h2>Zabijanie procesów &ndash; polecenia <code>kill</code> i <code>killall</code></h2>
+
+        <p>Każdy proces w momencie uruchomienia otrzymuje nazwę oraz swój indywidualny i niepowtarzalny numer. Numer ten nazywamy <i>identyfikatorem procesu</i> i oznaczamy skrótem <code>PID</code>.</p>
+
+        <div class="exercise">
+          <p>Korzystając z programu <code>ps</code> dowiedz się, jakie identyfikatory mają aktualnie uruchomione programy.</p>
+        </div>
+
+        <p>Program <code>kill</code> pozwala wysłać sygnał do programów o wskazanych identyfikatorach. Domyślnie jest to sygnał <code>SIGTERM</code>.</p>
+
+        <div class="exercise">
+          <p>Dowiedz się, jakie inne sygnały można przesłać do programu za pomocą programu <code>kill</code> i jak to zrobić.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight"><!--
+           -->&lt;pid&gt; [...]
+<!--       -->    Send signal to every &lt;pid&gt; listed.
+<!--       -->-&lt;signal&gt;
+<!--       -->-s &lt;signal&gt;
+<!--       --></code></pre>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Uruchom w tle program <code>sleep</code> z argumentem <code>240</code>. Dowiedz się, jaki identyfikator ma utworzony proces, a następnie zakończ go używając polecenia <code>kill</code>.</p>
+        </div>
+
+        <p>Polecenie <code>killall</code> pozwala na zakończenie procesu o określonej nazwie, przekazanej jako argument.</p>
+
+        <div class="exercise">
+          <p>Uruchom w tle program <code>sleep</code> z argumentem <code>240</code>. Wykonaj następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ killall sle
+<!--     -->$ killall sleep
+<!--     --></code></pre>
+          <p>Zaobserwuj efekty. Czy polecenie <code>$ killall sle*</code> zadziała tak, jak można się spodziewać?</p>
+        </div>
+
+        <h2>Polecenie <code>time</code></h2>
+
+        <p>Program <code>time</code> pozwala zmierzyć czas wykonywania polecenia.</p>
+
+        <div class="exercise">
+          <p>Korzystając z programu <code>time</code> dowiedz się, jak wiele czasu potrzebuje komputer na wykonanie polecenia</p>
+          <pre><code class="no-highlight">$ ls -la /etc</code></pre>
+          <p>Zinterpretuj wartości <code>real</code>, <code>user</code> oraz <code>sys</code>.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Czas <code>sys</code> okresla czas procesora związany z wykonywaniem operacji na poziomie jądra, <code>user</code> ten związany z wykonywaniem operacji poza jądrem, a <code>real</code> rzeczywisty czas od rozpoczęcia do zakończenia wykonywania programu.</p>
+          </div>
+        </div>
+
+        <div class="exercise exercise-star-star">
+          <p>W oparciu o rozwiązanie poprzedniego ćwiczenia, skonstruuj polecenie, które na standardowym wyjściu wypisuje wyłącznie rzeczywisty czas wykonania badanego polecenia w sekundach, na przykład:</p>
+          <pre><code class="no-highlight">0.015</code></pre>
+          <p>Upewnij się, że polecenie będzie działać poprawnie również gdy badane polecenie będzie się wykonywać ponad minutę.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight"><!--
+           -->$ TIMEFORMAT='%E'
+<!--       -->$ time "ls" &amp;> /dev/null
+<!--       --></code></pre>
+          </div>
+        </div>
+
+        <h1>Zadanie domowe</h1>
+
+        <div class="task">
+          <p>W wyniku działania pewnego polecenia otrzymano na wyjściu następujący ciąg znaków:</p>
+          <pre><code class="no-highlight">drwx------ 6 adam ludzie 4096 Oct  8 16:11 muchomorek/</code></pre>
+          <ol style="list-style-type: lower-latin;">
+            <li>Podaj pełną treść polecenia, które mogło zwrócić taki wynik. Załóż, że element o nazwie <code>muchomorek</code> znajduje się w bieżącym katalogu roboczym.</li>
+            <li>Jakie polecenie należy wykonać, aby dodać członkom grupy <code>ludzie</code> prawo do odczytu i wykonania elementu <code>muchomorek</code>, a pozostałym użytkownikom prawo do jego odczytu? Zaproponuj co najmniej dwa rozwiązania wykorzystujące notację liczbową i symboliczną.</li>
+          </ol>
+        </div>
+
+        <div class="task">
+          <p>W ramach eksperymentu utworzono katalog <code>zwirek</code>. Okazało się, że domyślne uprawnienia do niego są równe <code>r-xrw---x</code>.</p>
+          <ol style="list-style-type: lower-latin;">
+            <li>Jaki będzie efekt wywołania polecenia <code>umask</code>?</li>
+            <li>Jakie polecenie należy wykonać, aby domyślne uprawnienia do nowo tworzonych katalogów były równe <code>rwxr-xr--</code>?</li>
+          </ol>
+        </div>
+
+        <div class="task">
+          <p>Wykonaj poniższe zadania:</p>
+          <ol style="list-style-type: lower-latin;">
+            <li>Odpowiedz, ile elementów znajdujących się w katalogu <code>/dev</code> jest dowiązaniami symbolicznymi?</li>
+            <li>Plik <code>~/.bash_history</code> zawiera historię wykonywanych poleceń w kolejności od najdawniej wykonanego. Wypisz, począwszy od najświeższego, 3 wykonane ostatnio polecenia rozpoczynające się od słowa <code>cat</code> lub <code>ls</code>.</li>
+            <li>Wyświetl, posortowaną malejąco według nazw, szczegółową listę ośmiu największych plików regularnych, znajdujących się w katalogu <code>/usr/bin</code>.</li>
+            <li>Posortuj szczegółową listę elementów z katalogu <code>/etc</code> malejąco według liczby dowiązań stałych. Jeśli dwa lub więcej elementów ma taką samą liczbę dowiązań stałych, powinny być posortowane według rozmiaru malejąco. Uwzględnij tylko te elementy, które mogą być odczytane przez osoby inne niż właściciel i członkowie wskazanej grupy.</li>
+          </ol>
+        </div>
+
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
+</body>
+</html>
