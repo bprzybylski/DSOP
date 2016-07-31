@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html moznomarginboxes mozdisallowselectionprint>
 <head>
     <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
     <meta charset="utf-8">
@@ -7,92 +7,630 @@
     <meta name="robots" content="index,follow"/>
     <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
     <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <!--[if lt IE 9]>
     <script type="text/javascript" src="js/html5.js"></script>
     <![endif]-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
     <script type="text/javascript" src="js/js.js"></script>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
-    <div id="wrapper">
-        <header id="main-header">
-            <h1>Ćwiczenia 1</h1>
-            <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki UAM.</h2>
-        </header>
-        <article id="cw01">
-            <h1>Sesja powłoki</h1>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Ćwiczenia 1</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
 
-            <p>Zanim możliwe będzie korzystanie z systemu, należy rozpocząć <i>sesję powłoki</i>, identyfikując się jako uprawniony użytkownik. <i>Powłoka</i> to program, który pośredniczy między użytkownikiem a jądrem systemu operacyjnego, udostępniając narzędzia ułatwiające korzystanie z aplikacji. W ramach tych ćwiczeń korzystać będziemy wyłącznie z powłoki tekstowej Bash, która dostępna jest w praktycznie wszystkich instalacjach systemów *NIX.</p>
+    <article id="cw01">
 
-            <div class="exercise">
-                <p>Korzystając z internetu dowiedz się, czym jest system uniksopodobny (*NIX) oraz jak rozwijały się systemy z tej rodziny.</p>
-            </div>
+        <h1>Sesja powłoki</h1>
 
-            <div class="exercise exercise-star">
-                <p>Znajdź podstawowe informacje o jądrze systemu Linux (ang. <i>Linux kernel</i>). Za co ono odpowiada?</p>
+        <p>Zanim możliwe będzie korzystanie z systemu, należy rozpocząć <i>sesję powłoki</i>, identyfikując się jako uprawniony użytkownik. <i>Powłoka</i> to program, który pośredniczy między użytkownikiem a jądrem systemu operacyjnego, udostępniając narzędzia ułatwiające korzystanie z aplikacji. W ramach tych ćwiczeń korzystać będziemy wyłącznie z powłoki tekstowej Bash, która dostępna jest w praktycznie wszystkich instalacjach systemów uniksopodobnych.</p>
 
-                <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+        <div class="exercise">
+          <p>Korzystając z internetu dowiedz się, czym jest system uniksopodobny (*NIX) oraz jak rozwijały się systemy z tej rodziny.</p>
+        </div>
 
-                <div class="answer">
-                    <p>Jądro systemu operacyjnego odpowiada za komunikację pomiędzy aplikacjami a urządzeniami fizycznymi. Jądro systemów uniksopodobnych (monolityczne) odpowiada za tę komunikację w całości.</p>
-                </div>
-            </div>
+        <div class="exercise exercise-star">
+          <p>Znajdź podstawowe informacje o jądrze systemu Linux (ang. <i>Linux kernel</i>). Za co ono odpowiada? Jakie ma cechy?</p>
+        </div>
 
-            <div class="exercise">
-                <p>Znajdź informacje o innych dostępnych programach powłoki, np. <code>sh</code>, <code>csh</code> lub <code>ksh</code>. Jak myślisz, dlaczego nie istnieje tylko jeden program tego typu?</p>
-            </div>
+        <div class="exercise">
+          <p>Znajdź informacje o innych dostępnych programach powłoki, np. <code>sh</code>, <code>csh</code> lub <code>ksh</code>. Jak myślisz, dlaczego nie istnieje tylko jeden program tego typu?</p>
+        </div>
 
-            <h2>Logowanie lokalne</h2>
+        <h2>Logowanie lokalne</h2>
 
-            <div class="howitworks howitworks-star">
-                <p>Gdy jądro systemu zostanie poprawnie załadowane, wywoływany jest program o nazwie <code>init</code>, który odpowiada za uruchomienie aplikacji niezbędnych do poprawnego działania systemu. Jedną z nich jest program <code>getty</code><sup>[1]</sup>, który jest uruchamiany tak wiele razy, jak wiele <i>wirtualnych konsol</i> udostępnia system<sup>[2]</sup>. Gdy <code>getty</code> wykryje aktywność, wywołuje program <code>login</code>, odpowiedzialny za zweryfikowanie tożsamości użytkownika, a jeśli weryfikacja ta przebiegnie pomyślnie, za uruchomienie odpowiedniej powłoki. Po zakończeniu sesji (np. wskutek wylogowania) program powłoki i program <code>login</code> są zamykane, a <code>getty</code> powraca do nasłuchiwania.</p>
-                <p class="footnote">[1] W różnych systemach może to działać odrobinę różnie, dlatego warto zapoznać się z tym, jak jest to w przypadku tego, którego sami używamy.</p>
-                <p class="footnote">[2] Zwykle jest to 6 wirtualnych konsol oznaczanych symbolami od <code>tty1</code> do <code>tty6</code>.</p>
-            </div>
+        <div class="howitworks howitworks-star">
+          <p>Gdy jądro systemu zostanie poprawnie załadowane, wywoływany jest program o nazwie <code>init</code>, który odpowiada za uruchomienie aplikacji niezbędnych do poprawnego działania systemu. Jedną z nich jest program <code>getty</code><sup>[1]</sup>, który jest uruchamiany tak wiele razy, jak wiele <i>wirtualnych konsol</i> udostępnia system<sup>[2]</sup>. Gdy <code>getty</code> wykryje aktywność, wywołuje program <code>login</code>, odpowiedzialny za zweryfikowanie tożsamości użytkownika, a jeśli weryfikacja ta przebiegnie pomyślnie, za uruchomienie programu powłoki związanego ze zweryfikowanym kontem. Po zakończeniu sesji (np. wskutek wylogowania) program powłoki i program <code>login</code> są zamykane, a <code>getty</code> powraca do nasłuchiwania.</p>
+          <p class="footnote">[1] W różnych systemach proces ten może wyglądać odrobinę różnie, dlatego warto zapoznać się z tym, jak jest to w przypadku tego, którego sami używamy.</p>
+          <p class="footnote">[2] Zwykle jest to 6 wirtualnych konsol oznaczanych symbolami od <code>tty1</code> do <code>tty6</code>.</p>
+        </div>
 
-            <p>Aby rozpocząć sesję powłoki, wystarczy wprowadzić w odpowiednim momencie swój login i hasło. Poprawne logowanie zakończy się pojawieniem <i>znaku zachęty</i>, np.:</p>
+        <p>Aby rozpocząć sesję powłoki, wystarczy wprowadzić w odpowiednim momencie swój login i hasło. Poprawne logowanie zakończy się pojawieniem się <i>znaku zachęty</i>, np.:</p>
 
-            <pre><code class="bash">s123456@shell:~$</code></pre>
+        <pre><code class="no-highlight">s123456@shell:~$</code></pre>
 
-            <p>Nazwa znaku zachęty pochodzi od przeznaczenia tego ciągu. W tych materiałach będziemy oznaczać znak zachęty symbolem <code>$</code>, choć w zależności od okoliczności może on przyjmować różne postacie. Ma on zachęcać użytkownika do wprowadzenia jakiegoś <i>polecenia</i>. Jednym z takich poleceń jest <code>logout</code>, kończące sesję powłoki.</p>
+        <p>Nazwa znaku zachęty pochodzi od przeznaczenia tego ciągu. Ma on zachęcać użytkownika do wprowadzenia jakiegoś <i>polecenia</i>. Jednym z takich poleceń może być <code>logout</code>, kończące sesję powłoki. W tych materiałach będziemy oznaczać znak zachęty symbolem <code>$</code>, choć w zależności od okoliczności może on przyjmować różne postacie.</p>
 
-            <p>W przypadku systemów z powłoką graficzną (np. <i>Ubuntu</i>), sposób logowania może być niemalże dowolny (z automatycznym logowaniem włącznie). Zwykle jednak wirtualne konsole pozostają dostępne.</p>
+        <p>W przypadku systemów z powłoką graficzną (np. <i>Ubuntu</i>), sposób logowania może być niemalże dowolny (z automatycznym logowaniem włącznie). Zwykle jednak wirtualne konsole pozostają dostępne.</p>
 
-            <div class="exercise">
-                <p>Uruchom system Ubuntu zainstalowany na komputerze w laboratorium wydziałowym. Zanim się zalogujesz korzystając z graficznego interfejsu, przejdź przez wirtualne konsole korzystając z kombinacji klawiszy od <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>F1</kbd> do <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>F6</kbd>.</p>
-            </div>
+        <div class="exercise">
+          <p>Uruchom system Ubuntu zainstalowany na komputerze w laboratorium wydziałowym. Zanim się zalogujesz korzystając z graficznego interfejsu, przejdź przez wirtualne konsole korzystając z kombinacji klawiszy od <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>F1</kbd> do <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>F6</kbd>.</p>
+        </div>
 
-            <div class="exercise">
-                <p>Zaloguj się w wybranej konsoli wirtualnej. Zapoznaj się z wyglądem znaku zachęty, a następnie sprawdź, czy logowanie objęło też inne konsole. Wyloguj się, korzystając z polecenia <code>logout</code>.</p>
-            </div>
+        <div class="exercise">
+          <p>Zaloguj się do wybranej konsoli wirtualnej. Zapoznaj się z wyglądem znaku zachęty, a następnie sprawdź, czy logowanie objęło też inne konsole. Wyloguj się, korzystając z polecenia <code>logout</code>.</p>
+        </div>
 
-            <div class="exercise">
-                <p>Powróć do trybu graficznego, korzystając z kombinacji klawiszy <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>F7</kbd>. Zaloguj się, a następnie uruchom dostępną aplikację <i>Terminal</i> lub podobną (taki program nazywamy <i>emulatorem konsoli</i>). Spróbuj intuicyjnie odpowiedzieć na pytanie, dlaczego nie musisz ponownie podawać danych logowania.</p>
-            </div>
+        <div class="exercise">
+          <p>Powróć do trybu graficznego, korzystając z kombinacji klawiszy <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>F7</kbd>. Zaloguj się, a następnie uruchom dostępną aplikację <i>Terminal</i> lub podobną (taki program nazywamy <i>emulatorem konsoli</i>). Spróbuj intuicyjnie odpowiedzieć na pytanie, dlaczego nie musisz ponownie podawać danych logowania.</p>
+        </div>
 
-            <div class="test">
-              <p><a href="#" class="button button-gold" rel="question">Pokaż pytanie kontrolne</a></p>
-              <div class="question">
-                <p>Bash to:</p>
-                <ul>
-                  <li><input type="radio" name="q1a" id="q1aa" /> <label for="q1aa">konsola wirtualna</label></li>
-                  <li><input type="radio" name="q1a" id="q1ab" /> <label for="q1ab">znak zachęty</label></li>
-                  <li><input type="radio" name="q1a" id="q1ac" class="correct" /> <label for="q1ac">powłoka tekstowa</label></li>
-                  <li><input type="radio" name="q1a" id="q1ad" /> <label for="q1ad">emulator konsoli</label></li>
-                </ul>
-                <p><a href="#" class="button button-grey" rel="testcheck">Sprawdź odpowiedź</a></p>
-              </div>
-            </div>
-        </article>
-        <footer id="main-footer">
-            <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
-            <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
-        </footer>
-    </div>
+        <div class="test">
+          <p><a href="#" class="button button-gold" rel="question">Pokaż pytanie kontrolne</a></p>
+          <div class="question">
+            <p>Bash to:</p>
+            <ul>
+              <li><input type="radio" name="q1" id="q1a" /> <label for="q1a">konsola wirtualna</label></li>
+              <li><input type="radio" name="q1" id="q1b" /> <label for="q1b">znak zachęty</label></li>
+              <li><input type="radio" name="q1" id="q1c" class="correct" /> <label for="q1c">powłoka tekstowa</label></li>
+              <li><input type="radio" name="q1" id="q1d" /> <label for="q1d">emulator konsoli</label></li>
+            </ul>
+            <p><a href="#" class="button button-grey" rel="testcheck">Sprawdź odpowiedź</a></p>
+          </div>
+        </div>
+
+        <h2>Logowanie zdalne z komputera z systemem z rodziny *NIX</h2>
+
+        <p>Niekiedy zachodzi potrzeba zdalnego połączenia się z komputerem. W dawnych czasach wykorzystywano do tego protokół <code>telnet</code>, dziś zdecydowanie popularniejszy jest protokół <code>ssh</code> (ang. <i>secure shell</i>), umożliwiający nawiązanie szyfrowanego połączenia. Jeśli na komputerze, z&nbsp;którym próbujemy się połączyć, uruchomiony jest dobrze skonfigurowany <i>demon</i> <code>ssh</code>, połączenie takie może się udać.</p>
+
+        <div class="exercise">
+          <p>Dowiedz się, czym jest <i>demon</i> w omawianym kontekście.</p>
+        </div>
+
+        <p>Większość instalacji systemów uniksopodobnych wyposażonych jest w program <code>ssh</code>, umożliwiający nawiązanie połączenia z użyciem protokołu <code>ssh</code>. Gdybyśmy chcieli się połączyć z wydziałowym serwerem studenckim, moglibyśmy napisać
+        <pre><code class="no-highlight">$ ssh s123456@students.wmi.amu.edu.pl</code></pre>
+        wywołując w ten sposób program <code>ssh</code> z argumentem <code>s123456@students.wmi.amu.edu.pl</code>. Jeśli login aktualnie zalogowanego użytkownika pokrywa się z loginem użytkownika, na którego konto chcemy się zalogować zdalnie, można pominąć prefiks adresu, pisząc po prostu</p>
+        <pre><code class="no-highlight">$ ssh students.wmi.amu.edu.pl</code></pre>
+
+        <div class="titbit">
+          <p>Każde połączenie przychodzące do zdalnej maszyny okupuje tak zwany <i>pseudoterminal</i> (oznaczany zwykle symbolem <code>pts/x</code>, gdzie <code>x</code> jest liczbowym identyfikatorem), czyli dodatkowe, programowe środowisko obsługi wejścia/wyjścia. Związane jest to z zasadą, że z&nbsp;jednego terminala (ale też z jednej konsoli, czy to fizycznej, czy wirtualnej) może korzystać w danym momencie tylko jeden użytkownik.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając z konsoli wirtualnej lub emulatora konsoli połącz się z&nbsp;serwerem <code>students.wmi.amu.edu.pl</code>. Spróbuj zrobić to samo z komputera znajdującego się poza wydziałową siecią komputerową. Dlaczego logowanie z sieci wydziałowej nie wymaga podania danych logowania?</p>
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Wewnątrz sieci wydziałowej logowanie odbywa się automatycznie przy użyciu protokołu kerberos.</p>
+          </div>
+        </div>
+
+        <div class="notice">
+          <p>Wszystkie ćwiczenia od tego momentu wykonuj na zdalnym serwerze <code>students.wmi.amu.edu.pl</code> z wykorzystaniem protokołu <code>ssh</code>. Chociaż zdecydowana większość poleceń działa identycznie również w lokalnych instalacjach systemów uniksopodobnych, niektóre ćwiczenia wykorzystują strukturę lub ustawienia lokalne serwera <code>students</code>.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając, w różnych kontekstach, z polecenia <code>who</code> zbadaj, który zalogowany użytkownik korzysta z którego terminala. Spróbuj określić, czy jest to konsola wirtualna czy pseudoterminal.</p>
+        </div>
+
+        <div class="test">
+          <p><a href="#" class="button button-gold" rel="question">Pokaż pytanie kontrolne</a></p>
+          <div class="question">
+            <p>Pseudoterminale oznaczane są zwykle skrótem:</p>
+            <ul>
+              <li><input type="radio" name="q2" id="q2a" /> <label for="q2a"><code>ssh</code></label></li>
+              <li><input type="radio" name="q2" id="q2b" class="correct" /> <label for="q2b"><code>pts</code></label></li>
+              <li><input type="radio" name="q2" id="q2c" /> <label for="q2c"><code>tty</code></label></li>
+              <li><input type="radio" name="q2" id="q2d" /> <label for="q2d"><code>who</code></label></li>
+            </ul>
+            <p><a href="#" class="button button-grey" rel="testcheck">Sprawdź odpowiedź</a></p>
+          </div>
+        </div>
+
+        <h2>Logowanie zdalne z komputera z systemem Windows</h2>
+
+        <p>Cóż, komputery z systemem Windows nie są wyposażone w oprogramowanie do nawiązywania połączeń przy użyciu protokołu <code>ssh</code>. Na szczęście istnieją narzędzia, które można do tego wykorzystać, a najpopularniejszym z nich jest PuTTY.</p>
+
+        <div class="exercise">
+          <p>Korzystając z programu PuTTY, połącz się z serwerem <code>students.wmi.amu.edu.pl</code> za pomocą protokołu <code>ssh</code>.</p>
+        </div>
+
+        <h1>Dokumentacja poleceń</h1>
+
+        <div class="howitworks">
+          <p>Do tej pory dość intuicyjnie rozumieliśmy pojęcie <i>polecenia</i> jako instrukcji, którą przekazujemy komputerowi. Taka instrukcja składa się z uporządkowanej sekwencji ciągów znaków wyraźnie od siebie oddzielonych. Pierwsze słowo polecenia określa element, do którego się odwołujemy. Do tej pory była to zawsze nazwa programu &ndash; w rzeczywistości może to być:</p>
+          <ul>
+            <li>nazwa programu zlokalizowanego na dysku komputera, np. <code>who</code> lub <code>ssh</code>, lub ścieżka do niego,</li>
+            <li>alias zdefiniowany wewnątrz powłoki, np. <code>ll</code>,</li>
+            <li>nazwa funkcji zdefiniowanej w powłoce,</li>
+            <li>słowo kluczowe języka powłoki, np. <code>if</code>,</li>
+            <li>nazwa polecenia powłoki (polecenia wbudowanego w powłokę), np. <code>type</code>,</li>
+          </ul>
+          <p>Polecenie to jednak rzadko tylko nazwa elementu, do którego się odwołujemy. Często wraz z wywołaniem polecenia chcielibyśmy (a&nbsp;czasem nawet musimy) sparametryzować efekt działania docelowego programu, funkcji itd. Przykładowo, gdy chcemy połączyć się ze zdalnym serwerem z wykorzystaniem programu <code>ssh</code>, przekazujemy do niego <i>argument</i> będący adresem zdalnego serwera. Innym przykładem jest próba skopiowania pliku &ndash; należy przekazać do programu kopiującego informację o tym, który plik i dokąd chcemy skopiować.</p>
+          <p>Interpretacja argumentów i uzależnienie działania programu od nich dzieje się zawsze po stronie samego programu. Powłoka w żaden sposób nie weryfikuje ani czy liczba argumentów jest odpowiednia, ani czy są one poprawne (chyba że polecenie jest poleceniem wewnętrznym powłoki). Niektóre argumenty mogą mieć jednak szczególne znaczenie &ndash; w jaki sposób można powiedzieć programowi wypisującemu zawartość katalogu, że chcemy wypisać ją w postaci szczegółowej listy, a nie standardowej, złożonej wyłącznie z nazw elementów? Argumenty, które przekazują programowi takie i podobne informacje nazywamy <i>opcjami</i> (lub <i>przełącznikami</i>). Te zaś, zwyczajowo, poprzedzamy symbolem pojedynczego lub podwójnego łącznika (<code>-</code>). Warto zauważyć, że każda opcja (lub grupa opcji) jest argumentem, ale nie każdy argument programu jest opcją.</p>
+        </div>
+
+        <div class="notice">
+          <p>W tych materiałach pod pojęciem <i>polecenia</i> będziemy rozumieć nie tylko sekwencję ciągów znaków tworzącą instrukcję (nazwę lub ścieżkę do wywołanego elementu wraz z argumentami), ale też samą nazwę wywoływanego elementu. Będziemy więc często mówić na przykład o poleceniu <code>ls</code>, które może przyjmować argumenty, unikając w ten sposób konieczności precyzyjnego definiowana, jakiego typu jest element <code>ls</code>.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Określ nazwę polecenia, opcje i argumenty poniższych wywołań. Nie przejmuj się, jeśli nie wiesz, co niektóre z nich powodują.</p>
+          <pre><code class="no-highlight"><!--
+          -->$ logout
+<!--      -->$ who -u -H
+<!--      -->$ who -uH
+<!--      -->$ ssh --help
+<!--      -->$ type -t ssh who ls
+<!--      -->$ mv plik.txt plik.c
+<!--      -->$ ls -l /home/students/s123456
+<!--      -->$ cp -r plik1.txt plik2.txt katalog1 katalog2
+<!--      --></code></pre>
+          <p>Kiedy jako prefiks opcji stosuje się symbol <code>-</code>, a kiedy ciąg <code>--</code>? Kto o tym decyduje?</p>
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Wyciąg z dokumentacji polecenia <code>ps</code> odpowiada na przedostatnie z pytań:</p>
+            <pre><code class="no-highlight"><!--
+           -->1   UNIX options, which may be grouped and must be preceded
+<!--       -->    by a dash.
+<!--       -->2   BSD options, which may be grouped and must not be used
+<!--       -->    with a dash.
+<!--       -->3   GNU long options, which are preceded by two dashes.
+<!--       --></code></pre>
+            <p>Interpretacja opcji odbywa się po stronie programu. To, jak interpretowane są ciągi znaków przekazane do programu w momencie wywołania, zależy tylko i wyłącznie od programisty. Zastosowanie się do sugerowanych standardów zdaje się jednak być dobrym pomysłem.</p>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Jaka, w kontekście przyjętych standardów, jest różnica pomiędzy wywołaniem dwóch poniższych poleceń?</p>
+          <pre><code class="no-highlight"><!--
+          -->$ polecenie -abc
+<!--      -->$ polecenie --abc
+<!--      --></code></pre>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając z polecenia <code>type</code> z opcją <code>-t</code>, sprawdź typy poznanych dotąd poleceń. W tym celu wykonaj np.:</p>
+          <pre><code class="no-highlight">$ type -t who</code></pre>
+          <p>Porównaj otrzymane wyniki z efektem działania polecenia <code>type</code> bez opcji <code>-t</code>. Co się stanie, jeśli próbujesz wywołać polecenie <code>type</code> z większą liczbą argumentów?</p>
+        </div>
+
+        <h2>Polecenie <code>man</code></h2>
+
+        <p>Wiele poleceń wykorzystywanych w codziennej pracy ma dosyć duże możliwości. Przyjmuje wiele opcji i argumentów, których znaczenie może różnić się w zależności od sytuacji. To jeden z powodów, dla których istotna jest umiejętność dotarcia do ich <i>podręcznika</i>. Przez podręcznik (ang. <i>manual</i>) rozumiemy plik tekstowy zawierający szczegółowy opis działania programu.</p>
+
+        <p>Systemy uniksopodobne wyposażone są zwykle w program <code>man</code>, umożliwiający dotarcie do podręczników programów (oraz niektórych poleceń niebędących programami i&nbsp;informacji ogólnych).</p>
+
+        <div class="exercise">
+          <p>Program <code>man</code> wyświetla dokumentację poleceń przy użyciu programu <code>less</code>. Korzystając z jego dokumentacji, to znaczy wywołując polecenie<sup>[1]</sup></p>
+          <pre><code class="no-highlight">$ man less</code></pre>
+          <p>zapoznaj się z funkcjonalnościami wywoływanymi za pomocą następujących klawiszy: <kbd>Spacja</kbd>, <kbd>b</kbd>, <kbd>q</kbd>, <kbd>/</kbd>, <kbd>?</kbd>, <kbd>n</kbd>, <kbd>N</kbd> oraz&nbsp;sprawdź działanie związanych z nimi funkcjonalności w praktyce, wykonując następne ćwiczenie.</p>
+          <p class="footnote">[1] Jeśli nie czujesz się na siłach, żeby uczyć się obsługi programu <code>less</code> w sposób wymagający znajomości obsługi programu <code>less</code>, możesz skorzystać z dokumentacji w wersji internetowej, np. na stronie <a href="http://man7.org/linux/man-pages/man1/less.1.html">http://man7.org/linux/man-pages/man1/less.1.html</a>.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Wybrane polecenia programu <code>less</code></p>
+            <ul>
+              <li><code>/pattern</code> &ndash; szukaj w przód,</li>
+              <li><code>?pattern</code> &ndash; szukaj w tył,</li>
+              <li><code>n</code> &ndash; szukaj następnego w tym samym kierunku,</li>
+              <li><code>N</code> &ndash; szukaj następnego w przeciwnym kierunku.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając z programu <code>man</code> zapoznaj się z dokumentacją poznanych dotąd programów. W&nbsp;tym celu wykonaj polecenia:
+            <pre><code class="no-highlight"><!--
+           -->$ man ssh
+<!--       -->$ man who
+<!--       -->$ man man
+<!--       --></code></pre></p>
+        </div>
+
+        <div class="exercise exercise-star">
+          <p>Gdy wyświetlamy podręcznik programu <code>who</code>, w nagłówku wyświetla się nazwa <code>WHO(1)</code>. Jeśli jednak wyświetlimy podręcznik programu <code>man</code>, w&nbsp;nagłówku pojawi się <code>MAN(7)</code>. Korzystając z podręcznika programu <code>man</code>, dowiedz się, co oznaczają liczby w nawiasach.</p>
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Wyciąg z podręcznika programu <code>man</code>:</p>
+            <pre><code class="no-highlight"><!--
+           -->1   Executable programs or shell commands
+<!--       -->2   System calls (functions provided by the kernel)
+<!--       -->3   Library calls (functions within program libraries)
+<!--       -->4   Special files (usually found in /dev)
+<!--       -->5   File formats and conventions eg /etc/passwd
+<!--       -->6   Games
+<!--       -->7   Miscellaneous  (including  macro  packages  and
+<!--       -->    conventions), e.g. man(7), groff(7)
+<!--       -->8   System administration commands (usually only for root)
+<!--       -->9   Kernel routines [Non standard]
+<!--       --></code></pre>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Dowiedz się, za co odpowiadają opcje <code>-u</code> oraz <code>-H</code> programu <code>who</code>. Korzystając z nich, sprawdź działanie poleceń:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ who -u
+<!--     -->$ who -H
+<!--     -->$ who -uH
+<!--     -->$ who -Hu
+<!--     -->$ who -u -H
+<!--     -->$ who -H -u
+<!--     --></code></pre>
+          <p>Jak myślisz, czy podobna zasada interpretacji opcji dotyczy innych programów?</p>
+        </div>
+
+        <div class="test">
+          <p><a href="#" class="button button-gold" rel="question">Pokaż pytanie kontrolne</a></p>
+          <div class="question">
+            <p>Załóżmy, że program <code>alfa</code> poprawnie interpretuje przekazane opcje. Wskaż, jakie opcje zostaną do niego przekazane, jeśli zostanie wywołany jako</p>
+            <pre><code class="no-highlight"><!--
+            -->$ alfa --bc -de
+<!--        --></code></pre>
+            <ul>
+              <li><input type="radio" name="q3" id="q3a" /> <label for="q3a"><code>b</code>, <code>c</code>, <code>d</code> oraz <code>e</code></label></li>
+              <li><input type="radio" name="q3" id="q3b" /> <label for="q3b"><code>b</code>, <code>c</code> oraz <code>de</code></label></li>
+              <li><input type="radio" name="q3" id="q3c" class="correct" /> <label for="q3c"><code>bc</code>, <code>d</code> oraz <code>e</code></label></li>
+              <li><input type="radio" name="q3" id="q3d" /> <label for="q3d"><code>bc</code> oraz <code>de</code></label></li>
+            </ul>
+            <p><a href="#" class="button button-grey" rel="testcheck">Sprawdź odpowiedź</a></p>
+          </div>
+        </div>
+
+        <h2>Opcja <code>--help</code></h2>
+
+        <p>W większości sytuacji korzystanie z podręcznika nie jest jednak najwygodniejsze. Na szczęście wiele programów przyjmuje opcję <code>--help</code>, która powoduje, że program wyświetla skrócony opis swojego użycia.</p>
+
+        <div class="exercise">
+          <p>Korzystając z opcji <code>--help</code>, zapoznaj się ze skróconym opisem użycia poznanych dotąd programów. W tym celu wykonaj polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ ssh --help
+<!--     -->$ who --help
+<!--     -->$ man --help
+<!--     --></code></pre>
+          <p>Dlaczego próba wykonania polecenia</p>
+          <pre><code class="no-highlight">$ logout --help</code></pre>
+          <p>powoduje zakończenie sesji?</p>
+        </div>
+
+        <h1>Poruszanie się w strukturze katalogów i podstawowe operacje na plikach i&nbsp;katalogach</h1>
+
+        <p>Struktura katalogów w systemach uniksopodobnych różni się znacząco od tej znanej nam z systemu Windows. Przede wszystkim istnieje główny katalog, oznaczany symbolem <code>/</code>, wewnątrz którego znajduje się cała struktura plików. Ten katalog nazywamy <i>katalogiem głównym</i>. Wewnątrz katalogu głównego znajdują się inne katalogi (np. <code>bin</code> czy <code>home</code>), w których mogą się znajdować inne katalogi itd. Każdy plik na dysku znajduje się w jakimś katalogu.</p>
+
+        <div class="howitworks howitworks-star">
+          <p>Jak wiemy, w komputerze może się znajdować wiele dysków, a każdy z nich może być podzielony na tak zwane <i>partycje</i>. W systemach z rodziny Windows każda partycja stanowi osobną strukturę, a jedna z nich (oznaczana zwykle symbolem <code>C:</code>) stanowi partycję główną (systemową).</p>
+          <p>W systemach uniksopodobnych partycje są <i>montowane</i>. Oznacza to, że pliki i&nbsp;katalogi znajdujące się na danej partycji zostają umieszczone, z zachowaniem ich struktury, we wskazanym katalogu. W szczególności, katalog główny <code>/</code> odwołuje się do struktury plików i&nbsp;katalogów znajdujących się na jednej z partycji dysku.</p>
+        </div>
+
+        <div class="test">
+          <p><a href="#" class="button button-gold" rel="question">Pokaż pytanie kontrolne</a></p>
+          <div class="question">
+            <p>Katalog <code>/</code> to:</p>
+            <ul>
+              <li><input type="radio" name="q4" id="q4a" /> <label for="q4a">katalog domowy</label></li>
+              <li><input type="radio" name="q4" id="q4b" /> <label for="q4b">partycja główna</label></li>
+              <li><input type="radio" name="q4" id="q4c" /> <label for="q4c">partycja systemowa</label></li>
+              <li><input type="radio" name="q4" id="q4d" class="correct" /> <label for="q4d">katalog główny</label></li>
+            </ul>
+            <p><a href="#" class="button button-grey" rel="testcheck">Sprawdź odpowiedź</a></p>
+          </div>
+        </div>
+
+        <h2>Katalog domowy, katalog bieżący i nadrzędny, polecenia <code>pwd</code> oraz <code>cd</code></h2>
+
+        <p>Do każdego użytkownika systemu przypisany jest jeden katalog na dysku, nazywany jego <i>katalogiem domowym</i>. W ramach sesji powłoki, katalog domowy aktualnie zalogowanego użytkownika oznacza się symbolem <code>~</code>. To właśnie ten katalog jest domyślnym <i>katalogiem roboczym</i> sesji powłoki, czyli takim katalogiem, względem którego interpretowane są wszystkie ścieżki używane do odwołań do plików.</p>
+
+        <p>Bieżący katalog roboczy można sprawdzić przy pomocy polecenia <code>pwd</code> (ang. <i>print working directory</i>), a zmienić przy pomocy polecenia <code>cd</code> (ang. <i>change directory</i>).</p>
+
+        <div class="exercise">
+          <p>Korzystając z polecenia <code>pwd</code> dowiedz się, gdzie zlokalizowany jest Twój katalog domowy. W tym celu wykonaj</p>
+          <pre><code class="no-highlight">$ pwd</code></pre>
+          <p>zaraz po rozpoczęciu sesji powłoki.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Zmień katalog roboczy na katalog główny, wykonując polecenie</p>
+          <pre><code class="no-highlight">$ cd /</code></pre>
+          <p>W analogiczny sposób zmień katalog roboczy na:</p>
+          <ul>
+            <li><code>/home</code></li>
+            <li><code>/bin</code></li>
+            <li><code>/home/students</code></li>
+            <li><code>/srv/resources</code></li>
+          </ul>
+          <p>Sprawdź, co się stanie, jeśli zakończysz ścieżkę znakiem ukośnika. Zwróć też uwagę, jak zmienia się w międzyczasie znak zachęty. Na koniec powróć do swojego katalogu domowego, odwołując się do niego bezpośrednio oraz poprzez symbol <code>~</code>.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Zaglądając do podręcznika <code>hier</code> dowiedz się, jakie funkcje przypisuje się katalogom znajdującym się bezpośrednio w&nbsp;katalogu głównym.</p>
+        </div>
+
+        <p>Korzystanie z bezwzględnych ścieżek do katalogów nie jest zawsze wygodne. Na szczęście możliwe jest stosowanie ścieżek względnych. Jeśli argument polecenia <code>cd</code> nie rozpoczyna się od znaku ukośnika ani symbolu <code>~</code>, będzie traktowany jako ścieżka względem bieżącego katalogu roboczego. Wyjątkiem od tej reguły jest polecenie</p>
+        <pre><code class="no-highlight">$ cd -</code></pre>
+        <p>które przywraca poprzedni katalog roboczy. W użyciu ścieżek względnych szczególne zastosowanie mają symbol kropki (<code>.</code>) oraz ciąg dwóch kropek (<code>..</code>). Pierwszy oznacza bieżący katalog, drugi zaś katalog nadrzędny.</p>
+
+        <div class="howitworks howitworks-star">
+          <p>Symbole katalogu bieżącego (<code>.</code>) oraz nadrzędnego (<code>..</code>) nie są tak naprawdę symbolami specjalnymi powłoki. W systemach uniksopodobnych są to <i>dowiązania stałe</i> do odpowiednich katalogów, tworzone automatycznie w oparciu o strukturę katalogów zapisaną w systemie plików. Informacje o tych dowiązaniach można nawet wypisać na ekranie, wykonując choćby polecenie</p>
+          <pre><code class="no-highlight">$ ls -la</code></pre>
+          <div class="exercise exercise-star">
+            <p>Czy w katalogu głównym znajduje się dowiązanie stałe <code>..</code>? Jeśli tak, to na który katalog wskazuje?</p>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Przetestuj działanie poleceń:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ cd .
+<!--     -->$ cd ..
+<!--     --></code></pre>
+        </div>
+
+        <div class="exercise">
+          <p>Nie wykonując poniższych poleceń, spróbuj odpowiedzieć na pytanie, który katalog będzie katalogiem roboczym na końcu (ciąg <code>s123456</code> zastąp swoim loginem w sieci wydziałowej).</p>
+          <pre><code class="no-highlight"><!--
+         -->$ cd /home/students/../students/s123456
+<!--     -->$ cd .
+<!--     -->$ cd .././..
+<!--     -->$ cd ftp
+<!--     -->$ cd -
+<!--     --></code></pre>
+          <p>Zweryfikuj empirycznie swoje przypuszczenia. Zwróć uwagę, jak zachowuje się powłoka po wykonaniu polecenia <code>cd -</code>.</p>
+        </div>
+
+        <h2>Polecenie <code>ls</code></h2>
+
+        <p>Umiejętność poruszania się w strukturze plików jest bardzo ważna, równie ważna jest jednak umiejętność sprawdzenia zawartości wybranego katalogu. Do tego celu służy polecenie <code>ls</code> (ang. <i>list</i>).</p>
+
+        <div class="exercise">
+          <p>Korzystając z wyniku działania polecenia <code>ls</code>, wymień nazwy elementów znajdujących się w&nbsp;Twoim katalogu domowym. Porównaj otrzymany wynik z efektem wykonania (w&nbsp;tym samym katalogu) polecenia <code>ls -a</code>. Jak myślisz, jaką własność mają pliki i katalogi, których nazwa rozpoczyna się od znaku kropki? Za co odpowiada opcja <code>-a</code> polecenia <code>ls</code>?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Dowiedz się, za co odpowiada opcja <code>-l</code> polecenia <code>ls</code>, a następnie wykonaj w&nbsp;swoim katalogu domowym następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ ls
+<!--     -->$ ls -a
+<!--     -->$ ls -l
+<!--     -->$ ls -l -a
+<!--     -->$ ls -a -l
+<!--     -->$ ls -la
+<!--     -->$ ls -al
+<!--     --></code></pre>
+          <p>Czy istnieje jakakolwiek różnica pomiędzy efektami wywołań (4)-(7)?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Zbadaj efekty wykonania następujących poleceń w swoim katalogu domowym, a jeśli któreś zwróci błąd, zapoznaj się z jego treścią:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ ls -R
+<!--     -->$ ls -aR
+<!--     -->$ ls -laR
+<!--     -->$ ls ..
+<!--     -->$ ls -l .bashrc
+<!--     -->$ ls Desktop "My Documents"
+<!--     --></code></pre>
+          <p>Za co odpowiada opcja <code>-R</code>? Odpowiedz intuicyjnie, dlaczego w ostatnim przykładzie użyto cudzysłowu.</p>
+        </div>
+
+        <div class="test">
+          <p><a href="#" class="button button-gold" rel="question">Pokaż pytanie kontrolne</a></p>
+          <div class="question">
+            <p>Wskaż tę opcję programu <code>ls</code>, której dotąd nie poznaliśmy:</p>
+            <ul>
+              <li><input type="radio" name="q5" id="q5a" /> <label for="q5a"><code>-a</code></label></li>
+              <li><input type="radio" name="q5" id="q5b" /> <label for="q5b"><code>-l</code></label></li>
+              <li><input type="radio" name="q5" id="q5c" class="correct" /> <label for="q5c"><code>-A</code></label></li>
+              <li><input type="radio" name="q5" id="q5d" /> <label for="q5d"><code>-R</code></label></li>
+            </ul>
+            <p><a href="#" class="button button-grey" rel="testcheck">Sprawdź odpowiedź</a></p>
+          </div>
+        </div>
+
+        <h2>Tworzenie plików i katalogów &ndash; polecenia <code>touch</code> i <code>mkdir</code></h2>
+
+        <div class="howitworks howitworks-star">
+          <p>W systemie plików przechowywane są informacje o następujących momentach w&nbsp;czasie (datach), związanych z plikami i katalogami znajdującymi się na dysku:</p>
+          <ul>
+            <li>data ostatniego dostępu do pliku/katalogu (access),</li>
+            <li>data ostatniej modyfikacji zawartości pliku/struktury katalogu (modify),</li>
+            <li>data ostatniej zmiany w metadanych pliku/katalogu (change).</li>
+          </ul>
+          <div class="exercise exercise-star">
+            <p>Korzystając z polecenia <code>stat</code>, dowiedz się, jakie daty są przechowywane w&nbsp;kontekście Twojego katalogu domowego.</p>
+          </div>
+        </div>
+
+        <p>Systemy uniksopodobne pozwalają tworzyć pliki na wiele różnych sposobów. Kilka z&nbsp;nich poznamy na kolejnych ćwiczeniach, aktualnie jednak wykorzystamy w tym celu polecenie <code>touch</code>. Program <code>touch</code> pozwala zmodyfikować związane z plikiem lub katalogiem daty dostępu, modyfikacji lub zmiany na bieżące, a jeśli wskazany plik nie istnieje, to <i>zostanie utworzony</i>.</p>
+
+        <div class="exercise">
+          <p>Używając tylko jednego wywołania programu <code>touch</code>, utwórz w swoim katalogu domowym pliki o nazwach <code>plik001.txt</code>, <code>plik002.txt</code> oraz <code>plik003.txt</code>.</p>
+        </div>
+
+        <div class="exercise exercise-star">
+          <p>Używając tylko jednego wywołania programu <code>touch</code>, utwórz w dowolnym katalogu pliki o nazwach od <code>plik001.txt</code> do <code>plik999.txt</code>.</p>
+        </div>
+
+        <div class="exercise exercise-star">
+          <p>Spróbuj wykonać następujące polecenie:</p>
+          <pre><code class="no-highlight">$ touch SOP/</code></pre>
+          <p>Zastanów się, dlaczego nie został utworzony ani plik, ani katalog o nazwie <code>SOP</code>.</p>
+        </div>
+
+        <div class="exercise exercise-star">
+          <p>Zmodyfikuj datę ostatniego dostępu (access) do pliku <code>plik001.txt</code> w&nbsp;katalogu domowym na <code>2001-02-03 04:05:06</code>. Skorzystaj z dokumentacji programu <code>touch</code>, aby dowiedzieć się, jak to zrobić.</p>
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="bash">touch -a -d "2001-02-03 04:05:06" plik.txt</code></pre>
+          </div>
+        </div>
+
+        <p>Podobnie jak pliki, można tworzyć katalogi. Do tego zadania służy polecenie <code>mkdir</code> (ang. <i>make directory</i>). Przyjmuje ono jako argumenty nazwy katalogów, które mają zostać utworzone.</p>
+
+        <div class="exercise">
+          <p>Utwórz w swoim katalogu domowym katalog o nazwie <code>SOP</code> oraz zmień na niego aktualny katalog roboczy.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Wywołując polecenie <code>mkdir</code> jednokrotnie, utwórz w katalogu <code>SOP</code> katalogi <code>kat1</code> oraz <code>kat2</code>.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Dowiedz się, za co odpowiada opcja <code>-p</code> polecenia <code>mkdir</code> i skorzystaj z niej, aby utworzyć w katalogu <code>~/SOP/kat1</code> następującą strukturę katalogów:</p>
+          <pre><code class="no-highlight"><!--
+         -->.
+<!--     -->└── A
+<!--     -->    └── B
+<!--     -->        └── C
+<!--     -->            └── D
+<!--     -->                └── E
+<!--     -->                    ├── F
+<!--     -->                    ├── G
+<!--     -->                    └── H
+<!--     --></code></pre>
+        </div>
+
+        <h2>Usuwanie plików i katalogów &ndash; polecenia <code>rmdir</code> i <code>rm</code></h2>
+
+        <p>Do usuwania <i>pustych</i> katalogów służy polecenie <code>rmdir</code>. Podobnie jak <code>mkdir</code>, przyjmuje ono opcję <code>-p</code> o analogicznym działaniu (ale odwróconym).</p>
+
+        <div class="exercise">
+          <p>Wykorzystaj polecenie <code>rmdir</code> do usunięcia katalogu <code>H</code> utworzonego w&nbsp;poprzednim ćwiczeniu.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając z podręcznika programu <code>rmdir</code>, odpowiedz na pytanie, jak zinterpretowane zostanie polecenie</p>
+          <pre><code class="no-highlight">$ rmdir -p A/B/C/D/E/F</code></pre>
+          <p>Jakie katalogi zostaną usunięte, jeśli powyższe polecenie zostanie wywołane w katalogu <code>~/SOP/kat1</code>? Wykorzystaj swoją wiedzę, aby usunąć całą jego zawartość z katalogiem <code>A</code> włącznie.</p>
+          <p>Aby wyświetlić bieżącą strukturę plików i katalogów, skorzystaj z polecenia <code>tree</code>.</p>
+        </div>
+
+        <p>Do usuwania plików służy polecenie <code>rm</code> (ang. <i>remove</i>). Przyjmuje ona jako argumenty nazwy plików, które mają zostać usunięte.</p>
+
+        <div class="exercise">
+          <p>Usuń ze swojego katalogu domowego plik <code>plik001.txt</code>. W tym celu wykonaj polecenie:</p>
+          <pre><code class="no-highlight">$ rm ~/plik001.txt</code></pre>
+          <p>Usuń pliki <code>plik002.txt</code> oraz <code>plik003.txt</code>, wywołując polecenie <code>rm</code> z opcją <code>-i</code>. Porównaj sposób zachowania programu.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Spróbuj usunąć pusty katalog <code>~/SOP/kat2</code>, wykonując polecenie</p>
+          <pre><code class="no-highlight">$ rm ~/SOP/kat2</code></pre>
+          <p>Zastanów się, dlaczego program <code>rm</code> zwrócił błąd.</p>
+        </div>
+
+        <div class="exercise">
+          <p>W katalogu <code>~/SOP/kat2</code> utwórz plik o dowolnej nazwie. Usuń całą strukturę katalogów (razem z nowo utworzonym plikiem) wykonując polecenie</p>
+          <pre><code class="no-highlight">$ rm -r ~/SOP</code></pre>
+          <p>Dowiedz się, jaką funkcję pełni opcja <code>-r</code>. Czy można ją połączyć z opcją <code>-i</code>?</p>
+        </div>
+
+        <div class="exercise exercise-star">
+          <p>Dowiedz się, czym się różnią polecenia <code>rm</code> oraz <code>shred</code>. Którego z&nbsp;nich lepiej użyć do usunięcia wrażliwych informacji?</p>
+        </div>
+
+        <div class="test">
+          <p><a href="#" class="button button-gold" rel="question">Pokaż pytanie kontrolne</a></p>
+          <div class="question">
+            <p>Z którego polecenia najlepiej skorzystać, aby usunąć niepusty katalog wraz z zawartością?</p>
+            <ul>
+              <li><input type="radio" name="q6" id="q6a" /> <label for="q6a"><code>touch</code></label></li>
+              <li><input type="radio" name="q6" id="q6b" class="correct" /> <label for="q6b"><code>rm</code></label></li>
+              <li><input type="radio" name="q6" id="q6c" /> <label for="q6c"><code>rmdir</code></label></li>
+              <li><input type="radio" name="q6" id="q6d" /> <label for="q6d"><code>mkdir</code></label></li>
+            </ul>
+            <p><a href="#" class="button button-grey" rel="testcheck">Sprawdź odpowiedź</a></p>
+          </div>
+        </div>
+
+        <h2>Przenoszenie i kopiowanie plików i katalogów &ndash; polecenia <code>mv</code> oraz <code>cp</code></h2>
+
+        <p>Do przenoszenia plików i katalogów służy polecenie <code>mv</code>. Aby lepiej zaobserwować zjawiska opisywane w tym paragragie, możesz skorzystać z dowolnego edytora tekstu, aby wypełnić tworzone pliki zawartością.</p>
+
+        <div class="exercise">
+          <p>Utwórz w swoim katalogu domowym katalog o nazwie <code>SOP</code> oraz pliki o nazwach <code>plik.txt</code> oraz <code>inny.txt</code>. Wykonaj polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ mv plik.txt nowy.txt
+<!--     -->$ mv inny.txt nowy.txt katalog
+<!--     -->$ mv inny.txt nowy.txt SOP
+<!--     -->$ cd SOP
+<!--     -->$ mv inny.txt nowy.txt
+<!--     -->$ mv nowy.txt ..
+<!--     --></code></pre>
+          <p>Sprawdź efekty po wykonaniu każdego z nich. Dlaczego drugie z poleceń zwróciło błąd? Jak zachowuje się polecenie <code>mv</code>, jeśli ostatni argument jest: (a) nazwą nieistniejącego pliku/katalogu, (b) nazwą istniejącego pliku, (c) nazwą istniejącego katalogu?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając z dowolnego edytora tekstu, utwórz w katalogu domowym pliki <code>plik001.txt</code> i <code>plik002.txt</code> oraz wypełnij je dowolną treścią. Zapisz je na dysku w kolejności tworzenia (tak, aby plik <code>plik002.txt</code> był zapisany później). Wykonaj w odpowiednim katalogu roboczym polecenie</p>
+          <pre><code class="no-highlight">$ mv -u plik001.txt plik002.txt</code></pre>
+          <p>Dowiedz się, za co odpowiada opcja <code>-u</code> programu <code>mv</code> i zweryfikuj otrzymane efekty.</p>
+        </div>
+
+        <div class="exercise exercise-star">
+          <p>W katalogu domowym utwórz katalog <code>SOPA</code>. W jego wnętrzu utwórz katalogi o nazwach <code>1</code>, <code>2</code> oraz <code>3</code>. Uprzednio zmieniając katalog roboczy na <code>SOPA</code>, wykonaj polecenie</p>
+          <pre><code class="no-highlight">$ mv *</code></pre>
+          <p>Co się stało? Dlaczego?</p>
+        </div>
+
+        <p>Do kopiowania plików służy polecenie <code>cp</code>. Jego użycie jest bardzo zbliżone do użycia polecenia <code>mv</code>, chociaż polecenie <code>cp</code> jest bardziej restrykcyjne, jeżeli chodzi o obsługę katalogów.</p>
+
+        <div class="exercise">
+          <p>W katalogu <code>SOP</code> utwórz katalogi <code>1</code>, <code>2</code>, <code>3</code> oraz pliki <code>plik.txt</code>, <code>plik.c</code> oraz <code>plik.conf</code>. Utworzone pliki wypełnij dowolną treścią, korzystając z dowolnego edytora tekstu. Wykonaj następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ cp plik.txt plik.cpp
+<!--     -->$ cp plik.txt plik.cpp plik.py
+<!--     -->$ cp -i plik.txt plik.py
+<!--     -->$ cp -i plik.txt plik.c
+<!--     -->$ cp plik.c 1
+<!--     -->$ cp plik.txt plik.conf 1
+<!--     -->$ cp 1 2
+<!--     -->$ cp -r 1 2
+<!--     -->$ cp -r 1 N
+<!--     --></code></pre>
+          <p>Sprawdź efekty po wykonaniu każdego z nich. Dlaczego drugie i siódme z poleceń zwróciło błąd? Jak zachowuje się polecenie <code>cp</code>, jeśli ostatni argument jest: (a) nazwą nieistniejącego pliku/katalogu, (b) nazwą istniejącego pliku, (c) nazwą istniejącego katalogu? Za co odpowiadają opcje <code>-i</code> oraz <code>-r</code>? Czy polecenie <code>cp</code> przyjmuje opcję <code>-u</code>? Jeśli tak, to jak ona działa?</p>
+        </div>
+
+        <div class="test">
+          <p><a href="#" class="button button-gold" rel="question">Pokaż pytanie kontrolne</a></p>
+          <div class="question">
+            <p>Jeśli ostatni argument polecenia <code>mv</code> jest nazwą nieistniejącego elementu, to:</p>
+            <ul>
+              <li><input type="radio" name="q7" id="q7a" /> <label for="q7a">zostanie utworzony katalog o wskazanej nazwie</label></li>
+              <li><input type="radio" name="q7" id="q7b" /> <label for="q7b">wywołanie zakończy się niepowodzeniem</label></li>
+              <li><input type="radio" name="q7" id="q7c" /> <label for="q7c">nazwa katalogu zostanie zinterpretowana jako nazwa pliku</label></li>
+              <li><input type="radio" name="q7" id="q7d" class="correct" /> <label for="q7d">za mało informacji, aby udzielić odpowiedzi</label></li>
+            </ul>
+            <p><a href="#" class="button button-grey" rel="testcheck">Sprawdź odpowiedź</a></p>
+          </div>
+        </div>
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
 </body>
 </html>
