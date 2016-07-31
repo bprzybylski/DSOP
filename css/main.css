@@ -4,6 +4,10 @@ i, em{
   font-style: italic;
 }
 
+b{
+  font-weight: 500;
+}
+
 a{
   color: #666;
 }
@@ -16,11 +20,19 @@ sup{
   color: #888;
 }
 
+img{
+  max-width: 100%;
+}
+
+.center{
+  text-align: center;
+}
+
 /* body */
 
 body{
   background-color: #FFF;
-  font-family: "Lora", serif;
+  font-family: "Fira Sans", serif;
   color: #222;
   line-height: 1.45em;
 }
@@ -46,9 +58,13 @@ body{
 }
 
 #main-header h2{
+  margin-bottom: 1em;
+  color: #888;
+}
+
+#main-header h3{
   padding-bottom: 1.25em;
   border-bottom: 0.1em solid #EEE;
-  color: #888;
 }
 
 /* main-nav */
@@ -126,6 +142,17 @@ article{
 }
 
 article#cw01{ counter-reset: cwiczenia 1; }
+article#cw02{ counter-reset: cwiczenia 2; }
+article#cw03{ counter-reset: cwiczenia 3; }
+article#cw04{ counter-reset: cwiczenia 4; }
+article#cw05{ counter-reset: cwiczenia 5; }
+article#cw06{ counter-reset: cwiczenia 6; }
+article#cw08{ counter-reset: cwiczenia 8; }
+article#cw09{ counter-reset: cwiczenia 9; }
+article#cw10{ counter-reset: cwiczenia 10; }
+article#cw11{ counter-reset: cwiczenia 11; }
+article#cw12{ counter-reset: cwiczenia 12; }
+article#cw13{ counter-reset: cwiczenia 13; }
 
 article h1{
   counter-increment: section;
@@ -173,19 +200,25 @@ article p.footnote{
   line-height: 1.25em;
 }
 
-article ul{
-  margin-left: 1em;
+article ul,
+article ol{
+  margin-left: 2em;
   margin-bottom: 1.25em;
   list-style-type: circle;
 }
 
-article ul li{
+article ul li,
+article ol li{
   margin-bottom: 0.5em;
 }
 
 article .exercise,
+article .task,
+article .command,
+article .example,
 article .howitworks,
-article .titbit{
+article .titbit,
+article .notice{
   padding: 1.25em 1.25em 0.25em 1.25em;
   border-radius: 0.6em;
   margin-bottom: 1em;
@@ -197,7 +230,15 @@ article .exercise{
   background-color: #FCFCFC;
 }
 
-article .howitworks{
+article .task{
+  border: 0.1em solid #EEE;
+  counter-increment: zadanie;
+  background-color: #FCFCFC;
+}
+
+article .howitworks,
+article .command,
+article .example{
   border: 0.1em solid #caeaf0;
   background-color: #f4fafc;
 }
@@ -207,10 +248,19 @@ article .titbit{
   background-color: #f4fafc;
 }
 
+article .notice{
+  border: 0.25em solid #CC3333;
+  background-color: #FCFCFC;
+}
+
 article .exercise::before,
+article .task::before,
+article .command::before,
+article .example::before,
 article .answer::before,
 article .howitworks::before,
-article .titbit::before{
+article .titbit::before,
+article .notice::before{
   font-weight: bold;
   display: block;
   margin-bottom: 1em;
@@ -218,10 +268,17 @@ article .titbit::before{
 
 article .exercise::before{ content: "Ćwiczenie " counter(cwiczenia) "." counter(cwiczenie); }
 article .exercise-star::before{ content: "\2605  Ćwiczenie " counter(cwiczenia) "." counter(cwiczenie); }
+article .exercise-star-star::before{ content: "\2605\2605  Ćwiczenie " counter(cwiczenia) "." counter(cwiczenie); }
+article .task::before{ content: "Zadanie " counter(zadanie); }
+article .command::before{  content: "Polecenie"; }
+article .example::before{  content: "Przykład"; }
 article .answer::before{  content: "Odpowiedź"; }
 article .howitworks::before{  content: "Jak to działa?"; }
 article .howitworks-star::before{ content: "\2605  Jak to działa?"; }
 article .titbit::before{ content: "Ciekawostka"; }
+article .titbit-star::before{ content: "\2605  Ciekawostka"; }
+article .titbit-star-star::before{ content: "\2605\2605  Ciekawostka"; }
+article .notice::before{  content: "Uwaga"; }
 
 article .test{
   background-color: #F8F8F8;
@@ -258,13 +315,29 @@ article .test .question li.incorrect{
   border-radius: 0.3em;
 }
 
+article .test .question li.correct code,
+article .test .question li.incorrect code{
+  color: #222;
+}
+
 article .test .question li.incorrect{ background-color: #a02c2c; }
 article .test .question li.correct{ background-color: #5aa02c; }
 
 article code{
-  font-family: "Courier New";
-  background-color: #F2F2F2;
+  font-family: "Fira Mono";
+  background-color: #FFF;
+  border: 0.1em solid #DDD;
   padding: 0.15em 0.25em;
+}
+
+article pre code{
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 0.5em;
+  background-color: transparent;
+  border: none;
+  font-size: 0.9em;
 }
 
 article kbd{
@@ -289,11 +362,64 @@ article kbd{
 
 article pre{
   margin-bottom: 1em;
-  font-family: "Courier New";
+  font-family: "Fira Mono";
   border: 0.1em solid #EEE;
   border-radius: 0.6em;
   padding: 0.6em;
   background-color: #FFF;
+}
+
+article table{
+  margin: 0 auto;
+  font-size: 0.9em;
+  margin-bottom: 1em;
+  border-top: 0.1em solid #DDD;
+  border-right: 0.1em solid #DDD;
+  max-width: 100%;
+}
+
+article table th,
+article table td{
+  border-left: 0.1em solid #DDD;
+  border-bottom: 0.1em solid #DDD;
+  padding: 0.5em;
+}
+
+article table th{
+  background-color: #EEE;
+  text-align: center;
+}
+
+article table tbody th{
+  text-align: center;
+  background-color: transparent;
+  color: #666;
+}
+
+article table.noborder{
+  margin: 0;
+  margin-bottom: 1em;
+}
+
+article table.noborder,
+article table.noborder th,
+article table.noborder td{
+  border: none;
+  background-color: none;
+}
+
+article table.noborder th{
+  font-weight: bold;
+}
+
+article .image{
+  padding: 1em;
+  margin-bottom: 1.5em;
+  text-align: center;
+}
+
+article .image img{
+  width: 65%;
 }
 
 /* klasy ogólne */
@@ -393,4 +519,44 @@ article pre{
     margin-bottom: 1em;
     margin-right: 0;
   }
+}
+
+@media print{
+  body{
+    font-size: 0.7em;
+  }
+
+  #main-header{
+    margin-bottom: 1cm;
+  }
+
+  #main-header h3,
+  .test,
+  .answer,
+  .button{
+    display: none !important;
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  article .exercise::before,
+  article .exercise-star::before,
+  article .exercise-star-star::before,
+  article .task::before,
+  article .command::before,
+  article .example::before,
+  article .answer::before,
+  article .howitworks::before,
+  article .howitworks-star::before,
+  article .titbit::before,
+  article .titbit-star::before,
+  article .titbit-star-star::before,
+  article .notice::before,
+  {
+    page-break-after: avoid;
+  }
+}
+
+@page{
+  size: A4;
+  margin: 25mm;
 }
