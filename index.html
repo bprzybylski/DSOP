@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html moznomarginboxes mozdisallowselectionprint>
 <head>
     <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
     <meta charset="utf-8">
@@ -7,12 +7,22 @@
     <meta name="robots" content="index,follow"/>
     <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
     <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <!--[if lt IE 9]>
     <script type="text/javascript" src="js/html5.js"></script>
     <![endif]-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
     <script type="text/javascript" src="js/js.js"></script>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
@@ -21,10 +31,21 @@
 <body>
     <div id="wrapper">
         <header id="main-header">
-            <h1>Spis treści</h1>
-            <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki UAM.</h2>
+            <h1>Systemy operacyjne</h1>
+            <h2>Spis materiałów do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
         </header>
         <nav id="main-nav">
+            <section>
+                <ul>
+                    <li>
+                        <dl>
+                            <dt>Wskazówki początkowe</dt>
+                            <dd>Dowiedz się, jak wydrukować materiały do zajeć i do jakich książek warto zajrzeć, aby rozszerzyć swoją wiedzę z ćwiczeń.</dd>
+                        </dl>
+                        <a href="wskazowki.html" class="button button-grey">Zobacz wskazówki</a>
+                    </li>
+                </ul>
+            </section>
             <section>
                 <h3>Część I. Polecenia w powłoce Bash</h3>
                 <p>Celem tej części zajęć jest zapoznanie się z podstawowymi poleceniami powłoki Bash. Polecenia te będziemy później wykorzystywać do budowania skryptów powłoki Bash.</p>
@@ -35,6 +56,101 @@
                             <dd>Na tych ćwiczeniach zapoznamy się z podstawami obsługi powłoki Bash oraz z ideą, która stoi za systemami uniksopodobnymi. Poznamy też podstawowe polecenia standardu POSIX związane z operacjami na plikach i katalogach.</dd>
                         </dl>
                         <a href="cw01.html" class="button button-blue">Zobacz materiały do zajęć</a>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt>Ćwiczenia 2</dt>
+                            <dd>Na tych ćwiczeniach nauczymy się analizować uprawnienia do elementów struktury plików oraz modyfikować je. Zapoznamy się także z tym, jak powłoka Bash łączy się z obsługą wejścia i wyjścia oraz poznamy podstawowe polecenia związane z obsługą procesów.</dd>
+                        </dl>
+                        <a href="cw02.html" class="button button-blue">Zobacz materiały do zajęć</a>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt>Ćwiczenia 3</dt>
+                            <dd>Te ćwiczenia to wprowadzenie do kilku nowych i przydatnych poleceń oraz garść wskazówek dotyczących korzystania z połowki Bash.</dd>
+                        </dl>
+                        <a href="cw03.html" class="button button-blue">Zobacz materiały do zajęć</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h3>Część II. Skrypty powłoki Bash</h3>
+                <p>Celem tej części zajęć jest zapoznanie się z podstawowymi możliwościami powłoki Bash w kontekście tworzenia i wykonywania przydatnych skryptów.</p>
+                <ul>
+                    <li>
+                        <dl>
+                            <dt>Ćwiczenia 4</dt>
+                            <dd>W czasie tych ćwiczeń zapoznamy się z podstawami korzystania z powłoki Bash jako interpretera języka powłoki i poznamy kilka poleceń przydatnych przy tworzeniu skryptów powłoki, w szczególności tych związanych z obsługą zmiennych i wyjścia. Zapoznamy się także z kolejną porcją wskazówek dotyczących korzystania z powłoki Bash.</dd>
+                        </dl>
+                        <a href="cw04.html" class="button button-blue">Zobacz materiały do zajęć</a>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt>Ćwiczenia 5</dt>
+                            <dd>Te ćwiczenia przybliżą nam nowe zagadnienia związane z tworzeniem skryptów powłoki Bash. W szczególności poznamy polecenia związane z obsługą wejścia, instrukcjami warunkowymi i pętlami. Dowiemy się także, jak obsługiwać parametry pozycyjne.</dd>
+                        </dl>
+                        <a href="cw05.html" class="button button-blue">Zobacz materiały do zajęć</a>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt>Ćwiczenia 6</dt>
+                            <dd>Te zajęcia to zbiór praktycznych zadań podsumowujących wiedzę zdobytą w czasie pierwszych pięciu ćwiczeń.</dd>
+                        </dl>
+                        <a href="cw06.html" class="button button-blue">Zobacz materiały do zajęć</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h3>Część III. Obsługa procesów w języku C</h3>
+                <p>Na zajęciach z tej części zapoznamy się z podstawami języka C w kontekście programowania systemowego.</p>
+                <ul>
+                    <li>
+                        <dl>
+                            <dt>Ćwiczenia 8</dt>
+                            <dd>Te ćwiczenia przybliżą nam to, w jaki sposób kompilowane są programy w języku C. Poznamy program make, który umożliwia automatyzację procesu kompilacji i zapoznamy się z wybranymi funkcjami systemowymi dostępnymi w systemach operacyjnych zgodnych z POSIX.</dd>
+                        </dl>
+                        <a href="cw08.html" class="button button-blue">Zobacz materiały do zajęć</a>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt>Ćwiczenia 9</dt>
+                            <dd>Na tych ćwiczeniach zapoznamy się z uproszczonymi kodami źródłowymi programów, z których korzystaliśmy w I i II części zajęć.</dd>
+                        </dl>
+                        <a href="cw09.html" class="button button-blue">Zobacz materiały do zajęć</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h3>Część IV. Wiersz poleceń i programy wsadowe w systemie Windows</h3>
+                <p>W tej części zapoznamy się z podstawowymi poleceniami wiersza poleceń systemu Windows i tym, w jaki sposób można z nich tworzyć programy wsadowe.</p>
+                <ul>
+                    <li>
+                        <dl>
+                            <dt>Ćwiczenia 10</dt>
+                            <dd>Na tych ćwiczeniach zapoznamy się z podstawami obsługi wiersza poleceń systemu Windows, w tym z jego podstawowymi poleceniami związanymi z obsługą plików i katalogów.</dd>
+                        </dl>
+                        <a href="cw10.html" class="button button-blue">Zobacz materiały do zajęć</a>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt>Ćwiczenia 11</dt>
+                            <dd>Te ćwiczenia wprowadzą kilka nowych poleceń związanych z obsługą systemu, wiersza poleceń, sieci oraz operacjami na plikach tekstowych. Poznamy także graficzne narzędzie służące do zarządzania procesami.</dd>
+                        </dl>
+                        <a href="cw11.html" class="button button-blue">Zobacz materiały do zajęć</a>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt>Ćwiczenia 12</dt>
+                            <dd>W czasie tych zajeć zapoznamy się z podstawowymi poleceniami związanymi z wierszem polecenia jako interpreterem języka. Nauczymy się też obsługiwać zmienne i parametry pozycyjne oraz napiszemy nasz pierwszy program wsadowy.</dd>
+                        </dl>
+                        <a href="cw12.html" class="button button-blue">Zobacz materiały do zajęć</a>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt>Ćwiczenia 13</dt>
+                            <dd>Te ćwiczenia przybliżą nam polecenia wiersza poleceń systemu Windows związane ze sterowaniem przepływem programu, w szczególności instrukcje warunkowe i pętle. Te zajęcia to także okazja do sprawdzenia swojej wiedzy w praktyce &ndash; przy pisaniu konkretnych programów wsadowych.</dd>
+                        </dl>
+                        <a href="cw13.html" class="button button-blue">Zobacz materiały do zajęć</a>
                     </li>
                 </ul>
             </section>
