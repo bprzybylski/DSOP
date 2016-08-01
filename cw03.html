@@ -1,0 +1,346 @@
+<!DOCTYPE HTML>
+<html moznomarginboxes mozdisallowselectionprint>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Ćwiczenia 3</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
+
+    <article id="cw03">
+
+        <h1>Kilku nowych przyjaciół</h1>
+
+        <h2>Polecenia <code>finger</code> i <code>passwd</code></h2>
+
+        <p>Na pierwszych ćwiczeniach poznaliśmy polecenie <code>who</code>, pozwalające dowiedzieć się, którzy użytkownicy korzystają z systemu. Podobne działanie oferuje program <code>finger</code>, który jednak pozwala poznać szczegółowe informacje o tych użytkownikach.</p>
+
+        <div class="exercise">
+          <p>Sprawdź działanie programu <code>finger</code>. Wywołaj go z opcją <code>-l</code> i porównaj otrzymane efekty. Jakie informacje można w ten sposób uzyskać?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Dowiedz się, do czego służy program <code>passwd</code>. Jeśli chcesz, możesz zmienić swoje hasło do sieci wydziałowej, wywołując go bez argumentu.<sup>[1]</sup> Spróbuj też zmienić hasło innego użytkownika. Czy jest to możliwe? Jak myślisz, kto może zmienić hasło dowolnego użytkownika systemu?</p>
+
+          <p class="footnote">[1] Konfiguracja wydziałowej sieci sprawia, że wywołanie programu <code>passwd</code> z konta uwierzytelnionego przy pomocy protokołu Kerberos pozwoli na zmianę hasła wykorzystywanego do dostępu do wszystkich usług sieciowych.</p>
+        </div>
+
+        <h2>Filtry <code>wc</code>, <code>cut</code>, <code>tr</code> oraz <code>uniq</code></h2>
+
+        <p>Nauczyliśmy się już korzystać z filtrów <code>cat</code>, <code>tac</code>, <code>head</code>, <code>tail</code>, <code>sort</code> oraz <code>grep</code>. W codziennej pracy mogą się jednak przydać także poniższe.</p>
+
+        <div class="notice">
+          <p>O zachowaniu wymienionych dalej programów będziemy mówić w kontekście operowania na danych pochodzących ze standardowego wejścia. Każdy z nich radzi sobie jednak równie dobrze z plikami &ndash; wystarczy podać ich nazwy jako argumenty.</p>
+        </div>
+
+        <div class="command">
+          <p>Program <code>wc</code> (ang. <i>word count</i>) pozwala badać liczebność (w sensie pewnych miar) danych ze standardowego wejścia. Przydatne opcje:</p>
+          <table class="noborder">
+            <tr><td><code>-c</code></td><td>wypisz liczbę bajtów (rozmiar pliku w bajtach)</td></tr>
+            <tr><td><code>-m</code></td><td>wypisz liczbę znaków</td></tr>
+            <tr><td><code>-l</code></td><td>wypisz liczbę wierszy</td></tr>
+            <tr><td><code>-w</code></td><td>wypisz liczbę wyrazów</td></tr>
+            <tr><td><code>-L</code></td><td>wypisz długość najdłuższej linii</td></tr>
+          </table>
+        </div>
+
+        <div class="exercise">
+          <p>Do ilu elementów katalogu <code>/etc</code> inni użytkownicy (<code>other</code>) mają prawo odczytu?</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">$ ls -l /etc | tail -n +2 | grep '^.\{7\}r' | wc -l</code></pre>
+          </div>
+        </div>
+
+        <div class="command">
+          <p>Program <code>cut</code> pozwala wpłynąć na ograniczanie danych ze standardowego wejścia w poziomie (według kolumn). Przydatne opcje:</p>
+          <table class="noborder">
+            <tr><td><code>-b XXX</code></td><td>wypisz tylko wskazane bajty, np. <code>1,4</code>, <code>1-5</code> itp.</td></tr>
+            <tr><td><code>-c XXX</code></td><td>wypisz tylko wskazane znaki</td></tr>
+            <tr><td><code>-d XXX</code></td><td>ustaw ogranicznik kolumn na <code>XXX</code></td></tr>
+            <tr><td><code>-f XXX</code></td><td>wypisz tylko wskazane pola (kolumny)</td></tr>
+            <tr><td><code>-s</code></td><td>nie wypisuj linii, które nie zawierają żadnego ogranicznika kolumn</td></tr>
+          </table>
+        </div>
+
+        <div class="exercise">
+          <p>Wyświetl listę uprawnień (i tylko uprawnień) do elementów katalogu <code>/etc</code>.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">$ ls -l /etc | tail -n +2 | cut -c 2-10</code></pre>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>W pliku <code>/etc/passwd</code> znajduje się lista lokalnych użytkowników systemu. Ogranicz ją do nazwy użytkownika (pierwsza) i nazwy powłoki, z której ten użytkownik korzysta (ostatnia kolumna).</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">$ cat /etc/passwd | cut -d : -f 1,7</code></pre>
+          </div>
+        </div>
+
+        <div class="command">
+          <p>Program <code>tr</code> pozwala na zamianę znaków z jednego ciągu na te z drugiego ciągu znaków.</p>
+          <table class="noborder">
+            <tr><td><code>-d</code></td><td>zamiast zamieniać, usuń wskazane znaki</td></tr>
+            <tr><td><code>-s</code></td><td>zamień ciągi wskazanych znaków na ich pojedyncze wystąpienie</td></tr>
+          </table>
+        </div>
+
+        <div class="exercise">
+          <p>Zmodyfikuj rozwiązanie poprzedniego ćwiczenia tak, aby poszczególne kolumny oryginalnego pliku <code>/etc/passwd</code> były rozdzielone znakiem tabulatora.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">$ cat /etc/passwd | cut -d : -f 1,7 | tr ":" "\t"</code></pre>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Wyświetl listę lokalnych użytkowników systemu w postaci nazw użytkowników oddzielonych znakiem przecinka.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">$ cat /etc/passwd | cut -d : -f 1 | tr "\n" ","</code></pre>
+          </div>
+        </div>
+
+        <div class="command">
+          <p>Program <code>uniq</code> pozwala badać unikalność wierszy na standardowym wejściu. Przydatne opcje:</p>
+          <table class="noborder">
+            <tr><td><code>-c</code></td><td>wyświetl statystykę częstości występowania poszczególnych wierszy</td></tr>
+            <tr><td><code>-d</code></td><td>wypisz te linie, które się powtarzają</td></tr>
+            <tr><td><code>-i</code></td><td>ignoruj wielkość liter</td></tr>
+            <tr><td><code>-u</code></td><td>wypisz te linie, które się nie powtarzają</td></tr>
+          </table>
+        </div>
+
+        <div class="exercise">
+          <p>Wyświetl statystykę częstości występowania poszczególnych uprawnień dla członków grup (<code>group</code>) do elementów w katalogu <code>/etc</code>.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">$ ls -l /etc | tail -n +2 | cut -c 5-7 | sort | uniq -c</code></pre>
+          </div>
+        </div>
+
+        <h2>Program <code>more</code>, czyli starszy brak programu <code>less</code></h2>
+
+        <p>Zanim program <code>less</code> osiągnął popularność, do wygodnego wyświetlania długich danych wykorzystywano program <code>more</code>. Jego możliwości są jednak ubogie (w porównaniu do programu <code>less</code>), dlatego pominiemy jego dokładny opis.</p>
+
+        <div class="exercise">
+          <p>Korzystając z podręcznika programu <code>more</code>, zapoznaj się z jego obsługą. Jakie największe, Twoim zdaniem, wady ma ten program?</p>
+        </div>
+
+        <h2>Porównywanie plików &ndash; programy <code>diff</code> i <code>cmp</code></h2>
+
+        <p>Czasami zachodzi potrzeba porównania zawartości dwóch plików, choćby po to, aby łatwo dostrzec, w których miejscach zostały wprowadzone zmiany. Do tego zadania służą programy <code>diff</code> i <code>cmp</code>.</p>
+
+        <div class="exercise">
+          <p>Zapoznaj się z podręcznikami programów <code>diff</code> i <code>cmp</code>. Przetestuj ich działanie w praktyce.</p>
+        </div>
+
+        <h1>Kilka poleceń związanych z pracą w sieci</h1>
+
+        <p>Wiele współczesnych programów korzysta z zasobów sieciowych. Na przykład, gdy aktualizujemy oprogramowanie zainstalowane w komputerze (choćby samo nie wymagało połączenia z siecią), odpowiednie pliki pobieramy z internetu.</p>
+
+        <p>Systemy uniksopodobne, w tym Linux, udostępniają narzędzia do zarządzania komputerem jako urządzeniem sieciowym.</p>
+
+        <div class="command">
+          <p>Program <code>ifconfig</code> pozwala zarządzać interfejsami sieciowymi komputera, w tym włączać je i wyłączać oraz wyświetlać informacje o ich statusach. W chwili obecnej, ze względu na swoją przestarzałość, program <code>ifconfig</code> jest wypierany przez oprogramowanie z pakietu <code>iproute2</code>.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Zapoznaj się z dokumentacją programu <code>ifconfig</code>. Jakie operacje można wykonać za jego pomocą?</p>
+        </div>
+
+        <div class="command">
+          <p>Program <code>ping</code> pozwala wysłać do zdalnego hosta żądanie <code>ECHO_REQUEST</code> w ramach protokołu <code>ICMP</code>. Przydatne opcje:</p>
+          <table class="noborder">
+            <tr><td><code>-c X</code></td><td>wyślij <code>X</code> żądań</td></tr>
+            <tr><td><code>-f</code></td><td>tryb <i>flood</i></td></tr>
+            <tr><td><code>-i X</code></td><td>ustaw odstęp pomiędzy kolejnymi żądaniami na <code>X</code> sekund</td></tr>
+          </table>
+        </div>
+
+        <div class="exercise">
+          <p>Wyślij do wybranego serwera 10 żądań <code>ECHO_REQUEST</code> w odstępach 2-sekundowych.</p>
+        </div>
+
+        <div class="command">
+          <p>Program <code>netstat</code> to jedno z najbardziej rozbudowanych konsolowych narzędzi sieciowych. Pozwala na wszechstronną analizę połączeń sieciowych realizowanych przez komputer.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Korzystając z podręcznika programu <code>netstat</code>, dowiedz się, jakie możliwości daje ten program. Wypróbuj kilka wybranych opcji.</p>
+        </div>
+
+        <h1>Powłoka Bash &ndash; tips &amp; tricks</h1>
+
+        <h2>Historia poleceń</h2>
+
+        <p>Powłoka Bash przechowuje historię wykonywanych poleceń. Korzystając z klawiszy strzałki w dół i w górę, można &ndash; na poziomie powłoki &ndash; przywoływać wykonywane ostatnio polecenia. Przeszukiwanie historii w ten sposób może być jednak uciążliwe. Na szczęście historię można wyświetlić w postaci wygodnej listy. Aby to zrobić, można wykonać polecenie</p>
+        <pre><code class="no-highlight">$ history | less</code></pre>
+        <p>Historia ta obejmuje domyślnie 500 ostatnich poleceń, a każdy element ma przypisany numer. Aby wykonać ponownie polecenie oznaczone, przykładowo, numerem 67, należy wywołać</p>
+        <pre><code class="no-highlight">$ !67</code></pre>
+
+        <p>Możliwe jest też skorzystanie z następujących ułatwień:</p>
+        <ul>
+          <li><code>!!</code> &ndash; powtarza ostatnie polecenie,</li>
+          <li><code>!ciąg</code> &ndash; powtarza ostatnie polecenie rozpoczynające się od ciągu <code>ciąg</code>,</li>
+          <li><code>!? ciąg</code> &ndash; powtarza ostatnie polecenie zawierające ciąg <code>ciąg</code>.</li>
+        </ul>
+
+        <h2>Uzupełnianie</h2>
+
+        <p>Kiedy podczas wpisywania polecenia wciśniemy klawisz <kbd>Tab</kbd>, powłoka Bash uzupełni (o ile to możliwe) brakujące znaki. W zależności od okoliczności, będzie to nazwa dostępnego polecenia lub pliku.</p>
+
+        <div class="exercise">
+          <p>Rozpocznij polecenie</p>
+          <pre><code class="no-highlight">$ ch</code></pre>
+          <p>i wciśnij klawisz <kbd>Tab</kbd>. Liczba dopasowań jest większa niż jeden, dlatego wciśnij klawisz <kbd>Tab</kbd> ponownie, aby wyświetlić wszystkie możliwości. Wprowadź znak <code>m</code>, uzyskując</p>
+          <pre><code class="no-highlight">$ chm</code></pre>
+          <p>i wciśnij klawisz <kbd>Tab</kbd> raz jeszcze. Co się stało?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Wpisz</p>
+          <pre><code class="no-highlight">$ cd ~/Desk</code></pre>
+          <p>i wciśnij klawisz <kbd>Tab</kbd>. Co się stało?</p>
+        </div>
+
+        <h2>Dopasowywanie wzorów</h2>
+
+        <p>Powłoka Bash udostępnia narzędzia dopasowywania wzorów, umożliwiające wygodne operowanie na plikach o nazwach, które można przedstawić w postaci wzoru &ndash; czyli uproszczonego wyrażenia regularnego.</p>
+
+        <div class="exercise">
+          <p>Połącz się zdalnie z serwerem <code>students.wmi.amu.edu.pl</code> i wykonaj w katalogu <code>/dev</code> następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ ls -ld a*
+<!--     -->$ ls -ld ?a*
+<!--     -->$ ls -ld *[ag]
+<!--     -->$ ls -ld [ABCDEFGHIJKLMNOPQRSTUVWXYZ]*
+<!--     -->$ ls -ld [^[:lower:]]*
+<!--     -->$ ls -ld [[:alpha:]]*
+<!--     --></code></pre>
+          <p>Za co odpowiada opcja <code>-d</code> polecenia <code>ls</code>? Jak działają kolejne polecenia?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Jakie polecenie jest tak naprawdę wykonywane, gdy wywołujemy trzecie polecenie z listy z poprzedniego ćwiczenia? Wymyśl kilka ciekawych zastosowań dopasowywania wzorców.</p>
+        </div>
+
+        <div class="exercise exercise-star">
+          <p>Dlaczego polecenie</p>
+          <pre><code class="no-highlight">$ ls -ld [A-Z]*</code></pre>
+          <p>zachowuje się w taki, a nie inny sposób? (Podpowiedź: wyświetlona lista obejmuje wszystkie elementy, którzych nazwa zaczyna się od litery innej niż <code>a</code>.)</p>
+        </div>
+
+        <p>We wzorcach, podobnie jak w wyrażeniach regularnych w poleceniu <code>grep</code>, możemy stosować <i>klasy</i> symboli. W jednym z powyższych ćwiczeń były to klasy <code>lower</code> i <code>alpha</code>.</p>
+
+        <div class="exercise">
+          <p>Korzystając z dostępnych źródeł, dowiedz się, z jakich innych klas symboli można korzystać. Przetestuj ich działanie w praktyce.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>"alnum", "alpha", "ascii", "blank", "cntrl", "digit", "graph", "lower", "print", "punct", "space", "upper", "word" oraz "xdigit".</p>
+          </div>
+        </div>
+
+        <p>Jeśli opcja <code>extglob</code> powłoki jest włączona, wzorce dopasowań mogą być bardziej skomplikowane. Obejmują one:</p>
+        <ul>
+          <li><code>?(wzorzec)</code> &ndash; dopasowuje zero lub jedno wystąpienie wzorca,</li>
+          <li><code>*(wzorzec)</code> &ndash; dopasowuje zero lub więcej wystąpień wzorca,</li>
+          <li><code>+(wzorzec)</code> &ndash; dopasowuje jedno lub więcej wystąpień wzorca,</li>
+          <li><code>!(wzorzec)</code> &ndash; dopasowuje wszystko, co nie odpowiada wzorcowi.</li>
+        </ul>
+
+        <div class="exercise">
+          <p>Jaki będzie efekt wykonania poniższego polecenia?</p>
+          <pre><code class="no-highlight">$ cp -r +([0-9])*([[:upper:]]) kopia</code></pre>
+        </div>
+
+        <div class="exercise">
+          <p>Wyświetl wszystkie elementy katalogu <code>/dev</code>, których nazwa:</p>
+          <ol style="list-style-type: lower-latin;">
+            <li>składa się wyłącznie z małych liter,</li>
+            <li>kończy się cyfrą,</li>
+            <li>rozpoczyna się ciągiem co najmniej trzech małych liter,</li>
+            <li>rozpoczyna się od znaku innego, niż t (wskaż dwa rozwiązania).</li>
+          </ol>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <ol style="list-style-type: lower-latin;">
+              <li><code>$ ls -ld +([[:lower:]])</code></li>
+              <li><code>$ ls -ld *[[:digit:]]</code></li>
+              <li><code>$ ls -ld [[:lower:]][[:lower:]][[:lower:]]*</code></li>
+              <li><code>$ ls -ld [^t]*</code> lub <code>$ ls -ld !(t*)</code></li>
+            </ol>
+          </div>
+        </div>
+
+        <h1>Zadanie domowe</h1>
+
+        <div class="task">
+          <p>Uniwersytet Biurokratyczny zatrudnił Cię na stanowisku młodszego administratora kont studenckich. Dostarczono Ci archiwum <a href="files/students.zip">students.zip</a>, zawierające kartoteki studentów w formie plików <code>txt</code> o nazwach postaci <code>imię_nazwisko.txt</code>. Jako że jutro ma się rozpocząć kontrola Państwowej Komisji Biurokratycznej, musisz pilnie udzielić rektorowi odpowiedzi na następujące pytania:</p>
+          <ol style="list-style-type: lower-latin;">
+            <li>Ilu jest studentów?</li>
+            <li>Ile różnych imion mają studenci?</li>
+            <li>Ilu studentów ma imię o długości 5 znaków?</li>
+            <li>Ilu jest studentów, których imię kończy się na "e", a nazwisko na "o"?</li>
+            <li>Jak rozkłada się częstość występowania kolejnych liter na drugim miejscu w nazwisku?</li>
+          </ol>
+          <p>Zaproponuj po jednym poleceniu, zwracającym odpowiednie dane.</p>
+        </div>
+
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
+</body>
+</html>
