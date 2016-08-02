@@ -1,0 +1,440 @@
+<!DOCTYPE HTML>
+<html moznomarginboxes mozdisallowselectionprint>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Ćwiczenia 4</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
+
+    <article id="cw04">
+
+        <p>Do tej pory traktowaliśmy powłokę Bash jako interfejs wiersza poleceń systemu. Pełni ona jednak dodatkowo funkcję interpretera języka skryptowego o tej samej nazwie (Bash). Celem tych i kolejnych ćwiczeń jest zapoznanie się z podstawami tworzenia skryptów powłoki Bash.</p>
+
+        <h1>Zmienne powłoki, polecenia <code>echo</code> i <code>eval</code></h1>
+
+        <h2>Zmienne lokalne</h2>
+
+        <p>Aby utworzyć zmienną lub zmienić jej wartość, należy wykonać polecenie</p>
+        <pre><code class="no-highlight">$ zmienna=wartość</code></pre>
+        <p>Istotny jest tu brak odstępów przed i po znaku równości.</p>
+
+        <div class="exercise">
+          <p>Wykonaj następuące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ a=1
+<!--     -->$ a= 1
+<!--     -->$ a =1
+<!--     -->$ b=Ala
+<!--     -->$ b=Ala ma kota
+<!--     -->$ b="Ala ma kota"
+<!--     -->$ b='Ala ma kota'
+<!--     --></code></pre>
+          <p>Które z nich zakończyły się wystąpieniem błędu? Spróbuj utworzyć kilka zmiennych lokalnych w analogiczny sposób. Sprawdź empirycznie, jakie warunki musi spełniać prawidłowa nazwa zmiennej.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Polecenia <code>a= 1</code>, <code>a =1</code> oraz <code>b=Ala ma kota</code> zakończyły się wystąpieniem błędu.</p>
+          </div>
+        </div>
+
+        <p>Aby odwołać się do zapisanej zmiennej, należy poprzedzić jej nazwę symbolem <code>$</code>.</p>
+
+        <div class="exercise">
+          <p>Wykonaj następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ a="ls"
+<!--     -->$ b=$a
+<!--     -->$ $b
+<!--     --></code></pre>
+          <p>Co się stało? Na podstawie tego eksperymentu spróbuj odpowiedzieć na pytanie, jak powłoka Bash zachowuje się, gdy w poleceniu następuje odwołanie do zmiennej.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Wykonaj poniższe polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ a=5
+<!--     -->$ sleep $a
+<!--     -->$ a="/usr/bin"
+<!--     -->$ b=less
+<!--     -->$ ls -l $a | $b
+<!--     --></code></pre>
+          <p>Czy powłoka rozróżnia zmienne liczbowe od znakowych?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Sprawdź, jak interpretowane są zmienne, które nie istnieją.</p>
+        </div>
+
+        <p>Do zmiennej możemy też przypisać efekt (w rozumieniu standardowego wyjścia) wykonania okreslonego polecenia. Służy do tego specjalna struktura <code>$()</code>.</p>
+
+        <div class="exercise">
+          <p>Wykonaj w swoim katalogu domowym następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ touch plik.txt
+<!--     -->$ plik="plik.txt"
+<!--     -->$ wynik=$(ls -l $plik)
+<!--     -->$ echo $wynik
+<!--     -->$ wynik2="Wynik to $(ls -l $plik)"
+<!--     -->$ echo $wynik2
+<!--     -->$ wynik3='Wynik to $(ls -l $plik)'
+<!--     -->$ echo $wynik3
+<!--     --></code></pre>
+          <p>Zapoznaj się z efektami. Jak myślisz, jak działa polecenie <code>echo</code>?</p>
+        </div>
+
+        <p>Podobnie zresztą można wykonywać podstawowe operacje arytmetyczne, korzystając ze struktury <code>$(())</code>.</p>
+
+        <div class="exercise">
+          <p>Wykonaj w swoim katalogu domowym następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ a=10 b=15
+<!--     -->$ a=$((a*2))
+<!--     -->$ b=$(((b-5)+a))
+<!--     -->$ sleep $b
+<!--     --></code></pre>
+          <p>Jaki parametr zostanie przekazany do programu <code>sleep</code>? Czy efekt będzie taki sam, jeśli nazwy zmiennych wewnątrz wyrażeń poprzedzimy znakiem dolara?</p>
+          <p>Zwróć uwagę na fakt, że możemy modyfikować wartość więcej niż jednej zmiennej w jednym poleceniu.</p>
+        </div>
+
+        <div class="howitworks">
+          <p>Kiedy przekazujemy do powłoki Bash polecenie, jej interpreter przegląda je w poszukiwaniu elementów, które należałoby w jakiś sposób przetworzyć. Dzieje się to <b>zanim</b> polecenie zostanie wykonane. Wyjątkiem są operacje przypisania wartości do zmiennych &ndash; jeśli polecenie jest ciągiem przypisań wartości do zmiennych, przypisania te będą realizowane po kolei.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Wykonaj w swoim katalogu domowym następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ a=10 b=15
+<!--     -->$ echo $((a*2))
+<!--     -->$ echo $(($a*2))
+<!--     --></code></pre>
+          <p>Jaka jest różnica w efektach wywołania polecenia <code>echo</code>? Jaka jest różnica w tym, jak na polecenie reaguje powłoka?</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>W ostatnim przypadku powłoka wykonuje tak naprawdę proces interpretacji dwukrotnie &ndash; raz przekształcając wyjściowe polecenie w <code>echo $((10*2))</code>, w drugim kroku zaś w <code>echo 20</code>.</p>
+          </div>
+        </div>
+
+        <h2>Zmienne środowiskowe</h2>
+
+        <div class="howitworks">
+          <p>Powłoka Bash pozwala na definiowanie stałych i zmiennych lokalnych i globalnych (zwanych środowiskowymi). Zmienne te wpływają na funkcjonowanie powłoki i wykonywanych w niej poleceń.</p>
+
+          <p>Kiedy powłoka Bash jest uruchamiana, wykonywane są polecenia zebrane w określonych plikach, np. <code>/etc/profile</code> czy <code>~/.bashrc</code>. Duża część tych poleceń wpływa na wartości zmiennych lokalnych i środowiskowych. Te ostatnie dostępne są nie tylko wewnątrz powłoki, ale także dla uruchamianych w niej programów.</p>
+        </div>
+
+        <p>Aby uczynić ze zmiennej lokalnej zmienną środowiskową (globalną), można skorzystać z polecenia <code>export</code>. Przyjmuje ono jako parametry nazwy istniejących zmiennych lub ich definicje. Tym samym polecenie</p>
+        <pre><code class="no-highlight">$ export a=1 b=2 c=3</code></pre>
+        <p>jest równoważne ciągowi poleceń</p>
+        <pre><code class="no-highlight"><!--
+      -->$ a=1
+<!--  -->$ b=2 c=3
+<!--  -->$ export a b
+<!--  -->$ export c
+<!--  --></code></pre>
+
+        <div class="exercise">
+          <p>Wykonaj następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ a=1 b=2 c=3
+<!--     -->$ export a b
+<!--     -->$ bash
+<!--     -->$ echo $a $b $c
+<!--     -->$ exit
+<!--     --></code></pre>
+          <p>Skomentuj wyniki. Co dokładnie się stało?</p>
+        </div>
+
+        <p>Czasami istnieje konieczność wykonania polecenia ze zmodyfikowanym środowiskiem. Taką możliwość daje program <code>env</code>.</p>
+
+        <div class="exercise">
+          <p>Zapoznaj się z efektem wykonania następujących poleceń:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ a=1 b=2 c=3
+<!--     -->$ export a b
+<!--     -->$ bash
+<!--     -->$ echo $a $b $c
+<!--     -->$ exit
+<!--     -->$ env b=5 bash
+<!--     -->$ echo $a $b $c
+<!--     -->$ exit
+<!--     -->$ echo $a $b $c
+<!--     --></code></pre>
+        </div>
+
+        <h2>Najważniejsze zmienne</h2>
+
+        <p>Funkcjonowanie powłoki Bash w dużej mierze zależy od tego, jakie wartości przyjmują określone zmienne. Najważniejsze z nich to:</p>
+
+        <ul>
+          <li><code>PS1</code> &ndash; zmienna lokalna określająca wygląd znaku zachęty,</li>
+          <li><code>PS2</code> &ndash; zmienna lokalna określająca wygląd uzupełniającego znaku zachęty,</li>
+          <li><code>PATH</code> &ndash; zmienna globalna określająca ścieżki przeszukiwań,</li>
+          <li><code>HOME</code> &ndash; zmienna globalna przechowująca ścieżkę do katalogu domowego.</li>
+        </ul>
+
+        <div class="howitworks">
+          <p>Programy w systemach uniksopodobnych są, podobnie jak wiele innych elementów, plikami. Pliki te mogą znajdować się w różnych miejscach struktury plików. Mimo to, gdy wpisujemy w powłoce polecenie</p>
+          <pre><code class="no-highlight">$ ls</code></pre>
+          <p>system wie, że ma wykonać program <code>/bin/ls</code>. Skąd? Informacja o tym, które katalogi mają być przeszukiwane w poszukiwaniu wykonywalnych elementów o wskazanej nazwie, przechowywana jest w zmiennej globalnej <code>PATH</code>.</p>
+          <div class="exercise">
+            <p>Wykonując polecenie <code>printenv</code>, zapoznaj się z listą zmiennych środowiskowych. Sprawdź, jaką wartość ma zmienna <code>PATH</code>.</p>
+          </div>
+          <div class="exercise exercise-star">
+            <p>Co by się stało, gdyby program <code>ls</code> znajdował się w więcej niż jednym katalogu wskazanym w zmiennej <code>PATH</code>?</p>
+
+            <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+            <div class="answer">
+              <p>W takim wypadku wykonałby się program <code>ls</code> z tego katalogu, który jest najwcześniej na liście.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Wykonaj następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ bash
+<!--     -->$ PS1="Wpisz coś: "
+<!--     -->$ PS2="Wpisuj dalej> "
+<!--     -->$ echo "Ala ma ko
+<!--     -->$ ta"
+<!--     -->$ exit
+<!--     --></code></pre>
+          <p>Jak zachowuje się powłoka? Jak na jej zachowanie wpływa otwarcie cudzysłowu? Jaki inny sposób łamania długich wierszy można wykorzystywać w powłoce Bash?</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Powłoka Bash pozwala na łamanie wierszy przy użyciu symbolu <code>\</code>.</p>
+          </div>
+        </div>
+
+        <h2>Polecenie <code>echo</code></h2>
+
+        <div class="command">
+          <p>W eksperymentowaniu z powłoką przydatne okaże się polecenie <code>echo</code>. Działa ono w bardzo prosty sposób &ndash; wypisuje w postaci ciągu znaków na wyjściu jego argumenty, oddzielając je znakiem odstępu.</p>
+          <div class="exercise">
+            <p>Wykonaj następujące polecenia:</p>
+            <pre><code class="no-highlight"><!--
+           -->$ echo
+<!--       -->$ echo 1
+<!--       -->$ echo Ala ma kota
+<!--       -->$ echo  Ala  ma  kota
+<!--       -->$ echo "Ala ma kota"
+<!--       -->$ echo " Ala  ma  kota"
+<!--       --></code></pre>
+            <p>Jakie wnioski można wyciągnąć z tego eksperymentu?</p>
+          </div>
+        </div>
+
+        <p>Polecenie <code>echo</code> pozwala nam przekonać się także, jak powłoka interpretuje ciągi znaków w różnego rodzaju cudzysłowach.</p>
+
+        <ul>
+          <li>pojedyncze cudzysłowy <code>' '</code> &ndash; znajdujący się wewnątrz ciąg znaków nie jest w żaden sposób przetwarzany, a znajdujące się wewnątrz znaki specjalne traktowane są jako zwykłe symbole;</li>
+          <li>podwójne cudzysłowy <code>" "</code> &ndash; znajdujący się wewnątrz ciąg znaków jest przetwarzany, dlatego niektóre symbole specjalne (np. znak dolara), które mają być traktowane jako symbole, powinny być poprzedzane znakiem odwróconego ukośnika;</li>
+          <li>apostrofy <code>` `</code> &ndash; reprezentuje ciąg znaków będących efektem (w sensie standardowego wyjścia) wykonania polecenia znajdującego się wewnątrz; warto tu zwrócić uwagę na zbieżność z poznaną już konstrukcją <code>$()</code>.</li>
+        </ul>
+
+        <p>Jeśli ciąg znaków nie jest umieszczony w cudzysłowach, jest <i>zwykle</i> traktowany tak samo jak ciąg umieszczony w podwójnych cudzysłowach, przy czym wówczas każdy znak specjalny należy poprzedzić znakiem odwróconego ukośnika, a symbol odstępu oznacza koniec tego ciągu.</p>
+
+        <div class="exercise">
+          <p>Wykonaj następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ program=ls
+<!--     -->$ echo $program
+<!--     -->$ echo 'Program $program' "Program $program"
+<!--     -->$ echo "Program $program"
+<!--     -->$ echo "${program}program"
+<!--     -->$ echo `$program`
+<!--     --></code></pre>
+        </div>
+
+        <p>Domyślnie, polecenie <code>echo</code> kończy swoje działanie wypisaniem znaku nowej linii. Aby temu zapobiec, należy wywołać je z opcją <code>-n</code>. Przydatność tego rozwiązania stanie się jasna, gdy będziemy łączyć polecenia <code>read</code> oraz <code>echo</code>.</p>
+
+        <h2>Polecenie <code>eval</code></h2>
+
+        <p>Wbudowane polecenie powłoki <code>eval</code> łączy przekazane mu jako argumenty ciągi znaków i wykonuje je jako jedno polecenie.</p>
+
+        <div class="exercise">
+          <p>Wykonaj poniższe polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ a=1 a1=2
+<!--     -->$ eval echo $a
+<!--     -->$ eval echo "\$a"
+<!--     -->$ eval echo "\$a$a"
+<!--     --></code></pre>
+          <p>Określ, w jaki sposób powłoka przetwarza poszczególne polecenia. Jeśli nie czujesz się zbyt pewnie z poleceniem <code>eval</code>, poeksperymentuj więcej.</p>
+        </div>
+
+        <h1>Powłoka Bash &ndash; tips &amp; tricks &ndash; część II</h1>
+
+        <h2>Wykonywanie warunkowe</h2>
+
+        <div class="howitworks">
+          <p>Każdy program uruchomiony w powłoce zwraca do systemu, po swoim zakończeniu, pewną całkowitą wartość liczbową z przedziału od 0 do 255, tzw. status wyjścia (<i>exit status</i>). Przyjmuje się, że jeśli program zwrócił wartość 0, to zakończył się prawidłowo. Inne liczby mogą być związane z konkretnymi błędami, które wystąpiły w czasie jego wykonywania.</p>
+
+          <p>Status wyjścia ostatnio wykonanego polecenia przechowywany jest w zmiennej <code>$?</code>. System zaś udostępnia dwa proste programy: <code>true</code>, który zawsze kończy się powodzeniem i <code>false</code>, który zawsze kończy się błędem.</p>
+
+          <div class="exercise">
+            <p>Sprawdź, jakie statusy wyjścia zwracają programy <code>true</code> i <code>false</code>. Korzystając z polecenia <code>whereis</code> dowiedz się, gdzie na dysku znajdują się te programy.</p>
+          </div>
+        </div>
+
+        <p>Wykonując polecenia, możemy uzależnić wykonanie niektórych z nich od tego, jakie statusy wyjścia zwracają inne. Służą do tego trzy metasymbole powłoki Bash: znak średnika, <code>&amp;&amp;</code> oraz <code>||</code>. Tak oto:</p>
+        <ul>
+          <li>znak średnika oddziela polecenia, które będą wykonywane jedno po drugim, niezależnie od efektu tego wykonywania, np.:</li>
+          <pre><code class="no-highlight">$ cd ~; touch plik.txt; ls -l plik.txt</code></pre>
+          <li>metasymbol <code>&amp;&amp;</code> oddziela polecenia, których wykonanie jest uzależnione od prawidłowego zakończenia wszystkich wcześniejszych, np.:</li>
+          <pre><code class="no-highlight">$ cd /dev &amp;&amp; touch plik.txt &amp;&amp; ls -l plik.txt</code></pre>
+          <li>metasymbol <code>||</code> oddziela polecenia, których wykonanie jest uzależnione od nieprawidłowego zakończenia któregokolwiek z wcześniejszych, np.:</li>
+          <pre><code class="no-highlight">$ (cd /dev &amp;&amp; touch plik.txt) || echo "Nie udało się"</code></pre>
+        </ul>
+        <p>Jak widać, nawiasy okrągłe mogą posłużyć do grupowania poleceń, jednak w swojej naturze powodują wykonanie polecenia w specjalnie do tego celu uruchomionym podprocesie powłoki.</p>
+
+        <div class="exercise">
+          <p>Spróbuj wykonać następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ cd /dev; touch plik.txt; ls -l ~
+<!--     -->$ cd /dev &amp;&amp; touch plik.txt
+<!--     -->$ cd /dev &amp;&amp; touch plik.txt &amp;&amp; ls -l plik.txt
+<!--     -->$ (cd /dev &amp;&amp; touch plik.txt) || echo "Nie udało się"
+<!--     --></code></pre>
+          <p>Sprawdź, jakie statusy wyjścia zwracają.</p>
+        </div>
+
+        <h2>Polecenia w plikach</h2>
+
+        <p>Naturalne pytanie brzmi: <i>czy można zapisać zbiór poleceń w pliku i wykonać je wszystkie na raz?</i> Odpowiedź jest pozytywna. Jeśli plik tekstowy będzie zawierać maksymalnie jedno polecenie w każdym wierszu, to można zmusić powłokę, aby wykonała je tak, jakbyśmy wprowadzali je jedno po drugim w powłoce.</p>
+
+        <p>Przykładowo, jeśli plik <code>~/kod</code> zawiera polecenia, to można je wykonać, wywołując polecenie</p>
+        <pre><code class="no-highlight">$ . ~/kod</code></pre>
+
+        <div class="notice">
+          <p>Zwróć szczególną uwagę na różnicę między symbolem kropki (<code>.</code>) jako poleceniem wewnętrznym powłoki a tym samym symbolem jako nazwą dowiązania stałego do bieżącego katalogu.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Utwórz w swoim katalogu domowym plik o nazwie <code>kod</code> i umieść w nim następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->cd /dev
+<!--     -->ls
+<!--     -->cd -
+<!--     --></code></pre>
+          <p>Wykonaj te polecenia, korzystając z metasymbolu kropki. Porównaj zachowanie powłoki w stosunku do sytuacji, w której polecenia te byłyby wprowadzane ręcznie, jedno po drugim. Jakie uprawnienia należy posiadać do pliku <code>kod</code>, aby można było wykonać zawarte w nim polecenia z użyciem metasymbolu <code>.</code>?</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>Nie ma różnicy w efektach wykonania, poza tym, że wraz z wykonywanymi poleceniami nie pojawia się nowy znak zachęty. To znaczy, ciąg poleceń traktowany jest jako jedno rozbudowane polecenie. Do wykonania poleceń z takiego pliku wystarczy uprawnienie do odczytu.</p>
+          </div>
+        </div>
+
+        <div class="exercise exercise-star">
+          <p>Dowiedz się, jaka jest techniczna różnica pomiędzy wykonaniem poleceń z pliku a wykonaniem skryptu powłoki. Swoje przypuszczenia zweryfikujesz na kolejnych ćwiczeniach.</p>
+        </div>
+
+        <h2>Zbiory</h2>
+
+        <p>Metasymbole <code>{</code> oraz <code>}</code> pozwalają generować na poziomie powłoki zbiory (ciągi) argumentów. Najłatwiej będzie to zrozumieć na przykładach.</p>
+
+        <div class="exercise">
+          <p>Wykonaj następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ echo a{b}d
+<!--     -->$ echo a{b,c}d
+<!--     -->$ echo {a..c}
+<!--     -->$ echo {a,b,c}{d,e,f}
+<!--     -->$ echo {a,b,c} {d,e,f}
+<!--     -->$ echo {5..100}
+<!--     -->$ echo {A..Z}{000..100}
+<!--     -->$ echo {00..100}
+<!--     -->$ echo {0..100}
+<!--     -->$ echo {AA..ZZ}
+<!--     -->$ echo To jest wyr{az,ocznia,ko}
+<!--     -->$ echo "To jest wyr{az,ocznia,ko}"
+<!--     -->$ echo "To jest wyr"{az,ocznia,ko}
+<!--     --></code></pre>
+          <p>Zastanów się nad efektami.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <p>W <code>echo a{b}d</code>, <code>echo {AA..ZZ}</code> oraz <code>echo "To jest wyr{az,ocznia,ko}"</code> symbol zbioru zostanie potraktowany jako ciąg znaków.</p>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Sprawdź, jak zachowa się powłoka, gdy wykonasz w niej następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ a=1 b=50
+<!--     -->$ echo {$a..$b}
+<!--     --></code></pre>
+          <p>Dlaczego tak się dzieje? Zmodyfikuj drugie polecenie tak, aby zadziałało w oczekiwany sposób.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">$ eval echo {$a..$b}</code></pre>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Utwórz w swoim katalogu domowym katalog <code>Daty</code>. W jego wnętrzu utwórz 365 katalogów o nazwach odpowiadających kolejnym datom w roku 2015, zapisanym w postaci <code>RRRR-MM-DD</code>.</p>
+
+          <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+          <div class="answer">
+            <pre><code class="no-highlight">
+<!--       -->$ mkdir 2015-{01,03,05,07,08,10,12}-{01..31} \
+<!--       -->        2015-{04,06,09,11}-{01-30} 2015-02-{01..28}
+            </code></pre>
+          </div>
+        </div>
+
+        <div class="exercise">
+          <p>Z katalogu, o którym mowa w poprzednim ćwiczeniu, usuń te katalogi, które są związane z miesiącem lutym, majem oraz wrześniem.</p>
+        </div>
+
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
+</body>
+</html>
