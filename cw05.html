@@ -1,0 +1,538 @@
+<!DOCTYPE HTML>
+<html moznomarginboxes mozdisallowselectionprint>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Ćwiczenia 5</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
+
+    <article id="cw05">
+
+        <h1>Skrypty powłoki Bash</h1>
+
+        <h2>Kontekst wykonywania skryptów</h2>
+
+        <p>Pod koniec poprzednich ćwiczeń dowiedzieliśmy się, jak wykonać polecenia zapisane w pliku tekstowym tak, jakbyśmy wpisywali je ręcznie w bieżącej sesji powłoki. Przypomnijmy, że należy w tym celu wykonać polecenie</p>
+        <pre><code class="no-highlight">$ . skrypt</code></pre>
+        <p>gdzie <code>skrypt</code> jest ścieżką do pliku zawierającego instrukcje, po jednej w wierszu. Taki plik nazywamy <i>skryptem powłoki</i>. Przyjęło się, że nazwy plików będących skryptami powłoki kończą się znakami <code>.sh</code> (ang. <i>shell</i>), np. <code>skrypt.sh</code> i tej notacji będziemy się odtąd trzymać.</p>
+
+        <p>Czasem zachodzi potrzeba wykonania poleceń w osobnej instancji powłoki (np. wtedy, gdy skrypt mógłby zmienić wartości zmiennych lokalnych i środowiskowych) i zwrócenia wyjścia do bieżącej instancji. Aby wykonać w ten sposób skrypt <code>skrypt.sh</code>, należałoby wykonać polecenie:</p>
+        <pre><code class="no-highlight">$ bash skrypt.sh</code></pre>
+        <p>czyli wywołać program powłoki (<code>bash</code>) z argumentem będącym nazwą skryptu.</p>
+
+        <div class="howitworks">
+          <p>Kiedy wykonywane jest polecenie</p>
+          <pre><code class="no-highlight">$ bash skrypt.sh</code></pre>
+          <p>bieżąca powłoka uruchamia program <code>bash</code>, przekazuje do niego wartości zmiennych środowiskowych i pośredniczy w obsłudze wejścia/wyjścia realizowanej przez polecenia wywoływane wewnątrz skryptu. W ten sposób, nawet jeśli wewnątrz skryptu znajdują się polecenia wpływające na środowisko, zakres ich działania ograniczy się do instancji, w której wykonywany jest skrypt i programów uruchamianych z jej poziomu.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Zmienna <code>$$</code> przechowuje identyfikator procesu bieżącej instancji powłoki. Utwórz skrypt o nazwie <code>pid.sh</code> i treści</p>
+          <pre><code class="bash">echo "PID: $$"</code></pre>
+          <p>Następnie wykonaj polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ . pid.sh
+<!--     -->$ bash pid.sh
+<!--     -->$ . pid.sh
+<!--     -->$ bash pid.sh
+<!--     --></code></pre>
+          <p>Jakie można stąd wyciągnąć wnioski?</p>
+        </div>
+
+        <div class="exercise">
+          <p>Utwórz w swoim katalogu domowym plik <code>zmienne.sh</code> o treści</p>
+          <pre><code class="bash"><!--
+         -->echo "a: $a"
+<!--     -->echo "b: $b"
+<!--     -->a=10 b=20
+<!--     --></code></pre>
+          <p>Następnie wykonaj polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ a=2 b=4
+<!--     -->$ export a
+<!--     -->$ bash zmienne.sh
+<!--     -->$ echo $a $b
+<!--     -->$ . zmienne.sh
+<!--     -->$ echo $a $b
+<!--     --></code></pre>
+          <p>Zastanów się, co dokładnie się stało. Przypomnij sobie, czym jest zmienna środowiskowa i jak działa polecenie <code>export</code>.</p>
+        </div>
+
+        <h2>Skrypty jako polecenia</h2>
+
+        <p>Nazwę skryptu można też traktować jako nazwę polecenia. Załóżmy, że w bieżącym katalogu znajduje się plik <code>skrypt.sh</code>. Moglibyśmy chcieć go wykonać, wywołując polecenie</p>
+        <pre><code class="no-highlight">$ skrypt.sh</code></pre>
+        <p>Najprawdopodobniej skończy się to jednak porażką, bo:</p>
+        <ul>
+          <li>powyższe wywołanie spowoduje, że powłoka podąży w poszukiwaniu pliku <code>skrypt.sh</code> do katalogów określonych w zmiennej <code>PATH</code> (patrz poprzednie ćwiczenia) &ndash; szansa, że katalog, w którym znajduje się skrypt znajduje się na tej liście jest niewielka,</li>
+          <li>aby wykonać plik (tzn. odwołać się do niego jak do programu), musimy mieć do niego prawa wykonywania.</li>
+        </ul>
+        <p>Aby więc uruchomić skrypt korzystając z tej metody, należy upewnić się, że mamy prawo jego wykonania, a następnie odwołać się do niego korzystając ze ścieżki względnej lub bezwzględnej (która będzie traktowana przez powłokę jak ścieżka, a nie samodzielna nazwa), pisząc choćby</p>
+        <pre><code class="no-highlight">$ ./skrypt.sh</code></pre>
+        <p>gdy plik <code>skrypt.sh</code> znajduje się w bieżącym katalogu.</p>
+
+        <div class="notice">
+          <p>W dalszej części materiałów będziemy odwoływać się do skryptów w ostatni z&nbsp;przedstawionych sposobów. Zanim wykonasz ćwiczenia, upewnij się, że do pliku ze skryptem dodane zostały uprawnienia do wykonania.</p>
+        </div>
+
+        <div class="howitworks">
+          <p>Załóżmy, że odwołaliśmy się do skryptu wykonując polecenie</p>
+          <pre><code class="no-highlight">$ ./skrypt.sh</code></pre>
+          <p>Skąd powłoka wie, że polecenia zawarte w wywołanym pliku powinny być wykonane w podprocesie będącym programem <code>bash</code>? Zwykle mechanizmy powłoki rozpoznają, czy wywoływany plik jest programem, czy skryptem. Jeśli powłoka ma do czynienia ze skryptem, stara się zdecydować, który program powinien być użyty do jego zinterpretowania. Może się to odbywać arbitralnie (<i>jeśli nie powiedziano inaczej, wykonaj skrypt w powłoce Bash</i>) lub przez próbę dobrania odpowiedniego programu do rozszerzenia pliku, np. powłoki <code>sh</code> lub <code>bash</code> dla plików z roszerzeniem <code>.sh</code>, interpretera języka Python dla plików z roszerzeniem <code>.py</code> itp. Nie jest to jednak sposób niezawodny &ndash; po pierwsze, plik skryptu nie musi mieć żadnego rozszerzenia, a po drugie, możemy chcieć wymusić wykonanie pliku z wykorzystaniem określonego programu. Informację o tym, jaki program ma zostać uruchomiony, aby wykonać polecenia zawarte w skrypcie, możemy zawrzeć w jego pierwszym wierszu, wskazując bezwzględną ścieżkę do interpretera. W przypadku powłoki Bash będzie to</p>
+          <pre><code class="no-highlight">#!/bin/bash</code></pre>
+          <p>Zbitkę <code>#!</code> rozpoczynającą wiersz nazywa się <i>shebang</i> lub <i>hashbang</i>.</p>
+          <p>Stosowanie wprowadzonego tu zapisu jest dobrym zwyczajem, ponieważ zdejmuje z powłoki koniecznośc podejmowania decyzji. Tak opisany skrypt jest więc bardziej uniwersalny i łatwiejszy w przenoszeniu między platformami.</p>
+        </div>
+
+        <p>Metaymbol <code>#</code> jest symbolem komentarza powłoki Bash. Oznacza to, że nic, co znajduje się za tym symbolem, nie zostanie potraktowane jako część polecenia.</p>
+
+        <div class="exercise">
+          <p>Utwórz w swoim katalogu domowym skrypt o nazwie <code>witaj.sh</code> i treści</p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->echo "Witaj uzytkowniku $USER" # To jest komentarz
+<!--     --></code></pre>
+          <p>Wykonaj go, wykorzystując wszystkie poznane dotąd metody. Dogłębnie zastanów się, jak zachowuje się powłoka w każdym z przypadków.</p>
+        </div>
+
+        <h1>Budowa skryptu</h1>
+
+        <h2>Parametry pozycyjne</h2>
+
+        <p>Do skryptu powłoki, podobnie jak do innych poleceń i programów, można przekazywać parametry (argumenty). Odwołać się do nich można korzystając ze specjalnych zmiennych:</p>
+        <ul>
+          <li><code>$0</code> &ndash; przechowuje nazwę skryptu w postaci, w jakiej został on wywołany,</li>
+          <li><code>$1</code>, <code>$2</code>, ... &ndash; przechowują kolejne parametry pozycyjne (argumenty),</li>
+          <li><code>$#</code> &ndash; przechowuje liczbę parametrów pozycyjnych (argumentów),</li>
+          <li><code>$*</code> &ndash; przechowuje wszystkie parametry pozycyjne (argumenty) w postaci ciągów znaków oddzielonych znakiem odstępu.</li>
+        </ul>
+
+        <div class="exercise">
+          <p>Utwórz w swoim katalogu domowym skrypt o nazwie <code>parametry.sh</code> i treści</p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->echo "Liczba parametrow: $#"
+<!--     -->echo "Nazwa skryptu: $0"
+<!--     -->echo "Parametry: $*"
+<!--     -->echo "Drugi parametr: $2"
+<!--     --></code></pre>
+          <p>Następnie wykonaj polecenia</p>
+          <pre><code class="no-highlight"><!--
+         -->$ ./test.sh
+<!--     -->$ ./test.sh 1 2 3 4 5
+<!--     -->$ . test.sh 1 2 3 4 5
+<!--     -->$ ./test.sh a "b c" d e
+<!--     -->$ ./test.sh s "b   c" d   e
+<!--     --></code></pre>
+          <p>Zainterpretuj wyniki.</p>
+        </div>
+
+        <div class="exercise">
+          <p>Utwórz w swoim katalogu domowym skrypt o nazwie <code>echo.sh</code> i treści</p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->echo $*
+<!--     -->echo "$*"
+<!--     --></code></pre>
+          <p>Następnie wykonaj polecenia</p>
+          <pre><code class="no-highlight"><!--
+         -->$ ./test.sh a b c d e
+<!--     -->$ ./test.sh a  b c d  e
+<!--     -->$ ./test.sh "a  b" c "d  e"
+<!--     --></code></pre>
+          <p>Dlaczego w ostatnim przypadku skrypt powoduje wyświetlenie dwóch różnych wyników?</p>
+        </div>
+
+        <p>Polecenie <code>shift</code> wywołane wewnątrz skryptu powoduje przesunięcie parametrów pozycyjnych o jedną pozycję w lewo. Oznacza to zmniejszenie liczby tych parametrów o jeden i usunięcie pierwszego z nich.</p>
+
+        <div class="exercise">
+          <p>Utwórz w swoim katalogu domowym skrypt o nazwie <code>shift.sh</code> i treści</p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->echo "Liczba parametrow: $#"
+<!--     -->echo "Parametry: $1 $2 $3 $4"
+<!--     -->shift
+<!--     -->echo "Liczba parametrow: $#"
+<!--     -->echo "Parametry: $1 $2 $3 $4"
+<!--     --></code></pre>
+          <p>Następnie wykonaj polecenia</p>
+          <pre><code class="no-highlight"><!--
+         -->$ ./test.sh
+<!--     -->$ ./test.sh 1 2 3
+<!--     -->$ ./test.sh 1 2 3 4
+<!--     -->$ ./test.sh 1 2 3 4 5
+<!--     --></code></pre>
+          <p>Zaobserwuj efekty.</p>
+        </div>
+
+        <h2>Polecenie <code>read</code></h2>
+
+        <p>Polecenie <code>read</code> pozwala wczytywać dane ze standardowego wejścia do wskazanej zmiennej. Jako argument przyjmuje nazwę zmiennej, do której zostanie wczytany kolejny wiersz danych. Jeśli nie określono, do jakiej zmiennej ma być wczytany wiersz, zostanie wczytany do zmiennej <code>$REPLY</code>.</p>
+
+        <div class="example">
+          <p>Poniższy skrypt realizuje polecenie <code>read</code>:</p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->read
+<!--     -->echo "$REPLY"
+<!--     -->read zmienna
+<!--     -->echo "$zmienna"
+<!--     --></code></pre>
+        </div>
+
+        <p>Polecenie <code>read</code> pozwala wczytać zawartość kilku zmiennych jednocześnie. Nazwy tych zmiennych powinny być kolejnymi argumentami polecenia.</p>
+
+        <div class="exercise">
+          <p>Sprawdź, jak zadziała poniższy skrypt:</p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->read a b c
+<!--     -->echo "a: $a"
+<!--     -->echo "b: $b"
+<!--     -->echo "c: $c"
+<!--     --></code></pre>
+          <p>Na wejściu wprowadź (w kolejnych próbach) następujące ciągi znaków:</p>
+          <pre><code class="no-highlight"><!--
+         -->1
+<!--     -->1 2
+<!--     -->1 2 3
+<!--     -->1 2 3 4
+<!--     --></code></pre>
+          <p>Jakie wnioski można wyciągnąć z tego eksperymentu?</p>
+        </div>
+
+        <h2>Polecenie <code>exit</code></h2>
+
+        <p>Kiedy skrypt wykonywany jest w osobnej instancji powłoki, w momencie zakończenia zwraca do powłoki macierzystej status wyjścia. Wykorzystując polecenie <code>exit</code>, możemy jednocześnie zakończyć wykonywanie skryptu (gdyż polecenie to zakończy sesję powłoki) i zwrócić procesowi macierzystemu wybrany status wyjścia. Aby to zrobić, należy umieścić w odpowiednim miejscu skryptu polecenie</p>
+        <pre><code class="bash">exit 0</code></pre>
+        <p>gdzie 0 można zastąpić dowolną liczbą całkowitą z przedziału od 0 do 255. Jeśli status wyjścia nie zostanie określony, zwrócony zostanie status wyjścia ostatniego polecenia, które go określiło.</p>
+
+        <div class="exercise">
+          <p>Porównaj działanie następujących skryptów w kontekście zwracanego statusu wyjścia:</p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->topolecenienieistnieje
+<!--     -->exit
+<!--     -->ls
+<!--     --></code></pre>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->topolecenienieistnieje
+<!--     -->exit 0
+<!--     -->ls
+<!--     --></code></pre>
+        </div>
+
+        <h2>Polecenie <code>test</code></h2>
+
+        <p>Powłoka Bash udostępnia polecenie o nazwie <code>test</code>, pozwalające weryfikować prawdziwość przekazanego jako argumenty warunku. Polecenie to zwraca status wyjścia równy 0, jeśli warunek jest prawdziwy lub inną wartość, jeśli jest nieprawdziwy. Dzięki temu może być wykorzystywany z powodzeniem w budowie skryptów powłoki. Polecenie to można wywołać dwojako:</p>
+        <pre><code class="no-highlight">$ test warunek</code></pre>
+        <p>lub, równoważnie</p>
+        <pre><code class="no-highlight">$ [ warunek ]</code></pre>
+        <p>Zwróć uwagę na odstępy po nawiasie kwadratowym otwierającym i przed nawiasem kwadratowym zamykającym.</p>
+
+        <p>Polecenie <code>test</code> pozwala budować warunki w oparciu o mnogość opcji. Niektóre z nich zostały zebrane w poniższej tabeli.</p>
+
+        <table>
+          <tr><th>Warunek</th><th>Znaczenie</th></tr>
+          <tr><th colspan="2">Testy wartości liczbowych</th></tr>
+          <tr><td class="center"><code>$a -eq $b</code></td><td>weryfikuje równość dwóch wartości</td></tr>
+          <tr><td class="center"><code>$a -ge $b</code></td><td>weryfikuje czy <code>$a</code> jest większe lub równe <code>$b</code></td></tr>
+          <tr><td class="center"><code>$a -le $b</code></td><td>weryfikuje czy <code>$a</code> jest mniejsze lub równe <code>$b</code></td></tr>
+          <tr><td class="center"><code>$a -gt $b</code></td><td>weryfikuje czy <code>$a</code> jest większe niż <code>$b</code></td></tr>
+          <tr><td class="center"><code>$a -lt $b</code></td><td>weryfikuje czy <code>$a</code> jest mniejsze niż <code>$b</code></td></tr>
+          <tr><th colspan="2">Testy ciągów znakowych</th></tr>
+          <tr><td class="center"><code>$a = $b</code></td><td>weryfikuje równość dwóch ciągów</td></tr>
+          <tr><td class="center"><code>$a != $b</code></td><td>weryfikuje czy <code>$a</code> jest różne od <code>$b</code></td></tr>
+          <tr><td class="center"><code>$a < $b</code></td><td>weryfikuje czy <code>$a</code> jest leksykograficznie mniejsze od <code>$b</code></td></tr>
+          <tr><td class="center"><code>$a > $b</code></td><td>weryfikuje czy <code>$a</code> jest leksykograficznie większe od <code>$b</code></td></tr>
+          <tr><th colspan="2">Testy zmiennych</th></tr>
+          <tr><td class="center"><code>-z $a</code></td><td>weryfikuje czy <code>$a</code> ma zerową długość</td></tr>
+          <tr><td class="center"><code>-n $a</code></td><td>weryfikuje czy <code>$a</code> ma niezerową długość</td></tr>
+          <tr><th colspan="2">Testy plików</th></tr>
+          <tr><td class="center"><code>-e plik</code></td><td>weryfikuje, czy plik <code>plik</code> istnieje</td></tr>
+          <tr><td class="center"><code>-c plik</code></td><td>weryfikuje, czy plik <code>plik</code> jest urządzeniem znakowym</td></tr>
+          <tr><td class="center"><code>-b plik</code></td><td>weryfikuje, czy plik <code>plik</code> jest urządzeniem blokowym</td></tr>
+          <tr><td class="center"><code>-f plik</code></td><td>weryfikuje, czy plik <code>plik</code> jest zwykłym plikiem</td></tr>
+          <tr><td class="center"><code>-d plik</code></td><td>weryfikuje, czy plik <code>plik</code> jest katalogiem</td></tr>
+          <tr><td class="center"><code>-L plik</code></td><td>weryfikuje, czy plik <code>plik</code> jest dowiązaniem symbolicznych</td></tr>
+          <tr><td class="center"><code>-r plik</code></td><td>weryfikuje, czy użytkownik wykonujący skrypt ma uprawnienia odczytu do <code>plik</code></td></tr>
+          <tr><td class="center"><code>-w plik</code></td><td>weryfikuje, czy użytkownik wykonujący skrypt ma uprawnienia zapisu do <code>plik</code></td></tr>
+          <tr><td class="center"><code>-x plik</code></td><td>weryfikuje, czy użytkownik wykonujący skrypt ma uprawnienia wykonania do <code>plik</code></td></tr>
+          <tr><td class="center"><code>-O plik</code></td><td>weryfikuje, czy użytkownik wykonujący skrypt jest właścicielem pliku <code>plik</code></td></tr>
+          <tr><td class="center"><code>plik1 -ef plik2</code></td><td>weryfikuje, czy plik <code>plik1</code> ma ten sam numer i-węzła, co <code>plik2</code></td></tr>
+          <tr><td class="center"><code>plik1 -nt plik2</code></td><td>weryfikuje, czy plik <code>plik1</code> jest nowszy niż <code>plik2</code></td></tr>
+          <tr><td class="center"><code>plik1 -ot plik2</code></td><td>weryfikuje, czy plik <code>plik1</code> jest starszy niż <code>plik2</code></td></tr>
+          <tr><th colspan="2">Operatory logiczne</th></tr>
+          <tr><td class="center"><code>war1 -a war2</code></td><td>operator koniunkcji logicznej</td></tr>
+          <tr><td class="center"><code>war1 -o war2</code></td><td>operator alternatywy logicznej</td></tr>
+          <tr><td class="center"><code>! war1</code></td><td>operator negacji</td></tr>
+          <tr><td class="center"><code>( warunek )</code></td><td>operator grupowania wyrażeń</td></tr>
+        </table>
+
+        <div class="exercise">
+          <p>Sprawdź, jakie statusy wyjścia generują następujące polecenia:</p>
+          <pre><code class="no-highlight"><!--
+         -->$ test 5 -eq 6
+<!--     -->$ test -d ~/Desktop
+<!--     -->$ [ 5 -eq 6 ]
+<!--     -->$ [ -d ~/Desktop ]
+<!--     --></code></pre>
+          <p>Samodzielnie zweryfikuj działanie polecenia <code>test</code> z wykorzystaniem zmiennych.</p>
+        </div>
+
+        <h2>Instrukcja warunkowa <code>if</code></h2>
+
+        <div class="howitworks">
+          <p>W języku powłoki Bash wszystkie warunki logiczne są tak naprawdę poleceniami, które zwracają odpowiednie statusy wyjścia. Wszystkie instrukcje oparte na warunkach, w tym instrukcja <code>if</code>, działają tak, że warunek uznaje się za spełniony, jeśli wykonywanie związanego z nim polecenia zakończy się zwróceniem statusu wyjścia równego 0. To dość specyficzne podejście, które wymaga przyzwyczajenia i... znajomości poleceń.</p>
+        </div>
+
+        <p>Instrukcja warunkowa <code>if</code> przyjmuje ogólną konstrukcję</p>
+        <pre><code class="bash"><!--
+       -->if warunek
+<!--   -->then
+<!--   -->    instrukcja
+<!--   -->elif warunek
+<!--   -->    instrukcja
+<!--   -->...
+<!--   -->elif warunek
+<!--   -->    instrukcja
+<!--   -->else
+<!--   -->    instrukcja
+<!--   -->fi
+<!--   --></code></pre>
+        <p>przy czym bloki <code>elif</code> oraz <code>else</code> mogą zostać pominięte.</p>
+
+        <div class="example">
+          <p>Poniższe skrypty wykorzystują instrukcję <code>if</code>.</p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->if [ $# -ge 2 -a $# -le 4 ]
+<!--     -->then
+<!--     -->    echo "Liczba argumentow nalezy do przedzialu [2,4]"
+<!--     -->    exit 0
+<!--     -->elif [ $# -gt 4 -a $# -le 6 ]
+<!--     -->    echo "Liczba argumentow nalezy do przedzialu [5,6]"
+<!--     -->    exit 0
+<!--     -->else
+<!--     -->    echo "Liczba argumentow nie nalezy do przedzialu [2,6]"
+<!--     -->    exit 1
+<!--     -->fi
+<!--     --></code></pre>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->if grep "^$1:" /etc/passwd &amp;> /dev/null
+<!--     -->then
+<!--     -->    exit 0
+<!--     -->fi
+<!--     -->exit 1
+<!--     --></code></pre>
+          <div class="exercise">
+            <p>Co robi drugi z przedstawionych skryptów?</p>
+
+            <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+            <div class="answer">
+              <p>Drugi ze skryptów weryfikuje, czy użytkownik o loginie przekazanym jako pierwszy parametr istnieje w lokalnym systemie.</p>
+            </div>
+          </div>
+        </div>
+
+        <h2>Pętla <code>for</code></h2>
+
+        <p>Pętla <code>for</code> przyjmuje w języku powłoki Bash jeden ze wariantów</p>
+
+        <pre><code class="bash"><!--
+       -->for zmienna in zbior
+<!--   -->do
+<!--   -->    instrukcja
+<!--   -->done
+<!--   --></code></pre>
+
+        <pre><code class="bash"><!--
+       -->for ((instrukcja poczatkowa;warunek petli;instrukcja iteracyjna))
+<!--   -->do
+<!--   -->    instrukcja
+<!--   -->done
+<!--   --></code></pre>
+
+        <div class="example">
+          <p>Poniższe skrypty wykorzystują pierwszy z możliwych wariantów</p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->for i in Ala ma kota
+<!--     -->do
+<!--     -->    echo $i
+<!--     -->done
+<!--     --></code></pre>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->for litera in {a..z}
+<!--     -->do
+<!--     -->    echo $litera
+<!--     -->done
+<!--     --></code></pre>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->for plik in `ls`
+<!--     -->do
+<!--     -->    echo $plik
+<!--     -->done
+<!--     --></code></pre>
+          <div class="exercise">
+            <p>Przeanalizuj powyższe przykłady. Zastanów się, jak zachowuje się powłoka Bash w momencie wykonywania drugiego wiersza każdego ze skryptów.</p>
+          </div>
+        </div>
+
+        <div class="example">
+          <p>Poniższy skrypt wykorzystuje drugi z wariantów pętli <code>for</code>:</p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->for ((i=1;i<=10;i++))
+<!--     -->do
+<!--     -->    for ((j=1;j<=10;j++))
+<!--     -->    do
+<!--     -->        k=$((i*j))
+<!--     -->        if [ $k -lt 100 ]; then echo -n " "; fi
+<!--     -->        if [ $k -lt 10 ]; then echo -n " "; fi
+<!--     -->        echo -n "$k "
+<!--     -->    done
+<!--     -->    echo
+<!--     -->done
+<!--     --></code></pre>
+          <div class="exercise">
+            <p>Co robi powyższy skrypt? Zwróć uwagę na zapis instrukcji warunkowej <code>if</code> wewnątrz pętli <code>for</code>. Dlaczego taki zapis działa?</p>
+          </div>
+        </div>
+
+        <h2>Pętla <code>while</code></h2>
+
+        <p>Pętla <code>while</code> przyjmuje w języku powłoki Bash postać</p>
+
+        <pre><code class="bash"><!--
+       -->while warunek
+<!--   -->do
+<!--   -->    instrukcja
+<!--   -->done
+<!--   --></code></pre>
+
+        <div class="example">
+          <p>Poniższy skrypt wykorzystuje pętlę <code>while</code></p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->l=$1
+<!--     -->if ([ "$l" -eq "$l" ] &amp;&amp; [ $l -gt 0 ]) &amp;> /dev/null
+<!--     -->then
+<!--     -->    while [ $l -gt 0 ]
+<!--     -->    do
+<!--     -->        str="$((l%2))$str"
+<!--     -->        l=$((l/2))
+<!--     -->    done
+<!--     -->    echo $str
+<!--     -->    exit 0
+<!--     -->else
+<!--     -->    echo "Argumentem powinna byc liczba dodatnia" 1>&amp;2
+<!--     -->    exit 1
+<!--     -->fi
+<!--     --></code></pre>
+          <div class="exercise">
+            <p>Co robi powyższy skrypt?</p>
+          </div>
+          <div class="exercise">
+            <p>Zastanów się nad trickami wykorzystanymi w przedstawionym powyżej skrypcie. <b>Uwaga.</b> To nie jest łatwe ćwiczenie. Poświęć mu tyle uwagi, ile potrzeba.</p>
+          </div>
+          <div class="exercise">
+            <p>Zmodyfikuj powyższy skrypt tak, aby warunek logiczny instrukcji <code>if</code> nie wykorzystywał łączenia poleceń na poziomie powłoki, lecz wewnątrz polecenia <code>test</code>.</p>
+          </div>
+        </div>
+
+        <h2>Polecenia <code>break</code> oraz <code>continue</code></h2>
+
+        <p>Podobnie jak w znanych językach programowania, tak i w języku skryptowym powłoki Bash można korzystać z poleceń <code>break</code> oraz <code>continue</code> wewnątrz pętli <code>for</code> oraz <code>while</code>.</p>
+
+        <div class="example">
+          <p>Poniższy skrypt pokazuje przykład wykorzystania instrukcji <code>break</code> oraz <code>continue</code> w pętli <code>for</code>.</p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->for i in {1..30}
+<!--     -->do
+<!--     -->    if [ $((i%3)) -eq 1 ]
+<!--     -->    then
+<!--     -->        continue
+<!--     -->    fi
+<!--     -->    if [ $i -ge 15 ]
+<!--     -->    then
+<!--     -->        break
+<!--     -->    fi
+<!--     -->    echo $i
+<!--     -->done
+<!--     --></code></pre>
+        </div>
+
+        <h2>Selektor <code>case</code></h2>
+
+        <p>Selektor <code>case</code> przyjmuje ogólną postać:</p>
+        <pre><code class="bash"><!--
+       -->case wartosc in
+<!--   -->    zakres1) instrukcja ;;
+<!--   -->    zakres2) instrukcja ;;
+<!--   -->    ...
+<!--   -->    zakresn) instrukcja ;;
+<!--   -->esac
+<!--   --></code></pre>
+        <p>Warto tu zwrócić uwagę na metasymbol <code>;;</code> będący terminatorem bloku instrukcji. Jako zakresy można wykorzystywać dopasowywanie wzorów poznane na ćwiczeniach 3.</p>
+
+        <div class="example">
+          <p>Poniższy skrypt pokazuje wykorzystanie selektora <code>case</code>.</p>
+          <pre><code class="bash"><!--
+         -->#!/bin/bash
+<!--     -->case "$1" in
+<!--     -->    [0-9]) echo "Argument to cyfra" ;;
+<!--     -->    [[:alpha:]]) echo "Argument to litera" ;;
+<!--     -->    "napis") echo "Argument to ciag 'napis'" ;;
+<!--     -->    a*) echo "Argument zaczyna sie od litery 'a'" ;;
+<!--     -->    *) echo "Argument nie spelnia zadnego kryterium" ;;
+<!--     -->esac
+<!--     --></code></pre>
+        </div>
+
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
+</body>
+</html>
