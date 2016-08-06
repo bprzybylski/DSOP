@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html moznomarginboxes mozdisallowselectionprint>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Ćwiczenia 9</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
+
+    <article id="cw09">
+
+      <h1>Proste wersje wybranych poleceń</h1>
+
+      <p>Siłą systemów uniksopodobnych jest mnogość narzędzi dostępnych z poziomu konsoli &ndash; w czasie pierwszych pięciu ćwiczeń poznaliśmy ledwie kilka z nich, nie wykraczając jednocześnie poza niewielki procent możliwości, jakie one udostępniają.</p>
+
+      <p>Twórcy nawet tak prostych programów, jak <code>cat</code> czy <code>echo</code>, musieli mierzyć się z wieloma zagadnieniami związanymi z optymalizacją kodu. Pominiemy je, analizując kody źródłowe uproszczonych wersji wybranych narzędzi. Niektóre z nich utworzyliśmy sami już wcześniej, inne będą dla nas nowością.</p>
+
+      <h2>Program <code>cat</code></h2>
+
+      <pre><code class="c"><!--
+     -->#include &lt;sys/types.h&gt;
+<!-- -->#include &lt;sys/stat.h&gt;
+<!-- -->#include &lt;fcntl.h&gt;
+<!-- -->#include &lt;unistd.h&gt;
+<!-- -->#include &lt;errno.h&gt;
+<!-- -->
+<!-- -->#define BUFSIZ 128
+<!-- -->
+<!-- -->int main(int argc, char *argv[]){
+<!-- -->    char buf[BUFSIZ];
+<!-- -->    int f,i,n;
+<!-- -->
+<!-- -->    if(argc &lt;= 1)
+<!-- -->        while ((n = read(0, buf, BUFSIZ)) &gt; 0)
+<!-- -->            write(1, buf, n);
+<!-- -->
+<!-- -->    for(i=1; i&lt;argc; i++){
+<!-- -->        if((f = open(argv[i], O_RDONLY)) &gt; 0){
+<!-- -->            while ((n = read(f, buf, BUFSIZ)) &gt; 0)
+<!-- -->                write(1, buf, n);
+<!-- -->            close(f);
+<!-- -->        } else {
+<!-- -->            perror(argv[i]);
+<!-- -->        }
+<!-- -->    }
+<!-- -->    return 0;
+<!-- -->}
+<!-- --></code></pre>
+
+      <h2>Program <code>echo</code></h2>
+
+      <pre><code class="c"><!--
+     -->#include &lt;stdio.h&gt;
+<!-- -->
+<!-- -->int main(int argc, char *argv[]){
+<!-- -->    int i;
+<!-- -->
+<!-- -->    for(i=1; i&lt;argc; i++){
+<!-- -->        printf("%s ", argv[i]);
+<!-- -->    }
+<!-- -->    printf("\n");
+<!-- -->    return 0;
+<!-- -->}
+<!-- --></code></pre>
+
+      <h2>Program <code>wc</code></h2>
+
+      <div class="notice">
+        <p>Poniższy przykład pochodzi z książki: B. W. Kernighan, D. M. Ritchie, <i>Język ANSI C</i>, Wydawnictwa Naukowo-Techniczne, Warszawa 2003.</p>
+      </div>
+
+      <pre><code class="c"><!--
+     -->#include &lt;stdio.h&gt;
+<!-- -->
+<!-- -->#define IN  1 /* inside a word */
+<!-- -->#define OUT 0 /* outside a word */
+<!-- -->
+<!-- -->/* count lines, words, and characters in input */
+<!-- -->main(){
+<!-- -->  int c, nl, nw, nc, state;
+<!-- -->
+<!-- -->  state = OUT;
+<!-- -->  nl = nw = nc = 0;
+<!-- -->  while ((c = getchar()) != EOF) {
+<!-- -->    ++nc;
+<!-- -->    if (c == '\n')
+<!-- -->      ++nl;
+<!-- -->    if (c == ' ' || c == '\n' || c == '\t')
+<!-- -->      state = OUT;
+<!-- -->    else if (state == OUT) {
+<!-- -->      state = IN;
+<!-- -->      ++nw;
+<!-- -->    }
+<!-- -->  }
+<!-- -->
+<!-- -->  printf("%d %d %d\n", nl, nw, nc);
+<!-- -->}
+<!-- --></code></pre>
+
+      <h2>Program <code>od</code></h2>
+
+      <pre><code class="c"><!--
+     -->#include &lt;stdio.h&gt;
+<!-- -->
+<!-- -->int main(){
+<!-- -->    int c, n;
+<!-- -->
+<!-- -->    n = 1;
+<!-- -->    while ((c = getchar()) != EOF) {
+<!-- -->        printf("%3o", c);
+<!-- -->        if (n++ &gt;= 10) {
+<!-- -->            n = 1;
+<!-- -->            printf("\n");
+<!-- -->        } else {
+<!-- -->            printf(" ");
+<!-- -->        }
+<!-- -->    }
+<!-- -->
+<!-- -->    if(n != 1) printf("\n");
+<!-- -->    return 0;
+<!-- -->}
+<!-- --></code></pre>
+
+      <h1>Prawdziwe programy</h1>
+
+      <div class="exercise exercise-star">
+        <p>Pobierz z katalogu <a href="ftp://ftp.gnu.org/gnu/coreutils/">ftp://ftp.gnu.org/gnu/coreutils/</a> plik <code>coreutils-8.9.tar.gz</code> i wypakuj jego zawartość. Przejdź do katalogu <code>src</code> i zapoznaj się z kodami źródłowymi trzech wybranych programów, z których dotąd korzystaliśmy.</p>
+      </div>
+
+      <h1>Zadanie domowe</h1>
+
+      <div class="task">
+        <p>Napisz w języku C prosty program powłoki. Program ten powinien przyjmować na wejściu polecenia, a następnie wykonywać działania zgodne z ich treścią. Powłoka powinna:</p>
+        <ol style="list-style-type: lower-latin;">
+          <li>wyświetlać znak zachęty w postaci <code>[{path}]</code>, gdzie <code>{path}</code> powinno być ścieżką do bieżącego katalogu roboczego,</li>
+          <li>obsługiwać polecenie powłoki <code>cd</code>, działające analogicznie do tego z powłoki <code>bash</code>,</li>
+          <li>obsługiwać polecenie powłoki <code>exit</code>, kończące działanie programu powłoki; polecenie <code>exit</code> powinno przyjmować jeden opcjonalny parametr, będący statusem wyjścia zwracanym do procesu rodzica,</li>
+          <li>obsługiwać polecenie powłoki <code>help</code>, wyświetlające na ekranie informacje o autorze programu i oferowanych przez niego funkcjonalnościach,</li>
+          <li>obsługiwać jedno inne, dowolnie wybrane polecenie powłoki,</li>
+          <li>przyjmować polecenia odwołujące się do potencjalnych programów <i>w bieżącym katalogu roboczym</i> oraz umożliwiać ich wykonanie z parametrami,</li>
+          <li>wypisywać komunikat błędu, gdy niemożliwe jest poprawne zinterpretowanie polecenia.</li>
+        </ol>
+      </div>
+
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
+</body>
+</html>
