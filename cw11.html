@@ -1,0 +1,310 @@
+<!DOCTYPE HTML>
+<html moznomarginboxes mozdisallowselectionprint>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['</td></tr>(','</td></tr>)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Ćwiczenia 11</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
+
+    <article id="cw11">
+
+      <h1>Kilka nowych poleceń</h1>
+
+      <p>Do wyczyszczenia zawartości okna wiersza poleceń służy polecenie <code>cls</code>.</p>
+
+      <div class="exercise">
+        <p>Sprawdź działanie polecenia <code>cls</code>.</p>
+      </div>
+
+      <p>Do zarządzania bieżącą datą i godziną systemową służą polecenia <code>date</code> oraz <code>time</code>. Jeśli są wywołane bez argumentów, wyświetlają bieżącą datę/godzinę i pytają o nową, chyba że wywołano je z przełącznikiem <code>/T</code>.</p>
+
+      <div class="exercise">
+        <p>Pomoc polecenia <code>date</code> mówi: <i>If Command Extensions are enabled the DATE command supports the /T switch (...)</i>. Dowiedz się, czym są <i>Command Extensions</i>. Jak myślisz, dlaczego zastosowano taki mechanizm?</p>
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Wyłączenie <i>Command Extensions</i> pozwala zachować zgodność z bardzo starymi skryptami wiersza poleceń.</p>
+        </div>
+      </div>
+
+      <div class="command">
+        <p>Do uruchamiania nowych poleceń <i>w osobnym oknie</i> służy polecenie wewnętrzne <code>start</code>. Argumentem polecenia <code>start</code> jest polecenie, które ma zostać wywołane. Pośród najpopularniejszych przełączników należy wymienić:</p>
+        <table class="noborder">
+          <tr><td><code>/min</code></td><td>uruchom nowe okno zminimalizowane</td></tr>
+          <tr><td><code>/low</code></td><td>uruchom program z najniższym priorytetem wykonania</td></tr>
+          <tr><td><code>/wait</code></td><td>wymuś zawieszenie polecenia <code>start</code> do czasu, gdy wywołane polecenie zakończy się</td></tr>
+        </table>
+        <p><b>Uwaga.</b> Polecenie <code>start</code> pozwala na podanie nazwy okna, w którym ma zostać uruchomione wskazane polecenie. Nazwa okna jest pierwszym argumentem i powinna być ujęta w cudzysłowy.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Porównaj efekty wykonania następujących poleceń w dowolnym katalogu:</p>
+        <pre><code class="no-highlight"><!--
+       -->> start dir
+<!--   -->> start "OKNO" dir
+<!--   -->> start /min dir
+<!--   -->> start /min "OKNO" dir
+<!--   -->> start /min /wait "OKNO" dir
+<!--   -->> start "OKNO" /min dir
+<!--   --></code></pre>
+      </div>
+
+      <p>Do zmiany nazwy bieżącego okna wiersza poleceń służy polecenie <code>title</code>. Przyjmuje ono jako argument ciąg znaków, który ma stanowić nową nazwę okna.</p>
+
+      <div class="exercise">
+        <p>Wykonaj następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> title ala
+<!--   -->> title ala ma kota
+<!--   -->> title "ala ma kota"
+<!--   --></code></pre>
+        <p>Jak zostało zinterpretowane trzecie polecenie? Czy możesz na tej podstawie wyciągnąć jakiś wniosek dotyczący tego, jak wiersz poleceń interpretuje argumenty ujęte w cudzysłowy?</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>W trzecim przypadku nazwa okna objęła także cudzysłowy. Wynika to z tego, że wiersz poleceń nie usuwa cudzysłowów w procesie przekazywania argumentów do programu.</p>
+        </div>
+      </div>
+
+      <div class="command">
+        <p>Istnieje bardziej rozbudowana wersja polecenia <code>copy</code> o nazwie <code>xcopy</code>. Jest to pierwsze polecenie zewnętrzne, które poznajemy na tych zajęciach. Ogólna składnia jest taka sama, jak w przypadku polecenia <code>copy</code>, jednak liczba przełączników jest o wiele większa. Najważniejsze z nich to:</p>
+        <table class="noborder">
+          <tr><td><code>/A</code></td><td>kopiuj tylko pliki z atrybutem <i>archiwalny</i></td></tr>
+          <tr><td><code>/M</code></td><td>kopiuj tylko pliki z atrybutem <i>archiwalny</i> i zdejmuje ten atrybut ze skopiowanych plików</td></tr>
+          <tr><td><code>/S</code></td><td>włącz możliwość kopiowania katalogów (z wyjątkiem pustych)</td></tr>
+          <tr><td><code>/E</code></td><td>włącz możliwość kopiowania katalogów (także pustych)</td></tr>
+          <tr><td><code>/V</code></td><td>włącz weryfikację poprawności przekopiowanych plików</td></tr>
+          <tr><td><code>/T</code></td><td>pozwala utworzyć w miejscu docelowym identyczną strukturę katalogów, jednak bez kopiowania plików</td></tr>
+          <tr><td><code>/U</code></td><td>kopiuj tylko te pliki, które już istnieją w katalogu docelowym</td></tr>
+          <tr><td><code>/K</code></td><td>kopiuj pliki wraz z ich atrybutami</td></tr>
+          <tr><td><code>/N</code></td><td>modyfikuje nazwy kopiowanych plików tak, by były postaci 8.3 (8 liter nazwy, trzy litery rozszerzenia)</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Utwórz plik <code>plik.txt</code> oraz katalog <code>katalog</code>, a następnie wykonaj następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> xcopy plik.txt katalog
+<!--   -->> xcopy plik.txt katalog_nie_istnieje
+<!--   --></code></pre>
+        <p>Jak zachowuje się program <code>xcopy</code>, gdy element docelowy nie istnieje?</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Jeśli element docelowy nie istnieje, to program <code>xcopy</code> pyta, czy ma go interpretować jako nazwę pliku czy katalogu i postępuje zgodnie z udzieloną odpowiedzią.</p>
+        </div>
+      </div>
+
+      <h1>Operacje na procesach</h1>
+
+      <div class="notice">
+        <p>W tej części odwołujemy się do mechanizmów w systemie operacyjnym Windows 10. W&nbsp;starszych wersjach systemu niektóre rzeczy mogą wyglądać inaczej.</p>
+      </div>
+
+      <p>Możliwości związane z zarządzaniem procesami w systemach z rodziny Windows nie są tak uporządkowane, jak w przypadku systemów uniksopodobnych. Nie mniej, systemy z rodziny Windows oferują dostęp do <i>menedżera zadań</i>, pozwalającego na podstawowe operacje na procesach. Aby uruchomić menedżer zadań, można:</p>
+      <ul>
+        <li>wcisnąć kombinację klawiszy <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Del</kbd> i wybrać odpowiednią opcję z otwartego w&nbsp;ten sposób okna (w niektórych konfiguracjach po wybraniu wskazanej kombinacji okno menedżera zadań uruchomi się od razu),</li>
+        <li>wcisnąć kombinację klawiszy <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd>,</li>
+        <li>uruchomić okno <i>Uruchamianie</i>, a następnie wprowadzić w nim polecenie <code>taskmgr</code>.</li>
+      </ul>
+
+      <div class="exercise">
+        <p>Uruchom menedżer zadań i zapoznaj się z zawartością dostępnych zakładek.</p>
+      </div>
+
+      <p>Informacje o uruchomionych procesach dostępne są na zakładce <i>Szczegóły</i>. Tam też można wykonywać proste operacje na procesach.</p>
+
+      <div class="exercise">
+        <p>Korzystając z opcji dostępnych w menu kontekstwoym dostępnym po kliknięciu prawym przyciskiem myszy na wybranym procesie na zakładce <i>Szczegóły</i>:</p>
+        <ul>
+          <li>zakończ wybrany proces (dla bezpieczeństwa zakończ np. proces wiersza poleceń),</li>
+          <li>ustaw koligację wybranego procesu (co to znaczy?),</li>
+          <li>zmień priorytet wybranego procesu,</li>
+          <li>utwórz plik zrzutu wybranego procesu.</li>
+        </ul>
+      </div>
+
+      <div class="titbit titbit-star-star">
+        <p>Firma Microsoft udostępnia dodatkowe (o wiele bardziej rozbudowane) narzędzie do zarządzania procesami, nazwane <i>Process monitor</i>, dostępne na stronie internetowej <a href="https://technet.microsoft.com/en-us/sysinternals/processmonitor.aspx">https://technet.microsoft.com/en-us/sysinternals/processmonitor.aspx</a>.</p>
+      </div>
+
+      <h1>Polecenia związane z operacjami na plikach tekstowych</h1>
+
+      <p>Silną stroną systemów uniksopodobnych jest rozbudowana biblioteka narzędzi umożliwiających operowanie na standardowym wejściu oraz na plikach. Wiersz poleceń systemu Windows także udostępnia narzędzia służące temu celowi.</p>
+
+      <div class="command">
+        <p>Windowsowym odpowiednikiem programu <code>cat</code> jest polecenie wewnętrzne <code>type</code>. Wypisuje ono na standardowym wyjściu zawartość wskazanych plików.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Przetestuj działanie programu <code>type</code>. Czy, podobnie jak <code>cat</code>, pozwala ono wywołać się z wieloma argumentami? Jak się wtedy zachowuje?</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Tak, program <code>type</code> można wywołać z wieloma argumentami, ale wówczas rozdziela on zawartość kolejnych plików ich nazwą.</p>
+        </div>
+      </div>
+
+      <div class="command">
+        <p>Do porównywania plików służy polecenie zewnętrzne <code>fc</code> (ang. <i>file compare</i>). Przyjmuje ono jako argumenty nazwy plików, które mają zostać porównane. Wśród najważniejszych przełączników należy wymienić:</p>
+        <table class="noborder">
+          <tr><td><code>/B</code></td><td>porównywanie binarne</td></tr>
+          <tr><td><code>/C</code></td><td>ignoruj różnice w wielkości liter</td></tr>
+          <tr><td><code>/U</code></td><td>porównuj pliki z kodowaniem unicode</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Dowiedz się, gdzie znajduje się program <code>fc.exe</code>.</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <pre><code class="no-highlight">C:\Windows\System32\fc.exe</code></pre>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <p>Przetestuj działanie polecenia <code>fc</code>.</p>
+      </div>
+
+      <div class="command">
+        <p>Pewnym prymitywnym odpowiednikiem uniksowego programu <code>grep</code> jest program <code>find</code>, który wypisuje na wyjściu tylko te wiersze ze standardowego wejścia, które zawierają wskazany jako argument ciąg znaków ujęty w cudzysłowy. Najważniejsze przełączniki to:</p>
+        <table class="noborder">
+          <tr><td><code>/V</code></td><td>wypisz te wiersze, które <i>nie</i> pasują do wzorca</td></tr>
+          <tr><td><code>/N</code></td><td>wyświetlaj numery wierszy</td></tr>
+          <tr><td><code>/I</code></td><td>ignoruj różnice w wielkości liter</td></tr>
+          <tr><td><code>/C</code></td><td>wypisz liczbę wierszy pasujących do wzorca</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Wykonaj następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> dir | find /i "ab"
+<!--   -->> type C:\Windows\system.ini | find [
+<!--   -->> type C:\Windows\system.ini | find "["
+<!--   --></code></pre>
+        <p>Skąd kojarzysz symbol <code>|</code>? Czy jego interpretacja w wierszu poleceń systemu Windows jest taka sama jak w systemach uniksopodobnych?</p>
+      </div>
+
+      <div class="command">
+        <p>Do sortowania wierszy standardowego wejścia służy polecenie zewnętrzne <code>sort</code>. Przyjmuje ono następujące przełączniki:</p>
+        <table class="noborder">
+          <tr><td><code>/+n</code></td><td>ignoruj pierwszych n-1 znaków w każdej linii</td></tr>
+          <tr><td><code>/R</code></td><td>odwróć porządek sortowania</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Posortuj zawartość katalogu <code>C:\Windows</code> według godziny ostatniej modyfikacji. Nie przejmuj się nagłówkami.</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <pre><code class="no-highlight">dir C:\Windows | sort /+13</code></pre>
+        </div>
+      </div>
+
+      <div class="command">
+        <p>Windowsowym odpowiednikiem uniksowego programu <code>more</code> jest program o takiej samej nazwie. Dzieli on standardowe wejście na strony, umożliwiając ich przeglądanie. Najpopularniejsze przełączniki to:</p>
+        <table class="noborder">
+          <tr><td><code>/C</code></td><td>wyczyść ekran przed wyświetleniem pierwszej strony tekstu</td></tr>
+          <tr><td><code>/S</code></td><td>połącz sąsiednie puste wiersze w jeden</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Korzystając z programu <code>more</code>, przejrzyj zawartość dowolnego pliku. Czy program <code>more</code> przyjmuje jakieś argumenty?</p>
+      </div>
+
+      <h1>Kilka poleceń związanych z obsługą sieci (i nie tylko)</h1>
+
+      <div class="command">
+        <p>Program <code>ipconfig</code> pozwala (w pewnym ograniczonym zakresie) zarządzać interfejsami sieciowymi komputera oraz wyświetlać informacje o ich statusach.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Zapoznaj się z pomocą programu <code>ipconfig</code>. Jakie operacje można wykonać za jego pomocą? Zwróć uwagę na fakt, że dostęp do pomocy nie jest możliwy z wykorzystaniem polecenia <code>help</code>. Skorzystaj więc z drugiej poznanej metody dostępu do niej.</p>
+      </div>
+
+      <div class="command">
+        <p>Program <code>ping</code> pozwala wysłać do zdalnego hosta żądanie <code>ECHO_REQUEST</code> w ramach protokołu <code>ICMP</code>. Przydatne opcje:</p>
+        <table class="noborder">
+          <tr><td><code>-t</code></td><td>wyślij nieskończenie wiele żądań</td></tr>
+          <tr><td><code>-n X</code></td><td>wyślij <code>X</code> żądań</td></tr>
+          <tr><td><code>-i X</code></td><td>ustaw wartość pola TTL na <code>X</code></td></tr>
+          <tr><td><code>-w X</code></td><td>ustaw odstęp pomiędzy kolejnymi żądaniami na <code>X</code> milisekund</td></tr>
+          <tr><td><code>-4</code></td><td>wymuś korzystanie z protokołu IP w wersji 4</td></tr>
+          <tr><td><code>-6</code></td><td>wymuś korzystanie z protokołu IP w wersji 6</td></tr>
+        </table>
+        <div class="notice">
+          <p>Zwróć uwagę, że program <code>ping</code> oczekuje opcji poprzedzonych znakiem łącznika.</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <p>Wyślij do wybranego serwera 10 żądań <code>ECHO_REQUEST</code> w odstępach 2-sekundowych.</p>
+      </div>
+
+      <div class="command">
+        <p>Program <code>net</code> to, wbrew pozorom, nie jest narzędzie do zarządzania siecią. Pozwala ono na kompleksowe zarządzanie systemem operacyjnym Windows, w tym na zarządzanie użytkownikami, grupami, uprawnieniami do plików, podstawowymi zasadami bezpieczeństwa itp.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Korzystając z progresywnej pomocy programu <code>net</code>, dowiedz się, jakie możliwości daje ten program. W tym celu możesz wykonać polecenia:</p>
+        <pre><code class="cmd"><!--
+       -->> net /?
+<!--   -->> net accounts /?
+<!--   -->> net computer /?
+<!--   --></code></pre>
+        <p>Czy ta pomoc jest przydatna?</p>
+      </div>
+
+      <div class="exercise">
+        <p>Korzystając z zasobów udostępnianych w internecie przez firmę Microsoft, zapoznaj się z dokładnym opisem działania poszczególnych poleceń z grupy <code>net</code>.</p>
+      </div>
+
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
+</body>
+</html>
