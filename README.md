@@ -4,7 +4,7 @@ To repozytorium zawiera pliki źródłowe strony z materiałami do zajęć z prz
 
 ## Dostęp do materiałów
 
-Strona internetowa, której źródła znajdują się w tym repozytorium, dostępna jest za pośrednictwem usługi _GitHub Pages_ pod adresem <http://bprzybylski.github.io/dsop>.
+Strona internetowa, której źródła znajdują się w tym repozytorium, dostępna jest za pośrednictwem usługi _GitHub Pages_ pod adresem <http://bprzybylski.github.io/DSOP>.
 
 ## Uwagi
 
