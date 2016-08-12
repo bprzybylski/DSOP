@@ -1,0 +1,333 @@
+<!DOCTYPE HTML>
+<html moznomarginboxes mozdisallowselectionprint>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Ćwiczenia 10</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
+
+    <article id="cw10">
+
+      <h1>Uruchamianie konsoli w systemie Windows</h1>
+
+      <div class="howitworks">
+        <p>Wszystko zaczęło się w 1981 roku, kiedy firma Microsoft wykupiła prawa do systemu operacyjnego QDOS. Po wprowadzeniu poprawek, nowy system pojawił się na rynku pod nazwą MS-DOS i zrewolucjonizował rynek komputerów osobistych.</p>
+
+        <p>Dzisiaj 16-bitowy MS-DOS nie jest już popularny, choć jeszcze w czasach Windowsa 95 i 98 był on wykorzystywany do uruchamiania 32-bitowych modułów systemu. W nowych wersjach systemu Windows resztki mechanizmów MS-DOS są dostępne w postaci emulatora konsoli, maszyny wirtualnej systemu DOS, a także w narzędziach diagnostycznych.</p>
+      </div>
+
+      <p>Nowsze systemy Windows, w przeciwieństwie do systemów uniksopodobnych, nie są wyposażone w&nbsp;konsole wirtualne w ścisłym znaczeniu tego określenia. Dlatego też jednym z niewielu sposobów tekstowej interakcji z systemem jest skorzystanie z powłoki tekstowej systemu (zwanej też <i>wierszem poleceń</i>). Aby się do niej dostać, należy wcisnąć kombinację klawiszy <kbd>Win</kbd> + <kbd>R</kbd>, a następnie wprowadzić polecenie <code>cmd</code>.</p>
+
+      <div class="howitworks">
+        <p>Okno <i>Uruchamianie</i> pozwala wywołać (uruchomić) dowolny element znajdujący się na dysku. Podobnie jak w przypadku powłoki Bash, możemy odwoływać się do konkretnych elementów na dysku z użyciem wyłącznie ich nazwy, a nie pełnej ścieżki, jeśli znajdują się one w określonych katalogach. Ten temat poruszymy jeszcze później. To w gestii systemu pozostaje rozpoznanie, do jakiego elementu się odwołujemy i w jaki sposób powinien zostać <i>uruchomiony</i>.</p>
+        <p>W praktyce, okno <i>Uruchamianie</i> pozwala nam wprowadzić dowolne polecenie tekstowe, w tym takie, które otwiera wiersz poleceń.</p>
+      </div>
+
+      <div class="howitworks">
+        <p>W systemie Windows wykonywalne pliki programów mają rozszerzenie <code>.exe</code>. Do plików o takim rozszerzeniu możemy się odwoływać z jego pominięciem. Dlatego w oknie <i>Uruchamianie</i> możemy napisać <code>cmd</code> zamiast <code>cmd.exe</code>. Mimo to oba sposoby są równoważne.</p>
+
+        <p>Plik <code>cmd.exe</code> jest programem wiersza poleceń systemu Windows. Warto zwrócić uwagę na pewne subtelne różnice pomiędzy systemami uniksopodobnymi a systemami z rodziny Windows. Po pierwsze, w systemach z rodziny Windows istotną rolę w interpretacji typu pliku odgrywa jego rozszerzenie. Po drugie, w systemach z rodziny Windows nie ma znaczenia wielkość liter. Nazwy <code>CMD</code>, <code>cmd</code> oraz <code>Cmd</code> są równoważne i użycie każdej z nich spowoduje ten sam efekt.</p>
+      </div>
+
+      <div class="howitworks howitworks-star">
+        <p>Tak naprawdę program <code>cmd.exe</code> jest 32- lub 64-bitową powłoką tekstową systemu Windows, umożliwiającą o wiele więcej działań (związanych też z konstruowaniem programów wsadowych) niż system MS-DOS i nie ma z tym systemem zbyt wiele wspólnego. Systemy z rodziny Windows wyposażono jednak w <i>maszynę wirtualną systemu DOS</i>, o nazwie <code>command.com</code>, która w pewnym ograniczonym zakresie pozwala uruchamiać 16-bitowe programy stworzone dla systemu MS-DOS.</p>
+      </div>
+
+      <div class="notice">
+        <p>Na tych i kolejnych ćwiczeniach będziemy wykorzystywać <b>tylko</b> wiersz poleceń systemu Windows.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Uruchom wiersz poleceń systemu Windows korzystając w oknie <i>Uruchamianie</i> z wywołań <code>CMD</code>, <code>cmd</code>, <code>Cmd</code> oraz <code>cMd.EXe</code>. Jak zmieniał się tytuł okna wiersza poleceń w zależności od sposobu jego wywołania? W jakim katalogu znajduje się plik <code>cmd.exe</code>?</p>
+      </div>
+
+      <h1>Podstawowe polecenia</h1>
+
+      <div class="howitworks">
+        <p>Podobnie jak w systemach uniksopodobnych, każdy element wywoływany z poziomu wiersza poleceń może być wywoływany z argumentami. Wśród nich mogą być zarówno parametry, jak i <i>opcje</i> (zwane też <i>przełącznikami</i>). Te jednak, w odróżnieniu od systemów uniksopodobnych, poprzedzamy zwykle symbolem <code>/</code>. Każde polecenie da się skategoryzować jako <i>polecenie wewnętrzne</i> lub <i>polecenie zewnętrzne</i>. Pierwsze odwołują się do mechanizmów wbudowanych w wiersz poleceń (np. <code>cd</code>), drugie zaś do zewnętrznych programów (np. <code>net</code>).</p>
+      </div>
+
+      <h2>Poruszanie się po katalogach, ich tworzenie i usuwanie</h2>
+
+      <p>Zaraz po uruchomieniu wiersza poleceń bieżącym katalogiem roboczym jest albo katalog domowy użytkownika, albo katalog, w którym został wywołany wiersz polecenia, albo katalog <code>System32</code> na partycji systemowej.</p>
+
+      <div class="exercise">
+        <p>Wejdź do dowolnego katalogu znajdującego się na dysku komputera, korzystając z interfejsu graficznego. Następnie, trzymając wciśnięty klawisz <kbd>Shift</kbd>, kliknij w jego wnętrzu prawym przyciskiem myszy i uruchom wiersz poleceń w bieżącym katalogu, wybierając opcję <i>Otwórz okno polecenia tutaj</i>.</p>
+      </div>
+
+      <p>Do zmiany bieżącego katalogu roboczego służy polecenie wewnętrzne <code>cd</code> (lub <code>chdir</code>). Przyjmuje ono jako argument ścieżkę do katalogu, na który chcemy zmienić katalog roboczy.</p>
+
+      <div class="howitworks">
+        <p>Wiele z poznanych poleceń da się wywołać z użyciem dwóch nazw. Wynika to z chęci zachowania wewnątrz wiersza poleceń kompatybilności wstecz.</p>
+      </div>
+
+      <div class="howitworks">
+        <p>W systemach z rodziny Windows struktura plików może być podzielona na partycje. Polecenie <code>cd</code> interpretuje poprawnie ścieżki do katalogów znajdujących się na bieżącej partycji. Wywołanie polecenia <code>cd</code> tylko z oznaczeniem partycji (np. <code>cd C:</code>) lub ze ścieżką do katalogu na innej partycji nie spowoduje zmiany bieżącego katalogu.</p>
+      </div>
+
+      <div class="notice">
+        <p>W ramach ćwiczeń z wiersza poleceń systemu Windows, znak zachęty będziemy oznaczać symbolem <code>&gt;</code>.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Wykonaj poniższe polecenia. Jak zachowuje się wiersz poleceń? Zwróć uwagę na fakt, że katalogi oddzielane są od siebie symbolem <code>\</code>, a nie <code>/</code>.</p>
+        <pre><code class="no-highlight"><!--
+       -->> C:
+<!--   -->> chdir C:\Windows
+<!--   -->> cd
+<!--   -->> chdir P:
+<!--   -->> P:
+<!--   -->> cd C:
+<!--   -->> C:
+<!--   -->> P:
+<!--   -->> cd C:\Users
+<!--   -->> C:
+<!--   --></code></pre>
+        <p>Jaki efekt przynosi wywołanie jako polecenia oznaczenia partycji? Jak zachowuje się polecenie <code>cd/chdir</code> wywołane bez parametrów?</p>
+      </div>
+
+      <div class="exercise">
+        <p>Sprawdź, jak zachowa się system Windows, gdy wprowadzisz w wierszu poleceń (jako polecenie) nazwę lub ścieżkę do dowolnego istniejącego pliku (np. pliku tekstowego).</p>
+      </div>
+
+      <div class="command">
+        <p>Do wypisywania zawartości katalogu służy polecenie wewnętrzne <code>dir</code>. Wśród jego najważniejszych opcji należy wymienić:</p>
+        <table class="noborder">
+          <tr><td><code>/A</code></td><td>wyświetl wszystkie elementy</td></tr>
+          <tr><td><code>/A:XYZ</code></td><td>wyświetl elementy o atrybutach <code>XYZ</code> (więcej o atrybutach później)</td></tr>
+          <tr><td><code>/P</code></td><td>podziel listę elementów na strony</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Wykonaj następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> C:
+<!--   -->> cd C:/Windows/System32
+<!--   -->> dir
+<!--   -->> dir /A
+<!--   -->> dir /a
+<!--   -->> dir /P
+<!--   -->> dir /AP
+<!--   -->> dir /A /P
+<!--   --></code></pre>
+        <p>Które polecenie zakończyło się niepowodzeniem? Jak myślisz, dlaczego? Czy polecenie drugie zakończyło się zgodnie z oczekiwaniami pomimo użycia zwykłego ukośnika?</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Polecenie <code>dir /AP</code> zakończy się niepowodzeniem, bo programy systemowe nie obsługują łączenia opcji w jedną.</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <p>Sprawdź, czy można wywołać polecenie <code>dir</code> z dopasowaniem wzorca (symbolem wieloznacznym), tak jak w systemach uniksopodobnych. W tym celu wykonaj polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> C:
+<!--   -->> cd \Windows
+<!--   -->> cd \System32
+<!--   -->> cd System32
+<!--   -->> dir a*
+<!--   -->> dir a*l
+<!--   -->> dir ?a*
+<!--   -->> dir a*.exe
+<!--   --></code></pre>
+        <p>Czy wiersz poleceń rozróżnił wielkość liter? Jak zostało zinterpretowane drugie i trzecie polecenie? Jaki wniosek można stąd wyciągnąć?</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Drugie polecenie zmieniło katalog roboczy na katalog znajdujący się w głównym katalogu. Trzecie zakończyło się niepowodzeniem.</p>
+        </div>
+      </div>
+
+      <div class="command">
+        <p>Wiersz poleceń systemu Windows jest wyposażony w polecenie wewnętrzne <code>tree</code>, które rysuje graficzne drzewo struktury plików we wskazanym jako argument katalogu. Jeśli nie podano argumentu, <code>tree</code> rysuje drzewo struktury plików o korzeniu w bieżącym katalogu.</p>
+      </div>
+
+      <div class="command">
+        <p>Do tworzenia nowych katalogów służy polecenie wewnętrzne <code>md/mkdir</code>. Przyjmuje ono jako argument ścieżkę do katalogu (ścieżka ta może obejmować też oznaczenie partycji), który ma zostać utworzony. Jeśli istnieje taka konieczność, polecenie <code>md/mkdir</code> utworzy wszystkie katalogi pośrednie.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Wykonaj na komputerze w laboratorium następujące polecenie:</p>
+        <pre><code class="no-highlight">> md P:\Test\Tworzenia\Katalogow</code></pre>
+        <p>Sprawdź jego efekty. Czy konieczna jest zmiana bieżącej partycji na <code>P:</code>?</p>
+      </div>
+
+      <div class="command">
+        <p>Do usuwania katalogu służy polecenie wewnętrzne <code>rd/rmdir</code>. Wśród jego najważniejszych opcji należy wymienić:</p>
+        <table class="noborder">
+          <tr><td><code>/S</code></td><td>usuń katalog wraz z zawartością</td></tr>
+          <tr><td><code>/Q</code></td><td>pomiń pytanie z prośbą o potwierdzenie usunięcia katalogu w przypadku wywołania opcji <code>/S</code></td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Wykonaj następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> md P:\Test\Usuwania\Katalogów
+<!--   -->> rd P:\Test
+<!--   -->> rd /S P:\Test
+<!--   --></code></pre>
+        <p>Czy usunięty katalog pojawił się w koszu?</p>
+      </div>
+
+      <h2>Zarządzanie plikami</h2>
+
+      <div class="howitworks">
+        <p>Jedną z istotnych różnic pomiędzy systemami uniksopodobnymi a systemami z rodziny Windows jest to, że w tych drugich istnieje <b>bardzo</b> wyraźne rozróżnienie pomiędzy katalogami (folderami) a plikami. Mimo to, pewne własności są wspólne dla obu tych rodzajów elementów struktury plików.</p>
+      </div>
+
+      <p>Każdy element struktury plików s systemie plików może mieć przypisany podzbiór atrybutów. Wśród nich najpopularniejsze to:</p>
+      <table class="noborder">
+        <tr><td><code>R</code></td><td>element tylko do odczytu</td></tr>
+        <tr><td><code>A</code></td><td>element archiwalny</td></tr>
+        <tr><td><code>S</code></td><td>element systemowy</td></tr>
+        <tr><td><code>H</code></td><td>element ukryty</td></tr>
+      </table>
+
+      <div class="command">
+        <p>Do nadawania i odbierania tych atrybutów służy polecenie wewnętrzne <code>attrib</code>. Przyjmuje ono następujące opcje:</p>
+        <table class="noborder">
+          <tr><td><code>/S</code></td><td>przetwarzaj elementy rekursywnie</td></tr>
+          <tr><td><code>/D</code></td><td>przetwarzaj również foldery</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Utwórz w swoim katalogu domowym dowolny plik i przetestuj działanie polecenia <code>attrib</code>. Jeśli nie wiesz, jak wywołać program <code>attrib</code>, wywołaj go z opcją <code>/?</code>.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Spróbuj zmodyfikować atrybuty tego samego pliku, korzystając z narzędzia graficznego systemu Windows. Wykorzystaj opcję <i>Właściwości</i>.</p>
+      </div>
+
+      <div class="command">
+        <p>Polecenie <code>ren/rename</code> pozwala zmienić nazwę wskazanego pliku. Warto zauważyć, że nowa nazwa musi się odnosić do tego samego katalogu. Nie można używać polecenia <code>ren</code> do przenoszenia plików pomiędzy katalogami.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Utwórz plik o dowolnej nazwie, a następnie zmień ją, wykorzystując polecenie <code>ren</code>. Sprawdź, czy użycie nazwy <code>rename</code> wpływa na efekt działania polecenia.</p>
+      </div>
+
+      <div class="command">
+        <p>Polecenie wewnętrzne <code>del/erase</code> służy do usuwania pliku lub plików opisanych symbolem wieloznacznym. Przyjmuje ono następujące opcje:</p>
+        <table class="noborder">
+          <tr><td><code>/P</code></td><td>wymuś potwierdzanie usunięcia każdego pliku z osobna</td></tr>
+          <tr><td><code>/F</code></td><td>usuń również pliki z atrybutem "tylko do odczytu"</td></tr>
+          <tr><td><code>/S</code></td><td>usuwanie rekursywne</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Usuń plik utworzony w poprzednim ćwiczeniu.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Sprawdź, co się stanie, jeśli argumentem polecenia <code>del</code> będzie ścieżka do niepustego katalogu.</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Zostanie usunięta zawartość katalogu, ale sam katalog (i jego katalogi podrzędne) pozostanie nietknięty.</p>
+        </div>
+      </div>
+
+      <div class="command">
+        <p>Do kopiowania plików służy polecenie wewnętrzne <code>copy</code>. Należy je wywołać z dwoma argumentami: nazwą pliku źródłowego i docelowego. Jeśli nazwą pliku źródłowego jest grupa plików (opisana symbolem wieloznacznym), to elementem docelowym musi być katalog. Najczęściej wykorzystywane przełączniki to:</p>
+        <table class="noborder">
+          <tr><td><code>/V</code></td><td>wymuś weryfikację poprawności przekopiowania pliku</td></tr>
+          <tr><td><code>/Y</code></td><td>wyłącz pytanie o zastąpienie pliku docelowego, jeśli ten istnieje</td></tr>
+        </table>
+      </div>
+
+      <p>Polecenie <code>copy</code> daje trochę więcej możliwości niż analogiczne polecenie znane z systemów uniksopodobnych. Pozwala ono choćby skopiować do pliku docelowego dane ze standardowego wejścia lub łączyć pliki w całość &ndash; uniksowe polecenie</p>
+      <pre><code class="no-highlight">$ cat a.txt b.txt c.txt > wynik.txt</code></pre>
+      <p>moglibyśmy zastąpić wówczas poleceniem</p>
+      <pre><code class="no-highlight">> copy a.txt+b.txt+c.txt wynik.txt</code></pre>
+
+      <div class="howitworks">
+        <p>W przeciwieństwie do systemów uniksopodobnych, symbole wieloznaczne wykorzystywane w wierszu poleceń systemu Windows nie są interpretowane (rozkładane) na poziomie wiersza poleceń, ale na poziomie samego programu. Tym samym nie każde polecenie musi je obsługiwać. Bądź ostrożny i zwracaj szczególną uwagę na tego typu subtelności.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Przetestuj działanie polecenia <code>copy</code>. Sprawdź też, czy można za jego pomocą skopiować folder.</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Jeśli pierwszym argumentem jest nazwa katalogu, to zostaną skopiowane wszystkie pliki, które znajdują się bezpośrednio w nim.</p>
+        </div>
+      </div>
+
+      <div class="exercise exercise-star">
+        <p>Sprawdź, jak zachowa się system Windows, gdy wykonasz w wierszu poleceń polecenie</p>
+        <pre><code class="no-highlight">> copy con wynik.txt</code></pre>
+        <p>Aby zakończyć wprowadzanie danych do programu <code>copy</code>, naciśnij kombinację klawiszy <kbd>Ctrl</kbd> + <kbd>Z</kbd> i wciśnij <kbd>Enter</kbd>.</p>
+      </div>
+
+      <div class="exercise exercise-star">
+        <p>Czy można utworzyć na dysku komputera plik o nazwie <code>con</code>? Zweryfikuj to w wierszu poleceń i w interfejsie graficznym.</p>
+      </div>
+
+      <div class="command">
+        <p>Do przenoszenia plików służy polecenie wewnętrzne <code>move</code>. Przyjmuje ono dwa argumenty &ndash; pierwszy z nich okresla nazwę pliku lub grupę plików (w postaci symbolu wieloznacznego), które mają zostać przeniesione, a drugi katalog, do którego mają zostać przeniesione. Jeśli katalog docelowy znajduje się na innej partycji, to polecenie <code>move</code> najpierw skopiuje plik, a później usunie oryginał.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Przetestuj działanie polecenia <code>move</code>. Sprawdź, czy możesz użyć programu <code>move</code> do zmiany nazwy pliku.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Przyjrzyj się poznanym dotąd poleceniom. Czy któreś z nich jest poleceniem zewnętrznym? Jak myślisz, dlaczego tak wiele ważnych funkcjonalności jest dostarczanych jako polecenia wewnętrzne? Czy tak samo było w systemach uniksopodobnych?</p>
+      </div>
+
+      <h2>Pomoc</h2>
+
+      <p>Aby uzyskać informacje o poleceniach wewnętrznych wiersza poleceń, można użyć polecenia <code>help</code>. Wywołane bez argumentów wyświetli listę dostępnych poleceń wewnętrznych, a wywołane z argumentem będącym nazwą polecenia wyświetli informacje o wywołaniu tego polecenia. Drugie podejście jest w większości przypadków równoważne wywołaniu polecenia z przełącznikiem <code>/?</code>.</p>
+
+      <div class="exercise">
+        <p>Zapoznaj się z pomocą do wszystkich poznanych dotąd poleceń. Porównaj efekty jej wywołania z użyciem polecenia <code>help</code> oraz przełącznika <code>/?</code>.</p>
+      </div>
+
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
+</body>
+</html>
