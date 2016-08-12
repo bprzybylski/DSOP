@@ -1,0 +1,416 @@
+<!DOCTYPE HTML>
+<html moznomarginboxes mozdisallowselectionprint>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['</td></tr>(','</td></tr>)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Ćwiczenia 13</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
+
+    <article id="cw13">
+
+      <h1>Kontrola wykonywania poleceń</h1>
+
+      <p>Do tej pory konstruowaliśmy programy wsadowe, które można by określić mianem liniowych &ndash; polecenia były wykonywane jedno po drugim, począwszy od pierwszego, aż do ostatniego. Często zachodzi jednak dość oczywista potrzeba ściślejszej kontroli nad przepływem programu wsadowego, w tym możliwość odwołania się do zewnętrznych programów, przemieszczania się wewnątrz poleceń w naszym programie wsadowym, czy w końcu pętle i wykonywanie warunkowe.</p>
+
+      <h2>Polecenie <code>pause</code></h2>
+
+      <p>Podstawowym poleceniem służącym do chwilowego wstrzymania wykonywania programu wsadowego jest polecenie <code>pause</code>. Powoduje ono wyświetlenie odpowiedniego komunikatu i wznowienie wykonywania programu po rozpoznaniu wciśnięcia dowolnego klawisza.</p>
+
+      <div class="exercise">
+        <p>Uruchom poniższy program wsadowy:</p>
+        <pre><code class="cmd"><!--
+       -->@echo off
+<!--   -->echo Napis
+<!--   -->pause
+<!--   -->echo Inny napis
+<!--   --></code></pre>
+        <p>Sprawdź efekty.</p>
+      </div>
+
+      <h2>Polecenia <code>goto</code> oraz <code>call</code></h2>
+
+      <p>Interpreter programów wsadowych pozwala na stosowanie etykiet do oznaczania wewnątrz programu miejsc, do których być może będziemy chcieli się odwołać w przyszłości. Aby utworzyć etykietę, należy poprzedzić jej nazwę symbolem dwukropka. Odwołanie do niej możliwe jest za pomocą polecenia <code>goto</code>, którego argumentem jest jej nazwa.</p>
+
+      <div class="exercise">
+        <p>Spójrz na kod źródłowy poniższego programu wsadowego:</p>
+        <pre><code class="cmd"><!--
+       -->@echo off
+<!--   -->:wypisz
+<!--   -->echo Napis
+<!--   -->goto wypisz
+<!--   --></code></pre>
+        <p>Czy ten program się kiedyś zakończy? Dlaczego? Jaką znaną konstrukcję pętli Ci to przypomina?</p>
+      </div>
+
+      <div class="exercise">
+        <p>Sprawdź, czy wielkość liter w nazwach etykiet ma znaczenie. W tym celu spróbuj odwołać się do etykiety <code>wypisz</code> z poprzedniego ćwiczenia za pomocą polecenia <code>goto WYPISZ</code>.</p>
+      </div>
+
+      <p>Polecenie <code>goto</code> można wywołać z argumentem <code>:eof</code>. Wówczas działanie programu wsadowego zostanie przeniesione na koniec pliku, co w praktyce spowoduje, że program ten się zakończy. Zwróć uwagę na fakt, że w tym wywołaniu argument <b>wyjątkowo</b> poprzedzony jest symbolem dwukropka.</p>
+
+      <div class="exercise">
+        <p>Wykonaj poniższy program wsadowy:</p>
+        <pre><code class="cmd"><!--
+       -->@echo off
+<!--   -->echo Napis
+<!--   -->goto :eof
+<!--   -->echo Inny napis
+<!--   --></code></pre>
+        <p>Czy drugi napis się wyświetli?</p>
+      </div>
+
+      <p>Zaproponowane przejście do końca pliku nie czyni żadnej istotnej różnicy względem poznanego już na poprzednich ćwiczeniach polecenia <code>exit</code> z parametrem <code>/b</code>.</p>
+
+      <p>Polecenie <code>call</code> pozwala wykonać fragment bieżącego programu (poprzez odwołanie przez etykietę) lub cały zewnętrzny program wsadowy jak jedno polecenie. Funkcjonowanie polecenia <code>call</code> najlepiej przetestować na przykładach.</p>
+
+      <p>Aby odwołać się do fragmentu bieżącego programu wsadowego poprzez etykietę, należy wywołać polecenie <code>call</code> z argumentem będącym nazwą tej etykiety poprzedzoną dwukropkiem.</p>
+
+      <div class="howitworks">
+        <p>W przypadku polecenia <code>goto</code> nie musieliśmy poprzedzać nazwy etykiety dwukropkiem (z wyjątkiem <code>:eof</code>). Polecenie <code>call</code> może jednak przyjmować jako argument nazwę zewnętrznego programu wsadowego. Poprzedzenie etykiety symbolem dwukropka wprowadza jednoznaczność interpretacji.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Utwórz program wsadowy o następującej treści:</p>
+        <pre><code class="cmd"><!--
+       -->@echo off
+<!--   -->echo Witaj swiecie
+<!--   -->call :funkcja
+<!--   -->echo Funkcja sie skonczyla
+<!--   -->goto :eof
+<!--   -->
+<!--   -->:funkcja
+<!--   -->echo Jestem funkcja
+<!--   -->goto :eof
+<!--   --></code></pre>
+        <p>Sprawdź, co by się stało, gdyby zamienić ostatni (9.) wiersz tego programu na <code>exit</code> lub <code>exit /b</code>.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Utwórz program wsadowy o następującej treści:</p>
+        <pre><code class="cmd"><!--
+       -->@echo off
+<!--   -->echo Moje argumenty to: %1 %2 %3
+<!--   -->call :funkcja ala ma kota
+<!--   -->goto :eof
+<!--   -->
+<!--   -->:funkcja
+<!--   -->echo Moje argumenty to: %1 %2 %3
+<!--   -->goto :eof
+<!--   --></code></pre>
+        <p>Następnie wywołaj go z dowolnymi trzema argumentami. Wyciągnij wnioski. Sprawdź, czy podobna własność zachodzi dla zmiennych środowiskowych.</p>
+      </div>
+
+      <p>Polecenie <code>call</code> może także służyć do wywoływania zewnętrznych programów wsadowych. Warto jednak zdawać sobie sprawę z konsekwencji jego pominięcia do tego celu.</p>
+
+      <div class="exercise">
+        <p>Utwórz program wsadowy <code>napis.cmd</code> o zawartości:</p>
+        <pre><code class="cmd"><!--
+       -->@echo off
+<!--   -->echo Jestem programem napis.cmd. Moje argumenty to: %1 %2 %3
+<!--   --></code></pre>
+        <p>oraz program wsadowy <code>program.cmd</code> o zawartości:</p>
+        <pre><code class="cmd"><!--
+       -->@echo off
+<!--   -->napis ala ma kota
+<!--   -->echo Program napis.cmd sie wykonal
+<!--   --></code></pre>
+        <p>Czy wywołanie programu <code>program.cmd</code> spowoduje wypisanie napisu <code>Program napis.cmd sie wykonal</code>? Czy zmieni się to, jeśli program wsadowy <code>napis.cmd</code> wywołamy za pośrednictwem polecenia <code>call</code>?</p>
+      </div>
+
+      <div class="exercise">
+        <p>Uporządkuj sobie wiadomości dotyczące poleceń <code>goto</code> oraz <code>call</code>. Jeśli to niezbędne, wykonaj eksperymenty we własnym zakresie.</p>
+      </div>
+
+      <h2>Pętla <code>for</code></h2>
+
+      <p>W języku programów wsadowych systemu Windows istnieje konstrukcja pętli <code>for</code> o ogólnej strukturze:</p>
+      <pre><code class="cmd">for %zmienna in (zbior) do polecenie parametry</code></pre>
+      <p>W przypadku pętli wykorzystywanych w programach wsadowych, konstrukcja ta ma postać:</p>
+      <pre><code class="cmd">for %%zmienna in (zbior) do polecenie parametry</code></pre>
+      <p>Jako że na tych ćwiczeniach zajmujemy się programami wsadowymi, będziemy stosować głównie podwójny zapis. Taki też należy zachować, odwołując się do zmiennej iteracyjnej w wykonywanym poleceniu.</p>
+
+      <p>Odwołania do zmiennej <code>zmienna</code> wewnątrz pętli możliwe są przez zastosowanie konstrukcji z jednym znakiem procenta (lub dwoma w programach wsadowych), znanej nam już odkąd zapoznaliśmy się z parametrami pozycyjnymi. Należy jednak pamiętać o jednej ważnej rzeczy: nazwa zmiennej iteracyjnej może mieć co najwyżej jeden znak długości. <b>Uwaga:</b> zmienne iteracyjne są jednym z niewielu elementów języka wiersza poleceń, w którym wielkość liter ma znaczenie. Zmienna <code>%a</code> jest zatem inną zmienną niż <code>%A</code>.</p>
+
+      <div class="exercise">
+        <p>Wykonaj bezpośrednio w wierszu poleceń polecenie</p>
+        <pre><code class="cmd">> for %f in (ala ma kota) do echo %f</code></pre>
+        <p>Następnie napisz program wsadowy, który działa tak samo.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Wykonaj poniższy program wsadowy:</p>
+        <pre><code class="cmd"><!--
+       -->@echo off
+<!--   -->set wprowadzenie=W koszyczku lezy
+<!--   -->for %%f in (kot pies mysz) do echo %wprowadzenie% %%f.
+<!--   --></code></pre>
+        <p>Zauważ, w jaki sposób odwołujemy się do zmiennych środowiskowych.</p>
+      </div>
+
+      <p>Jeśli rozszerzenia poleceń są włączone (a w naszym przypadku są), to polecenie <code>for</code> można wywołać z następującymi przełącznikami:</p>
+      <table class="noborder">
+        <tr><td><code>/D</code></td><td>jeśli w zbiorze wartości są stosowane dopasowania wzorów, to stosuje je do katalogów, a nie plików</td></tr>
+        <tr><td><code>/R</code></td><td>uruchamia pętlę <code>for</code> w każdym katalogu drzewa o wskazanym korzeniu; jeśli korzenia nie wskazano, uznaje się za niego bieżący katalog; jeśli zbiór będzie określony pojedynczym symbolem kroki, wówczas pętla będzie iterować po katalogach</td></tr>
+        <tr><td><code>/L</code></td><td>stosuj iterację numeryczną; zbiór wartości określa wówczas odpowiednio wartość początkową, krok i wartość końcową</td></tr>
+      </table>
+
+      <div class="exercise">
+        <p>Przeanalizuj następujące przykłady zastosowania pętli <code>for</code>:</p>
+        <pre><code class="cmd"><!--
+       -->> for %f in (r*) do @echo %f
+<!--   -->> for /D %f in (r*) do @echo %f
+<!--   -->> for /R %f in (r*) do @echo %f
+<!--   -->> for /R %f in (*) do @echo %f
+<!--   -->> for /R C:\Users\Bartek %f in (.) do @echo %f
+<!--   -->> for /R /D %f in (a*) do @echo %f
+<!--   -->> for /L %f in (1,2,10) do @echo %f
+<!--   --></code></pre>
+        <p>Pamiętaj, że jeśli umieszczasz pętle wewnątrz programu wsadowego, zmienne iteracyjne powinny być poprzedzone podwójnym symbolem procenta.</p>
+      </div>
+
+      <h2>Instrukcja <code>if</code></h2>
+
+      <p>Podstawowa konstrukcja <code>if</code> przyjmuje jedną z trzech form:</p>
+      <pre><code class="cmd"><!--
+     -->if [not] errorlevel liczba polecenie parametry
+<!-- -->if [not] ciag1==ciag2 polecenie parametry
+<!-- -->if [not] exist plik polecenie parametry
+<!-- --></code></pre>
+      <p>Pierwsza z nich powoduje wykonanie polecenia, jeśli wartość zmiennej <code>%errorlevel%</code> jest równa <b>co najmniej</b> wskazanej liczbie. Druga służy do porównywania ciągów znaków, trzecia zaś weryfikuje istnienie pliku. Instrukcja <code>if</code> przyjmuje opcję <code>/I</code>, która powoduje, że różnice w wielkości znaków są ignorowane.</p>
+
+      <div class="exercise">
+        <p>Przetestuj działanie następujących poleceń (w folderze zawierającym plik <code>plik.txt</code> oraz katalog <code>katalog</code>):</p>
+        <pre><code class="cmd"><!--
+       -->if abc==abc echo Rowne
+<!--   -->if ABC==abc echo Rowne
+<!--   -->if /i ABC==abc echo Rowne
+<!--   -->if not "abc"==abc echo Rozne
+<!--   -->if exist plik.txt echo Plik istnieje
+<!--   -->if not exist katalog echo Katalog nie istnieje
+<!--   --></code></pre>
+        <p>Czy konstrukcja <code>exist</code> może być stosowana do weryfikowania istnienia katalogów?</p>
+      </div>
+
+      <p>Instrukcja <code>if</code> pozwala na zastosowanie słowa kluczowego <code>else</code>. Musi ono jednak wystąpić w tej samej linii, np.:</p>
+      <pre><code class="cmd">if exist plik.txt (echo Plik istnieje) else (echo Plik nie istnieje)</code></pre>
+      <p>Warto zauważyć, że w tym przypadku zastosowano nawiasy grupujące polecenia.</p>
+
+      <div class="exercise">
+        <p>Sprawdź, co by się stało, gdyby pominąć nawiasy grupujące. Sprawdź też, czy zapis</p>
+        <pre><code class="cmd"><!--
+       -->if exist plik.txt (
+<!--   -->    echo Plik istnieje
+<!--   -->) else (
+<!--   -->    echo Plik nie istnieje
+<!--   -->)
+<!--   --></code></pre>
+        <p>jest równoważny. Jeśli tak, to w jaki sposób można wykonać blok instrukcji w przypadku, gdy warunek (nie) jest spełniony?</p>
+      </div>
+
+      <p>Jeśli rozszerzenia poleceń są włączone, to instrukcja <code>if</code> staje się o wiele bardziej rozbudowana. Przyjmuje ona wówczas kilka innych form, w tym</p>
+      <pre><code class="cmd">if [not] ciag1 operator ciag2 polecenie parametry</code></pre>
+      <p>gdzie operator jest jednym z poniższych:</p>
+      <table class="noborder">
+        <tr><td><code>EQU</code></td><td>operator równości</td></tr>
+        <tr><td><code>NEQ</code></td><td>operator różności</td></tr>
+        <tr><td><code>LSS</code></td><td>operator mniejszości</td></tr>
+        <tr><td><code>LEQ</code></td><td>operator mniejszości lub równości</td></tr>
+        <tr><td><code>GTR</code></td><td>operator większości</td></tr>
+        <tr><td><code>GEQ</code></td><td>operator większości lub równości</td></tr>
+      </table>
+      <p>oraz</p>
+      <pre><code class="cmd">if [not] defined zmienna polecenie parametry</code></pre>
+      <p>która pozwala na sprawdzenie, czy zmienna o wskazanej nazwie została zdefiniowana. Ta konstrukcja nie może być jednak stosowana do sprawdzenia, czy parametr istnieje.</p>
+
+      <h2>Operacje na zmiennych w blokach</h2>
+
+      <div class="exercise">
+        <p>Spójrz na poniższy program:</p>
+        <pre><code class="cmd"><!--
+       -->@echo off
+<!--   -->set var=a
+<!--   -->if 1 equ 1 (
+<!--   -->    set var=b
+<!--   -->    echo %var%
+<!--   -->)
+<!--   --></code></pre>
+        <p>Jaka wartość powinna być wypisana na ekranie? Jaka w rzeczywistości została? Dowiedz się, dlaczego.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Zmodyfikuj program z poprzedniego ćwiczenia tak, aby działał poprawnie. W tym celu zastosuj mechanizm z poleceniem <code>call</code>.</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <pre><code class="cmd"><!--
+         -->@echo off
+<!--     -->set var=a
+<!--     -->if 1 equ 1 call :fun
+<!--     -->goto :eof
+<!--     -->
+<!--     -->:fun
+<!--     -->set var=b
+<!--     -->echo %var%
+<!--     -->goto :eof
+<!--     --></code></pre>
+        </div>
+      </div>
+
+      <p>Rozwiązanie będące efektem powyższego ćwiczenia nie jest zbyt czytelne. Na szczęście problem można rozwiązać inaczej.</p>
+
+      <div class="exercise">
+        <p>Zmodyfikuj program z ćwiczenia przed poprzednim tak, aby działał poprawnie. W tym celu zmień jego treść na:</p>
+        <pre><code class="cmd"><!--
+       -->@echo off
+<!--   -->setlocal EnableDelayedExpansion
+<!--   -->set var=a
+<!--   -->if 1 equ 1 (
+<!--   -->    set var=b
+<!--   -->    echo !var!
+<!--   -->)
+<!--   --></code></pre>
+        <p>Co się zmieniło? Dowiedz się, czym jest <code>EnableDelayedExpansion</code>. W jaki sposób odwołujemy się do zmiennych wewnątrz bloku instrukcji <code>if</code>? Na jakim etapie są one zamieniane na wartości?</p>
+      </div>
+
+      <h1>Ćwiczenia podsumowujące</h1>
+
+      <div class="exercise">
+        <p>Napisz program wsadowy, który wypisze przekazane argumenty w odwrotnej kolejności.</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <pre><code class="cmd"><!--
+         -->@echo off
+<!--     -->if "%1"=="" exit /b
+<!--     -->set wynik=%1
+<!--     -->:poczatek
+<!--     -->if "%2"=="" goto wypisz
+<!--     -->set wynik=%2 %wynik%
+<!--     -->shift
+<!--     -->goto poczatek
+<!--     -->:wypisz
+<!--     -->echo %wynik%
+<!--     --></code></pre>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <p>Zmienna <code>%RANDOM%</code> zwraca losową wartość całkowitą dodatnią z~przedziału od 0 do 32767 za każdym razem, gdy jest wywoływana. Wykorzystaj ją, aby napisać program wsadowy, w którym użytkownik zgaduje wylosowaną liczbę z przedziału od 100 do 1000. Program ten powinien naprowadzać użytkownika na prawidłowe rozwiązanie, wypisując komunikaty "Więcej" lub "Mniej", w zależności od wprowadzonej liczby. Gdy użytkownik wprowadzi dobry wynik, program powinien zakończyć działanie.</p>
+
+        <p><b>Uwaga.</b> Operacja dzielenia modulo jest oznaczana przez pojedynczy symbol procenta tylko bezpośrednio w wierszu poleceń. W programach wsadowych należy zapisywać ją podwójnie (<code>%%</code>). Gdzie jeszcze taki zapis był niezbędny?</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <pre><code class="cmd"><!--
+         -->@echo off
+<!--     -->set /a n=100+(%random% %% 901)
+<!--     -->:zgaduj
+<!--     -->set /p l=Podaj liczbe:
+<!--     -->if %l% gtr %n% echo Mniej
+<!--     -->if %l% lss %n% echo Wiecej
+<!--     -->if %l% equ %n% exit /b
+<!--     -->goto zgaduj
+<!--     --></code></pre>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <p>Zaimplementuj algorytm Euklidesa (z dzieleniem) wyznaczania NWD dwóch liczb dodatnich. Program wsadowy powinien pobierać po dwie liczby ze zbioru argumentów, przy czym można wprowadzić więcej zestawów liczb (np. program wywołany z sześcioma parametrami powinien wypisać na wyjściu trzy wartości, po jednej w linii, każda będąca NWD kolejnych dwóch liczb).</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <pre><code class="cmd"><!--
+         -->@echo off
+<!--     -->setlocal EnableDelayedExpansion
+<!--     -->:poczatek
+<!--     -->if "%1"=="" goto :eof
+<!--     -->set a=%1
+<!--     -->set b=%2
+<!--     -->set /a r="%a% %% %b%"
+<!--     -->:petla
+<!--     -->if %r% neq 0 (
+<!--     -->    set a=!b!
+<!--     -->    set b=!r!
+<!--     -->    set /a r="!a! %% !b!"
+<!--     -->    goto petla
+<!--     -->)
+<!--     -->echo %b%
+<!--     -->shift
+<!--     -->shift
+<!--     -->goto poczatek
+<!--     --></code></pre>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz program wsadowy, który przekształca przekazane jako argumenty liczby dziesiętne do postaci dwójkowej. Każda wartość powinna być wypisana w osobnej linii.</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <pre><code class="cmd"><!--
+         -->@echo off
+<!--     -->setlocal EnableDelayedExpansion
+<!--     -->:poczatek
+<!--     -->if "%1"=="" exit /b
+<!--     -->set liczba=%1
+<!--     -->set /a wynik=%liczba% %% 2
+<!--     -->set /a liczba=%liczba%/2
+<!--     -->:petla
+<!--     -->if %liczba% gtr 0 (
+<!--     -->    set /a temp=!liczba! %% 2
+<!--     -->    set wynik=!temp!!wynik!
+<!--     -->    set /a liczba=!liczba!/2
+<!--     -->    goto petla
+<!--     -->)
+<!--     -->echo %wynik%
+<!--     -->shift
+<!--     -->goto poczatek
+<!--     --></code></pre>
+        </div>
+      </div>
+
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
+</body>
+</html>
