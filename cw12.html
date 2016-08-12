@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html moznomarginboxes mozdisallowselectionprint>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['</td></tr>(','</td></tr>)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Ćwiczenia 12</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
+
+    <article id="cw12">
+
+      <h1>Wiersz poleceń jako interpreter własnego języka</h1>
+      <h2>Zmienne w wierszu poleceń systemu Windows</h2>
+
+      <p>Podobnie jak w przypadku powłoki Bash, w wierszu poleceń systemu Windows możemy wykorzystywać zmienne. Aby przypisać zmiennej określoną wartość tekstową, należy skorzystać z polecenia <code>set</code>. Odwołanie do zmiennej jest możliwe poprzez konstrukcję <code>%zmienna%</code>, gdzie <code>zmienna</code> jest nazwą odpowiedniej zmiennej.</p>
+
+      <div class="exercise">
+        <p>Wykonaj następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> set zmienna=dir
+<!--   -->> %zmienna%
+<!--   -->> set abc=%zmienna%
+<!--   -->> %abc%
+<!--   --></code></pre>
+        <p>Czy sposób interpretacji zmiennych na poziomie wiersza poleceń systemu Windows przypomina Ci ten znany z powłoki Bash?</p>
+      </div>
+
+      <p>Wywołanie polecenia <code>set</code> z przełącznikiem <code>/p</code> pozwala na zapisanie w zmiennej wartości wprowadzonej przez użytkownika.</p>
+
+      <div class="exercise">
+        <p>Wykonaj następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> set /p x="Podaj polecenie: "
+<!--   -->> %x%
+<!--   --></code></pre>
+      </div>
+
+      <p>Wywołanie polecenia <code>set</code> z przełącznikiem <code>/a</code> pozwala na wykonywanie operacji arytmetyczno-logicznych na zmiennych.</p>
+
+      <div class="exercise">
+        <p>Korzystając z przełącznika <code>/?</code> polecenia <code>set</code>, zapoznaj się ze sposobem wykonywania działań arytmetyczno-logicznych na zmiennych. Przetestuj wybrane działania, ponieważ będą Ci potrzebne na następnych ćwiczeniach.</p>
+      </div>
+
+      <p>Dwie najważniejsze zmienne wiersza poleceń systemu Windows to <code>PATH</code> oraz <code>PROMPT</code>. Pierwsza z nich przechowuje, oddzielone znakiem średnika, ścieżki do katalogów, w których wiersz poleceń będzie poszukiwał poleceń zewnętrznych. Druga zaś przechowuje informację o wyglądzie znaku zachęty systemu Windows.</p>
+
+      <div class="titbit">
+        <p>Wiersz poleceń systemu Windows jest wyposażony w polecenia o nazwach <code>path</code> oraz <code>prompt</code>. Służą one do ustawiania wartości zmiennych o odpowiadających im nazwach.</p>
+        <div class="exercise">
+          <p>Korzystając z przełącznika <code>/?</code> poleceń <code>path</code> oraz <code>prompt</code>, zapoznaj się z ich opisem oraz sposobem ich wywołania.</p>
+        </div>
+      </div>
+
+      <p>Kolejną istotną zmienną wiersza poleceń jest zmienna <code>errorlevel</code>, która przechowuje status wyjścia ostatnio wykonanego polecenia.</p>
+
+      <div class="exercise">
+        <p>Korzystając z pomocy polecenia <code>set</code>, zapoznaj się z nazwami i znaczeniem innych zmiennych środowiskowych o specjalnym przeznaczeniu.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Zmodyfikuj znak zachęty wiersza poleceń wykonując polecenie</p>
+        <pre><code class="no-highlight">> set prompt=[%computername%] $d$s$t$_$p$_$_$+$g</code></pre>
+        <p>Sprawdź, czy taki sam efekt będzie miało wywołanie polecenia</p>
+        <pre><code class="no-highlight">> prompt [%computername%] $d$s$t$_$p$_$_$+$g</code></pre>
+        <p>Jakiej nieznanej dotąd zmiennej tu użyliśmy? Dowiedz się, korzystając z polecenia wewnętrznego <code>prompt /?</code>, jakie elementy formatowania znaku zachęty można wykorzystać.</p>
+      </div>
+
+      <h2>Polecenie <code>echo</code></h2>
+
+      <p>Znane nam już z systemów uniksopodobnych polecenie <code>echo</code> ma swój odpowiednik o tej samej nazwie również w wierszu poleceń. I choć sposób jego wywołania jest taki sam, to jednak efekt działania jest inny.</p>
+
+      <div class="exercise">
+        <p>Wykonaj następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> echo
+<!--   -->> echo 1
+<!--   -->> echo Ala ma kota
+<!--   -->> echo  Ala  ma  kota
+<!--   -->> echo "Ala ma kota"
+<!--   -->> echo " Ala  ma  kota"
+<!--   -->> set abc=kota
+<!--   -->> echo "Ala ma %abc%"
+<!--   -->> echo 'Ala ma %abc%"
+<!--   --></code></pre>
+        <p>Jakie wnioski można wyciągnąć z tego eksperymentu? Jak zachowywał się program <code>echo</code> w systemach uniksopodobnych? Jak były interpretowane wywołania zmiennych w cudzysłowach?</p>
+      </div>
+
+      <div class="exercise">
+        <p>Przetestuj, jak zmienia się zawartość zmiennej środowiskowej <code>errorlevel</code> wraz z wykonywaniem kolejnych poleceń. Jeśli trzeba, wywołaj polecenia, które zakończą się błędem.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Jak wiersz poleceń interpretuje zmienne, które nie istnieją? Czy tak samo było w powłoce Bash?</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Jak ciąg znaków otoczony symbolami procenta.</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <p>Wykonaj następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> set zmienna=wartosc
+<!--   -->> start cmd
+<!--   --></code></pre>
+        <p>a następnie w nowym oknie wywołaj polecenia</p>
+        <pre><code class="no-highlight">> echo %zmienna%</code></pre>
+        <p>Czy zmienna <code>zmienna</code> jest dostępna w utworzonym oknie (inaczej, czy jest zmienną środowiskową)? Ustaw wartość dowolnej zmiennej w uruchomionym wierszu poleceń i sprawdź, czy da się do niej odwołać w macierzystym oknie.</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Zmienne działają domyślnie tak jak zmienne środowiskowe.</p>
+        </div>
+      </div>
+
+      <h2>Metasymbole wiersza poleceń</h2>
+
+      <p>Wiersz poleceń systemu Windows daje wiele możliwości związanych z obsługą poleceń. Wiele metasymboli pokrywa się z tymi znanymi z powłoki Bash. W poniższej tabeli zaprezentowano ich porównanie.</p>
+
+      <table>
+        <tr><th>Bash</th><th>Windows</th><th>Znaczenie</th></tr>
+        <tr><td class="center"><code>/</code></td><td class="center"><code>\</code></td><td>symbol oddzielający elementy struktury plików w ścieżce</td></tr>
+        <tr><td class="center"><code>.</code></td><td class="center"><code>.</code></td><td>oznaczenie bieżącego katalogu</td></tr>
+        <tr><td class="center"><code>..</code></td><td class="center"><code>..</code></td><td>oznaczenie katalogu nadrzędnego</td></tr>
+        <tr><td class="center"><code>\</code></td><td class="center"><code>^</code></td><td>symbol kontynuacji polecenia w następnej linii</td></tr>
+        <tr><td class="center"><code>*</code></td><td class="center"><code>*</code></td><td>symbol dopasowania wzorca &ndash; dowolny ciąg znaków</td></tr>
+        <tr><td class="center"><code>?</code></td><td class="center"><code>?</code></td><td>symbol dopasowania wzorca &ndash; jeden znak</td></tr>
+        <tr><td class="center"><code>></code></td><td class="center"><code>></code></td><td>przekierowanie strumienia wyjścia do pliku</td></tr>
+        <tr><td class="center"><code>>></code></td><td class="center"><code>>></code></td><td>przekierowanie strumienia wyjścia do pliku (z dopisaniem wyjścia na jego końcu)</td></tr>
+        <tr><td class="center"><code><</code></td><td class="center"><code><</code></td><td>przekierowanie zawartości pliku na strumień wejścia</td></tr>
+        <tr><td class="center"><code>|</code></td><td class="center"><code>|</code></td><td>implementacja mechanizmu potokowania</td></tr>
+        <tr><td class="center"><code>$</code></td><td class="center"><code>%</code></td><td>symbol związany z oznaczeniem zmiennych</td></tr>
+        <tr><td class="center"><code>;</code></td><td class="center"><code>&amp;</code></td><td>wykonywanie poleceń jedno po drugim</td></tr>
+        <tr><td class="center"><code>&amp;&amp;</code></td><td class="center"><code>&amp;&amp;</code></td><td>warunkowe wykonywanie poleceń &ndash; warunek <b>i</b></td></tr>
+        <tr><td class="center"><code>||</code></td><td class="center"><code>||</code></td><td>warunkowe wykonywanie poleceń &ndash; warunek <b>lub</b></td></tr>
+        <tr><td class="center"><code>()</code></td><td class="center"><code>()</code></td><td>grupowanie poleceń</td></tr>
+      </table>
+
+      <div class="exercise">
+        <p>Których metasymboli powłoki Bash brakuje w tabeli? Korzystając ze źródeł internetowych zweryfikuj, czy mają swoje odpowiedniki w wierszu poleceń systemu Windows.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Przetestuj działanie metasymboli związanych z warunkowym wykonywaniem poleceń.</p>
+      </div>
+
+      <h1>Wprowadzenie do programowania wsadowego</h1>
+      <h2>Wykonywanie programów wsadowych</h2>
+
+      <p>Program wsadowy (skrypt) wiersza poleceń systemu Windows to plik tekstowy (zwany plikiem wsadowym) zawierający polecenia powłoki systemu Windows, który może być wykonywany jak pełnoprawny program.</p>
+
+      <p>Plik wsadowy określony jest rozszerzeniem <code>.bat</code> lub <code>.cmd</code>. Wybór odpowiedniego rozszerzenia pliku ma jednak kluczowe znaczenie dla interpretacji zawartych w nim poleceń. Te zapisane w plikach o rozszerzeniu <code>.cmd</code> będą domyślnie wykonywane w osobnej instancji wiersza poleceń systemu Windows, podczas gdy te zapisane w plikach o rozszerzeniu <code>.bat</code> będą domyślnie wykonywane w maszynie wirtualnej systemu DOS. Ze względu na o wiele większe możliwości wiersza poleceń, nasze programy wsadowe będziemy zapisywać z rozszerzeniem <code>.cmd</code>.</p>
+
+      <p>Aby wykonać polecenia zawarte w pliku wsadowym, należy wywołać jego nazwę jako polecenie powłoki. W przypadku rozszerzeń elementów wykonywalnych, takich jak <code>.exe</code>, <code>.bat</code>, czy <code>.cmd</code>, rozszerzenie może zostać pominięte.</p>
+
+      <div class="exercise">
+        <p>Jeśli odwołamy się do pliku z rozszerzeniem <code>.bat</code> w wierszu poleceń systemu Windows, to zostanie on wykonany w wierszu poleceń czy w maszynie wirtualnej systemu DOS? Dlaczego?</p>
+      </div>
+
+      <div class="exercise">
+        <p>Zastanów się ponownie, dlaczego w skryptach powłoki Bash musieliśmy wprost określać wewnątrz pliku, jaki program ma go interpretować. Dlaczego w systemach z rodziny Windows nie musimy tego robić?</p>
+      </div>
+
+      <div class="exercise">
+        <p>Utwórz skrypt <code>skrypt.cmd</code> o treści</p>
+        <pre><code class="cmd">echo %abc%</code></pre>
+        <p>Następnie wykonaj w katalogu ze skryptem następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> set abc=sprawdzam
+<!--   -->> skrypt
+<!--   --></code></pre>
+        <p>Czy skrypt zachował się tak, jak można by się spodziewać?</p>
+      </div>
+
+      <div class="howitworks">
+        <p>Domyślnie wykonywanie plików wsadowych pociąga za sobą wypisanie na ekranie kolejnych wykonywanych poleceń. Aby powstrzymać to działanie dla jednego polecenia, należy poprzedzić je symbolem <code>@</code>. Można też zablokować to zachowanie globalnie, wykonując polecenie <code>echo off</code>. Jego przywrócenie jest natomiast możliwe poprzez wywołanie polecenia <code>echo on</code>. Polecenie <code>echo</code> wywołane bez argumentów zwróci natomiast informację o tym, w jakim stanie znajdujemy się obecnie.</p>
+        <div class="exercise">
+          <p>Wykonaj polecenie <code>echo off</code>. Jak zachowuje się wiersz poleceń?</p>
+        </div>
+        <p>Skoro wywołanie polecenia <code>echo</code> z argumentami <code>on/off</code> nie powoduje wypisania na ekranie odpowiednich słów, to polecenie <code>echo</code> nie może służyć do ich wypisania. Aby to zmienić, należy rozdzielić nazwę polecenia od jej argumentu symbolem kropki, pisząc choćby <code>echo.on</code>.</p>
+      </div>
+
+      <h2>Polecenia <code>exit</code> i <code>rem</code></h2>
+
+      <p>Program wsadowy wykonywany jest w osobnym procesie wiersza poleceń, a następnie zwraca do macierzystego wiersza poleceń status wyjścia (przechowywany w zmiennej środowiskowej <code>%errorlevel%</code>). Podobnie jak w przypadku skryptów powłoki Bash, możemy zakończyć skrypt wiersza poleceń systemu Windows w dowolnym momencie, wywołując polecenie <code>exit</code>.</p>
+
+      <div class="exercise">
+        <p>Sprawdź, jak wywołać polecenie <code>exit</code>. Zapoznaj się z opisem i sprawdź w praktyce działanie przełącznika <code>/B</code>.</p>
+      </div>
+
+      <p>Interpreter wiersza poleceń systemu Windows nie interpretuje żadnego znaku specjalnego jako początku komentarza. W zamian za to udostępnia polecenie <code>rem</code>, które nie wykonuje żadnych działań, niezależnie od przekazanych argumentów. Tym samym możemy je wykorzystać do komentowania fragmentów kodu źródłowego skryptu wiersza poleceń, pisząc na przykład:</p>
+      <pre><code class="cmd"><!--
+     -->echo Ten napis sie wyswietli
+<!-- -->rem A ten nie
+<!-- --></code></pre>
+
+      <h2>Parametry pozycyjne i polecenie <code>shift</code></h2>
+
+      <p>Podobnie jak w powłoce Bash, do skryptów wiersza poleceń systemu Windows można przekazać parametry (zwane parametrami pozycyjnymi). Aby się do nich odwołać z wnętrza programu wsadowego, można użyć wywołań od <code>%0</code> do <code>%9</code>. Zwróć uwagę na fakt, że odwołania te nie są związane z otoczeniem numeru argumentu symbolem procenta z obu stron.</p>
+
+      <div class="exercise">
+        <p>Zmodyfikuj plik <code>skrypt.cmd</code> tak, aby był treści:</p>
+        <pre><code class="cmd"><!--
+       -->@echo off
+<!--   -->rem Program wyswietla zawartosc zmiennych
+<!--   -->echo '%1'
+<!--   -->echo '%2'
+<!--   -->echo '%3'
+<!--   --></code></pre>
+        <p>Zastanów się nad znaczeniem poszczególnych wierszy, szczególnie pierwszego. Następnie wykonaj następujące polecenia:</p>
+        <pre><code class="cmd"><!--
+       -->> skrypt a b c
+<!--   -->> skrypt     a      b     c
+<!--   -->> skrypt "a" "b" "c"
+<!--   -->> skrypt "   a"     "b   " " c"
+<!--   --></code></pre>
+        <p>Skomentuj efekty.</p>
+      </div>
+
+      <p>Z wnętrza programu wsadowego możemy odwołać się jedynie do dziesięciu pierwszych elementów polecenia (parametrem o indeksie 0 jest w momencie wywołania programu wsadowego jego nazwa). Na szczęście argumenty znajdujące się na kolejnych miejscach nie giną i można się do nich odwoływać, wykorzystując polecenie <code>shift</code> o działaniu analogicznym do polecenia o tej samej nazwie, udostępnianego przez powłokę Bash.</p>
+
+      <div class="exercise">
+        <p>Napisz program wsadowy, który wypisuje na ekranie wartość pierwszych 15 parametrów pozycyjnych. Upewnij się, że na ekranie pojawią się tylko one.</p>
+      </div>
+
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
+</body>
+</html>
