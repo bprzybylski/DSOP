@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html moznomarginboxes mozdisallowselectionprint>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Ćwiczenia 8</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
+
+    <article id="cw08">
+
+      <h1>Ćwiczenia powtórzeniowe</h1>
+
+      <div class="exercise">
+        <p>Napisz w języku C program, który wypisuje na standardowym wyjściu napis <code>Hello world!</code></p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz program, który wypisuje na wyjściu ciąg tych liczb całkowitych z przedziału od 1 do 100, które nie dzielą się przez 3. W jednym wierszu powinna zostać wypisana jedna liczba.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz program, który wypisuje na wyjściu tabliczkę mnożenia liczb od 1 do 10. Upewnij się, że wypisane liczby będą zajmować dokładnie 4 znaki i będą wyrównane do prawej.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Zdefiniuj funkcję <code>toInt</code>, która przyjmuje jako argument ciąg znaków i przekształca go do postaci liczbowej, a uzyskaną w ten sposób wartość zwraca. Znaki niebędące cyframi powinny być przez funkcję ignorowane. Jeśli przekazany ciąg znaków nie zawiera w sobie żadnej cyfry, funkcja powinna zwrócić wartość 0.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz funkcję <code>nwd</code>, która przyjmuje jako argumenty dwie liczby całkowite i zwraca ich największy wspólny dzielnik. Zaimplementuj w niej algorytm Euklidesa z dzieleniem.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz program, który wypisuje na wyjściu przekazane do niego argumenty, po jednym w wierszu.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz program, który przyjmuje dwa argumenty reprezentujące liczby i wypisuje na wyjściu ich największy wspólny dzielnik. Wykorzystaj funkcje <code>toInt</code> oraz <code>nwd</code>.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz funkcję <code>toHex</code>, która przyjmuje jako argument nieujemną liczbę całkowitą dziesiętną i przekształca ją w ciąg znaków reprezentujący ją w postaci szesnastkowej. Nie wykorzystuj żadnych wbudowanych funkcji ani formatowania wyjścia.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz funkcję <code>fromDec</code>, która przyjmuje jako argument nieujemną liczbę całkowitą i liczbę całkowitą z przedziału od 2 do 16 oraz zwraca ciąg znaków reprezentujący liczbę przekazaną jako pierwszy argument zapisaną w systemie liczbowym, którego podstawę determinuje drugi argument. Nie wykorzystuj żadnych wbudowanych funkcji ani formatowania wyjścia.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz funkcję <code>toDec</code>, która przyjmuje jako argument ciąg znaków i liczbę całkowitą z przedziału od 2 do 16, a następnie (traktując ciąg znaków jako nieujemną liczbę zapisaną we wskazanym systemie liczbowym) przekształca ją do postaci dziesiętnej i zwraca tak otrzymaną wartość liczbową. Niepoprawne znaki powinny być ignorowane. Jeśli ciąg znaków nie zawiera żadnej cyfry we wskazanym systemie, funkcja powinna zwrócić 0.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz program, który przyjmuje trzy argumenty, reprezentujące odpowiednio: liczbę, podstawę systemu liczbowego, w którym jest zapisana oraz podstawę systemu liczbowego, do którego ma zostać ona przekonwertowana, a następnie wypisuje na wyjściu wynik tej konwersji. Wykorzystaj funkcje z poprzednich zadań.</p>
+      </div>
+
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
+</body>
+</html>
