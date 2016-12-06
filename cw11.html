@@ -31,12 +31,87 @@
 <body>
 <div id="wrapper">
     <header id="main-header">
-        <h1>Ćwiczenia 9</h1>
+        <h1>Ćwiczenia 11</h1>
         <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
         <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
     </header>
 
-    <article id="cw09">
+    <article id="cw11">
+
+      <h1>Przydatne funkcje</h1>
+
+      <p>Funkcja <code>execl</code> (ang. <i>execute and leave</i>) zadeklarowana w nagłówku <code>unistd.h</code> zastępuje bieżący proces nowym procesem. Pierwszym argumentem jest ścieżka bezwzględna do pliku wykonywalnego, kolejne zaś określają argumenty (<b>uwaga:</b> razem z nazwą polecenia). Z uwagi na to, że liczba argumentów nie jest z góry ustalona, ostatnim argumentem funkcji <code>execl</code> musi być zawsze zero (lub stała <code>NULL</code>). Funkcja ta, ze względu na swoje działanie, zwraca wartość (ujemną) tylko w przypadku niepowodzenia wywołania. W przeciwnym przypadku nie zwraca wartości (bo nie ma dokąd, skoro proces zostaje zastąpiony).</p>
+
+      <div class="exercise">
+        <p>Skompiluj poniższy kod programu i go wykonaj:</p>
+        <pre><code class="c"><!--
+       -->#include &lt;unistd.h&gt;
+<!--   -->#include &lt;stdio.h&gt;
+<!--   -->
+<!--   -->int main(){
+<!--   -->    execl("/bin/sleep", "sleep", "5", 0);
+<!--   -->    printf("Czy ten napis sie wyswietli?");
+<!--   -->    return 0;
+<!--   -->}
+<!--   --></code></pre>
+        <p>Czy napis się wyświetlił? Dlaczego? Przeanalizuj wywołanie funkcji <code>execl</code>.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Zapoznaj się z funkcją systemową <code>wait</code>. Następnie skonstruuj funkcję <code>system</code>, która przyjmuje jako argument ścieżkę do programu, a następnie wykonuje go jako podproces. Funkcja powinna zwracać wartość zwracaną przez wywołany program lub -1, jeśli wystąpi jakikolwiek błąd.</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <pre><code class="c"><!--
+         -->#include &lt;unistd.h&gt;
+<!--     -->#include &lt;stdio.h&gt;
+<!--     -->
+<!--     -->int system(char *cmd){
+<!--     -->    int pid;
+<!--     -->    if((pid = fork()) >= 0){
+<!--     -->        if(pid == 0){
+<!--     -->            execl(cmd, cmd, 0);
+<!--     -->            return -1;
+<!--     -->        } else {
+<!--     -->            int ret;
+<!--     -->            wait(&amp;ret);
+<!--     -->            return ret;
+<!--     -->        }
+<!--     -->    } else {
+<!--     -->            return -1;
+<!--     -->    }
+<!--     -->}
+<!--     --></code></pre>
+        </div>
+      </div>
+
+      <p>Funkcja <code>exit</code>, zadeklarowana w nagłówku <code>stdlib.h</code>, przyjmuje argument całkowitoliczbowy i kończy bieżący proces zwracając wskazaną wartość.</p>
+
+      <div class="exercise">
+        <p>Zapoznaj się z poniższym kodem źródłowym. Zwróć uwagę na zastosowanie funkcji <code>exit</code>.</p>
+        <pre><code class="c"><!--
+        -->#include &lt;stdlib.h&gt;
+<!--     -->#include &lt;stdio.h&gt;
+<!--     -->
+<!--     -->int main(){
+<!--     -->    printf("Hello world!\n");
+<!--     -->    exit(0);
+<!--     -->}
+<!--     --></code></pre>
+      </div>
+
+      <div class="exercise">
+        <p>Zastanów się, jaką przewagę ma funkcja systemowa <code>exit</code> nad instrukcją <code>return</code> wywoływaną wewnątrz funkcji <code>main</code>.</p>
+      </div>
+
+      <div class="titbit titbit-star">
+        <p>W bibliotece standardowej zdefiniowana jest także funkcja <code>_exit</code> o działaniu zbliżonym do funkcji <code>exit</code>. Zadeklarowana jest ona w nagłówku <code>unistd.h</code>.</p>
+
+        <div class="exercise exercise-star">
+          <p>Jaka jest różnica pomiędzy funkcjami <code>exit</code> i <code>_exit</code>? Podpowiedź: zapoznaj się z działaniem funkcji systemowej <code>atexit</code> zadeklarowanej w nagłówku <code>stdlib.h</code>.</p>
+        </div>
+      </div>
 
       <h1>Proste wersje wybranych poleceń</h1>
 
