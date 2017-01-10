@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html moznomarginboxes mozdisallowselectionprint>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Ćwiczenia 12</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
+
+    <article id="cw12">
+
+      <h1>Ćwiczenia powtórzeniowe</h1>
+
+      <div class="exercise">
+        <p>Napisz w języku C program, który wypisuje na standardowym wyjściu przekazane do niego argumenty w odwrotnej kolejności.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz program, który wypisuje na standardowym wyjściu sumę liczb przekazanych do niego przez standardowe wejście (po jednej liczbie w wierszu).</p>
+      </div>
+
+      <div class="exercise">
+        <p>Zdefiniuj funkcję <code>toInt</code>, która przyjmuje jako argument ciąg znaków i przekształca go do postaci liczbowej, a uzyskaną w ten sposób wartość zwraca. Znaki niebędące cyframi powinny być przez funkcję ignorowane. Jeśli przekazany ciąg znaków nie zawiera w sobie żadnej cyfry, funkcja powinna zwrócić wartość 0. Pamiętaj, że liczby mogą być ujemne. Rozwiązanie umieść w pliku <code>toInt.c</code>. Przygotuj także odpowiedni plik nagłówkowy o nazwie <code>toInt.h</code>, który będzie zawierał deklarację funkcji <code>toInt</code>.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Wykorzystaj pliki z poprzedniego zadania do napisania programu, który wypisuje na standardowym wyjściu sumę liczb przekazanych do niego jako argumenty. Przygotuj także plik <code>Makefile</code>, który pozwoli uniknąć zbędnej kompilacji fragmentów kodu.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz program, który przyjmuje co najmniej dwa argumenty będące ścieżkami do plików. Jeśli do programu przekazano $n$ argumentów, to zawartość plików o ścieżkach reprezentowanych przez argumenty od $1$ do $n-1$ powinna zostać dopisana na końcu pliku, do którego ścieżka znajduje się w ostatnim argumencie. Jeśli plik docelowy nie istnieje, powinien zostać utworzony. Jeśli plik źródłowy nie istnieje, należy wypisać komunikat błędu na standardowym wyjściu.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz program <code>moresleep</code>, który działa jak program <code>sleep</code> z tą różnicą, że dla argumentu $n$ kończy swoje działanie po $n+10$ sekundach. Możesz wykorzystać program <code>sleep</code>.</p>
+      </div>
+
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
+</body>
+</html>
