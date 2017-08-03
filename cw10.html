@@ -14,13 +14,15 @@
     <script type="text/javascript" src="js/html5.js"></script>
     <![endif]-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
     <script>
       MathJax.Hub.Config({
         tex2jax: {
           inlineMath: [['$','$'], ['\\(','\\)']],
-          processEscapes: true
-        }
+          processEscapes: true,
+          delayStartupUntil: onload
+        },
+        TeX: { equationNumbers: {autoNumber: "AMS"} }
       });
     </script>
     <script type="text/javascript" src="js/js.js"></script>
@@ -38,355 +40,271 @@
 
     <article id="cw10">
 
-      <h1>Program <code>make</code></h1>
+      <h1>Kilka nowych poleceń</h1>
+
+      <p>Do wyczyszczenia zawartości okna wiersza poleceń służy polecenie <code>cls</code>.</p>
+
+      <div class="exercise">
+        <p>Sprawdź działanie polecenia <code>cls</code>.</p>
+      </div>
+
+      <p>Do zarządzania bieżącą datą i godziną systemową służą polecenia <code>date</code> oraz <code>time</code>. Jeśli są wywołane bez argumentów, wyświetlają bieżącą datę/godzinę i pytają o nową, chyba że wywołano je z przełącznikiem <code>/T</code>.</p>
+
+      <div class="exercise">
+        <p>Pomoc polecenia <code>date</code> mówi: <i>If Command Extensions are enabled the DATE command supports the /T switch (...)</i>. Dowiedz się, czym są <i>Command Extensions</i>. Jak myślisz, dlaczego zastosowano taki mechanizm?</p>
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Wyłączenie <i>Command Extensions</i> pozwala zachować zgodność z bardzo starymi skryptami wiersza poleceń.</p>
+        </div>
+      </div>
+
+      <div class="command">
+        <p>Do uruchamiania nowych poleceń <i>w osobnym oknie</i> służy polecenie wewnętrzne <code>start</code>. Argumentem polecenia <code>start</code> jest polecenie, które ma zostać wywołane. Pośród najpopularniejszych przełączników należy wymienić:</p>
+        <table class="noborder">
+          <tr><td><code>/min</code></td><td>uruchom nowe okno zminimalizowane</td></tr>
+          <tr><td><code>/low</code></td><td>uruchom program z najniższym priorytetem wykonania</td></tr>
+          <tr><td><code>/wait</code></td><td>wymuś zawieszenie polecenia <code>start</code> do czasu, gdy wywołane polecenie zakończy się</td></tr>
+        </table>
+        <p><b>Uwaga.</b> Polecenie <code>start</code> pozwala na podanie nazwy okna, w którym ma zostać uruchomione wskazane polecenie. Nazwa okna jest pierwszym argumentem i powinna być ujęta w cudzysłowy.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Porównaj efekty wykonania następujących poleceń w dowolnym katalogu:</p>
+        <pre><code class="no-highlight"><!--
+       -->> start dir
+<!--   -->> start "OKNO" dir
+<!--   -->> start /min dir
+<!--   -->> start /min "OKNO" dir
+<!--   -->> start /min /wait "OKNO" dir
+<!--   -->> start "OKNO" /min dir
+<!--   --></code></pre>
+      </div>
+
+      <p>Do zmiany nazwy bieżącego okna wiersza poleceń służy polecenie <code>title</code>. Przyjmuje ono jako argument ciąg znaków, który ma stanowić nową nazwę okna.</p>
+
+      <div class="exercise">
+        <p>Wykonaj następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> title ala
+<!--   -->> title ala ma kota
+<!--   -->> title "ala ma kota"
+<!--   --></code></pre>
+        <p>Jak zostało zinterpretowane trzecie polecenie? Czy możesz na tej podstawie wyciągnąć jakiś wniosek dotyczący tego, jak wiersz poleceń interpretuje argumenty ujęte w cudzysłowy?</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>W trzecim przypadku nazwa okna objęła także cudzysłowy. Wynika to z tego, że wiersz poleceń nie usuwa cudzysłowów w procesie przekazywania argumentów do programu.</p>
+        </div>
+      </div>
+
+      <div class="command">
+        <p>Istnieje bardziej rozbudowana wersja polecenia <code>copy</code> o nazwie <code>xcopy</code>. Jest to pierwsze polecenie zewnętrzne, które poznajemy na tych zajęciach. Ogólna składnia jest taka sama, jak w przypadku polecenia <code>copy</code>, jednak liczba przełączników jest o wiele większa. Najważniejsze z nich to:</p>
+        <table class="noborder">
+          <tr><td><code>/A</code></td><td>kopiuj tylko pliki z atrybutem <i>archiwalny</i></td></tr>
+          <tr><td><code>/M</code></td><td>kopiuj tylko pliki z atrybutem <i>archiwalny</i> i zdejmuje ten atrybut ze skopiowanych plików</td></tr>
+          <tr><td><code>/S</code></td><td>włącz możliwość kopiowania katalogów (z wyjątkiem pustych)</td></tr>
+          <tr><td><code>/E</code></td><td>włącz możliwość kopiowania katalogów (także pustych)</td></tr>
+          <tr><td><code>/V</code></td><td>włącz weryfikację poprawności przekopiowanych plików</td></tr>
+          <tr><td><code>/T</code></td><td>pozwala utworzyć w miejscu docelowym identyczną strukturę katalogów, jednak bez kopiowania plików</td></tr>
+          <tr><td><code>/U</code></td><td>kopiuj tylko te pliki, które już istnieją w katalogu docelowym</td></tr>
+          <tr><td><code>/K</code></td><td>kopiuj pliki wraz z ich atrybutami</td></tr>
+          <tr><td><code>/N</code></td><td>modyfikuje nazwy kopiowanych plików tak, by były postaci 8.3 (8 liter nazwy, trzy litery rozszerzenia)</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Utwórz plik <code>plik.txt</code> oraz katalog <code>katalog</code>, a następnie wykonaj następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->> xcopy plik.txt katalog
+<!--   -->> xcopy plik.txt katalog_nie_istnieje
+<!--   --></code></pre>
+        <p>Jak zachowuje się program <code>xcopy</code>, gdy element docelowy nie istnieje?</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Jeśli element docelowy nie istnieje, to program <code>xcopy</code> pyta, czy ma go interpretować jako nazwę pliku czy katalogu i postępuje zgodnie z udzieloną odpowiedzią.</p>
+        </div>
+      </div>
+
+      <h1>Operacje na procesach</h1>
 
       <div class="notice">
-        <p>W tym paragrafie będziemy korzystać z plików źródłowych dostępnych <a href="files/make.zip">tutaj</a>.</p>
+        <p>W tej części odwołujemy się do mechanizmów w systemie operacyjnym Windows 10. W&nbsp;starszych wersjach systemu niektóre rzeczy mogą wyglądać inaczej.</p>
       </div>
 
-      <p>Choć w przypadku prostych projektów, złożonych z jednego lub dwóch plików źródłowych, ręczne wywoływanie kompilatora nie stanowi problemu, to jednak w przypadku skomplikowanych aplikacji, złożonych już z kilku plików, może to być męczące i wymagające czasowo, szczególnie jeśli kompilacja poszczególnych części zajmuje dużo czasu. Chcielibyśmy bowiem uniknąć sytuacji, w której musimy niepotrzebnie kompilować pewne fragmenty kodu.</p>
-
-      <p>Na szczęście program <code>make</code> pozwala nam zautomatyzować proces kompilacji. Poszukuje on w bieżącym katalogu pliku o nazwie <code>makefile</code>, a następnie wykonuje zawarte w nim instrukcje. Jeśli chcemy, aby korzystano z innego pliku z instrukcjami, możemy wywołać program <code>make</code> z opcję <code>-f</code>.</p>
+      <p>Możliwości związane z zarządzaniem procesami w systemach z rodziny Windows nie są tak uporządkowane, jak w przypadku systemów uniksopodobnych. Nie mniej, systemy z rodziny Windows oferują dostęp do <i>menedżera zadań</i>, pozwalającego na podstawowe operacje na procesach. Aby uruchomić menedżer zadań, można:</p>
+      <ul>
+        <li>wcisnąć kombinację klawiszy <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Del</kbd> i wybrać odpowiednią opcję z otwartego w&nbsp;ten sposób okna (w niektórych konfiguracjach po wybraniu wskazanej kombinacji okno menedżera zadań uruchomi się od razu),</li>
+        <li>wcisnąć kombinację klawiszy <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd>,</li>
+        <li>uruchomić okno <i>Uruchamianie</i>, a następnie wprowadzić w nim polecenie <code>taskmgr</code>.</li>
+      </ul>
 
       <div class="exercise">
-        <p>Zapoznaj się z podręcznikiem programu <code>make</code>.</p>
+        <p>Uruchom menedżer zadań i zapoznaj się z zawartością dostępnych zakładek.</p>
       </div>
 
-      <p>W ogólności, plik <code>makefile</code> składa się z jednego lub wielu bloków postaci:</p>
-      <pre><code class="makefile"><!--
-     -->pliki docelowe: pliki zależne
-<!-- -->[tab] polecenie
-<!-- -->      ...
-<!-- --></code></pre>
-      <p>Jeśli nie stwierdzono inaczej, program <code>make</code> oprze swoje działanie na pierwszym bloku w pliku <code>makefile</code>.</p>
+      <p>Informacje o uruchomionych procesach dostępne są na zakładce <i>Szczegóły</i>. Tam też można wykonywać proste operacje na procesach.</p>
 
       <div class="exercise">
-        <p>Utwórz w katalogu z projektem plik <code>makefile</code>, o treści:</p>
-        <pre><code class="makefile"><!--
-       -->program:
-<!--   -->&Tab;gcc main.c hello.c silnia.c -o program
-<!--   --></code></pre>
-        <p>a następnie wykonaj polecenie</p>
-        <pre><code class="no-highlight">$ make</code></pre>
-        <p>Zapoznaj się z efektami.</p>
+        <p>Korzystając z opcji dostępnych w menu kontekstwoym dostępnym po kliknięciu prawym przyciskiem myszy na wybranym procesie na zakładce <i>Szczegóły</i>:</p>
+        <ul>
+          <li>zakończ wybrany proces (dla bezpieczeństwa zakończ np. proces wiersza poleceń),</li>
+          <li>ustaw koligację wybranego procesu (co to znaczy?),</li>
+          <li>zmień priorytet wybranego procesu,</li>
+          <li>utwórz plik zrzutu wybranego procesu.</li>
+        </ul>
       </div>
 
-      <p>Zawartość pliku docelowego może zależeć od innych plików. W naszym przykładzie, zawartość pliku obiektu <code>main.o</code>, tworzonego w procesie assemblacji, zależy od plików <code>main.c</code> oraz <code>funkcje.h</code>. Jeśli czas modyfikacji któregokolwiek z tych plików będzie nowszy niż czas utworzenia pliku <code>main.o</code>, konieczne jest ponowne wygenerowanie tego ostatniego. Jeśli jednak plik <code>main.o</code> jest nowszy niż wszystkie pliki, od których zależy, nie trzeba go ponownie tworzyć. Dzięki temu można oszczędzić zasoby procesora. Efekt procesu linkowania, równoważny poleceniu</p>
-      <pre><code class="no-highlight">$ gcc main.o hello.o silnia.o -o program</code></pre>
-      <p>zależy z kolei od plików obiektów <code>main.o</code>, <code>hello.o</code> oraz <code>silnia.o</code>. Jeśli któryś z nich jest nowszy niż plik <code>program</code>, należy wykonać proces linkowania. W przeciwnym przypadku jest to zbędne. To rozumowanie przedstawia ogólną zasadę działania programu <code>make</code>.</p>
+      <div class="titbit titbit-star-star">
+        <p>Firma Microsoft udostępnia dodatkowe (o wiele bardziej rozbudowane) narzędzie do zarządzania procesami, nazwane <i>Process monitor</i>, dostępne na stronie internetowej <a href="https://technet.microsoft.com/en-us/sysinternals/processmonitor.aspx">https://technet.microsoft.com/en-us/sysinternals/processmonitor.aspx</a>.</p>
+      </div>
 
-      <p>Jeśli w danym bloku pliku <code>makefile</code> zdefiniowane są pliki zależne, muszą one istnieć zanim wykonane zostaną instrukcje z bloku. Może się też zdarzyć, że w wyniku działania innego bloku ich data modyfikacji uległaby zmianie. Dlatego też program <code>make</code> poszukuje w pliku <code>makefile</code> bloków, których wykonanie może mieć wpływ na zawartość plików zależnych i wykonuje te bloki najpierw. Bloki te z kolei mogą zależeć od innych plików, na który wpływ mogą mieć instrukcje w innych blokach itd. Tak oto powstaje drzewo zależności, które jest wpierw konstruowane, a następnie wykonywane od liści do korzenia.</p>
+      <h1>Polecenia związane z operacjami na plikach tekstowych</h1>
+
+      <p>Silną stroną systemów uniksopodobnych jest rozbudowana biblioteka narzędzi umożliwiających operowanie na standardowym wejściu oraz na plikach. Wiersz poleceń systemu Windows także udostępnia narzędzia służące temu celowi.</p>
+
+      <div class="command">
+        <p>Windowsowym odpowiednikiem programu <code>cat</code> jest polecenie wewnętrzne <code>type</code>. Wypisuje ono na standardowym wyjściu zawartość wskazanych plików.</p>
+      </div>
 
       <div class="exercise">
-        <p>Zmodyfikuj plik <code>makefile</code> z poprzedniego ćwiczenia tak, aby był postaci:</p>
-        <pre><code class="makefile"><!--
-        -->program: main.o hello.o silnia.o
-<!--    -->&Tab;gcc main.o hello.o silnia.o -o program
-<!--    -->
-<!--    -->main.o: main.c funkcje.h
-<!--    -->&Tab;gcc -c main.c
-<!--    -->
-<!--    -->hello.o: hello.c
-<!--    -->&Tab;gcc -c hello.c
-<!--    -->
-<!--    -->silnia.o: silnia.c
-<!--    -->&Tab;gcc -c silnia.c
-<!--    -->
-<!--    -->clean:
-<!--    -->&Tab;-rm *.o program
-<!--    --></code></pre>
-        <p>Następnie odwołaj się do instrukcji w odpowiednich blokach pliku <code>makefile</code>, wykonując polecenia:</p>
+        <p>Przetestuj działanie programu <code>type</code>. Czy, podobnie jak <code>cat</code>, pozwala ono wywołać się z wieloma argumentami? Jak się wtedy zachowuje?</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Tak, program <code>type</code> można wywołać z wieloma argumentami, ale wówczas rozdziela on zawartość kolejnych plików ich nazwą.</p>
+        </div>
+      </div>
+
+      <div class="command">
+        <p>Do porównywania plików służy polecenie zewnętrzne <code>fc</code> (ang. <i>file compare</i>). Przyjmuje ono jako argumenty nazwy plików, które mają zostać porównane. Wśród najważniejszych przełączników należy wymienić:</p>
+        <table class="noborder">
+          <tr><td><code>/B</code></td><td>porównywanie binarne</td></tr>
+          <tr><td><code>/C</code></td><td>ignoruj różnice w wielkości liter</td></tr>
+          <tr><td><code>/U</code></td><td>porównuj pliki z kodowaniem unicode</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Dowiedz się, gdzie znajduje się program <code>fc.exe</code>.</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <pre><code class="no-highlight">C:\Windows\System32\fc.exe</code></pre>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <p>Przetestuj działanie polecenia <code>fc</code>.</p>
+      </div>
+
+      <div class="command">
+        <p>Pewnym prymitywnym odpowiednikiem uniksowego programu <code>grep</code> jest program <code>find</code>, który wypisuje na wyjściu tylko te wiersze ze standardowego wejścia, które zawierają wskazany jako argument ciąg znaków ujęty w cudzysłowy. Najważniejsze przełączniki to:</p>
+        <table class="noborder">
+          <tr><td><code>/V</code></td><td>wypisz te wiersze, które <i>nie</i> pasują do wzorca</td></tr>
+          <tr><td><code>/N</code></td><td>wyświetlaj numery wierszy</td></tr>
+          <tr><td><code>/I</code></td><td>ignoruj różnice w wielkości liter</td></tr>
+          <tr><td><code>/C</code></td><td>wypisz liczbę wierszy pasujących do wzorca</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Wykonaj następujące polecenia:</p>
         <pre><code class="no-highlight"><!--
-        -->$ make hello.o
-<!--    -->$ make hello.o
-<!--    -->$ make
-<!--    -->$ make clean
-<!--    --></code></pre>
-        <p>Zapoznaj się z efektami. Skąd program <code>make</code> wie, że (wraz z wywołaniem drugiego i trzeciego polecenia) nie trzeba ponownie wykonywać instrukcji w bloku generującym plik <code>hello.o</code>? Za co odpowiada symbol łącznika przed poleceniem <code>rm</code> w bloku <code>clean</code>? Dlaczego utworzyliśmy blok <code>clean</code>, mimo że w wyniku poleceń w jego wnętrzu nie jest tworzony żaden plik o takiej nazwie?</p>
-      </div>
-
-      <div class="exercise">
-        <p>Wykonaj dwukrotnie polecenie</p>
-        <pre><code class="no-highlight">$ make program</code></pre>
-        <p>Następnie zmień nieznacznie treść pliku <code>hello.c</code>, by w końcu wykonać ponownie polecenie</p>
-        <pre><code class="no-highlight">$ make program</code></pre>
-        <p>Jak zachował się program <code>make</code>? Narysuj drzewo zależności dla bloku <code>program</code> i prześledź sposób <i>myślenia</i> programu, aby wyjaśnić to zachowanie.</p>
-      </div>
-
-      <h1>Funkcje systemowe w języku ANSI C</h1>
-
-      <div class="howitworks">
-        <p>Wraz ze standaryzacją języka C (standard ANSI C) powstała specyfikacja dynamicznej biblioteki standardowej języka C (zwanej <i>ISO C Library</i>), której zadaniem jest udostępnianie programistom pewnych funkcji (takich jak np. <code>printf</code>). Jasne określenie, jakie funkcje mają być dostępne dla programistów, jak mogą być wywoływane i jakie wartości mają zwracać, pozwala tworzyć łatwo przenośne programy. Nie jest jednak zaskoczeniem, że implementacja funkcji z biblioteki standardowej różni się pomiędzy systemami operacyjnymi &ndash; korzystają one bowiem z różnych niskopoziomowych funkcji, udostępnianych przez jądro systemu (wywoływanych przez tak zwane <i>system calls</i> lub <i>kernel calls</i>).</p>
-
-        <p>Równolegle do standardu ANSI C wprowadzono standard POSIX, który określa funkcje udostępniane przez bibliotekę standardową C (zwaną <i>POSIX C Library</i>) w systemach zgodnych z tym standardem. Tę wersję będziemy nazywać krótko <code>libc</code> i to na niej będziemy opierać się na tych zajęciach.</p>
-
-        <p>Biblioteka <code>libc</code> udostępnia generyczną funkcję <code>syscall</code>, zadeklarowaną w nagłówku <code>unisys.h</code>,<sup>[1]</sup> umożliwiającą bezpośrednie odwołania do jądra systemu.<sup>[2]</sup> Udostępnia ona dodatkowo interfejsy do odwołań systemowych, ułatwiające korzystanie z nich. W ramach tych zajęć będziemy korzystać z tych interfejsów, nazywając je dla ułatwienia <i>funkcjami systemowymi</i>.</p>
-
-        <div class="exercise">
-          <p>Dowiedz się, jakie pliki nagłówkowe są związane z biblioteką standardową ISO C, a jakie z biblioteką standardową POSIX C. Odnajdź kody źródłowe nagłówków <code>stdio.h</code>, <code>unisys.h</code> oraz <code>fcntl.h</code> i dowiedz się, jakie funkcje są zadeklarowane w każdym z nich.</p>
-        </div>
-
-        <p class="footnote">[1] Funkcje zdefiniowane w bibliotece standardowej są zadeklarowane w licznych nagłówkach, podzielonych tematycznie.</p>
-        <p class="footnote">[2] Lista możliwych odwołań dla jądra systemu Linux jest dostępna na przykład na stronie <a href="http://docs.cs.up.ac.za/programming/asm/derick_tut/syscalls.html">http://docs.cs.up.ac.za/programming/asm/derick_tut/syscalls.html</a>, a stałe odpowiadające wartościom liczbowym dla poszczególnych odwołań zadeklarowane są zawsze w nagłówku <code>sys/syscall.h</code>.</p>
-      </div>
-
-      <div class="titbit titbit-star">
-        <p>W systemach z rodziny Linux oraz FreeBSD biblioteka matematyczna, definiująca funkcje zadeklarowane w nagłówku <code>math.h</code>, jest dostarczana osobno jako <code>libm</code>. W wielu innych systemach funkcje matematyczne są częścią biblioteki standardowej <code>libc</code>.</p>
-      </div>
-
-      <h2>Obsługa plików</h2>
-
-      <p>Do obsługi plików możemy wykorzystać funkcje systemowe <code>open</code>, <code>creat</code>,  <code>close</code>, <code>read</code>, <code>write</code> oraz  <code>lseek</code>. Pierwsze dwie zadeklarowano w nagłówku <code>fcntl.h</code>, pozostałe zaś w nagłówku <code>unistd.h</code>.</p>
-
-      <div class="exercise">
-        <p>Korzystając z poleceń</p>
-        <pre><code class="no-highlight"><!--
-       -->$ man 2 read
-<!--   -->$ man 2 write
+       -->> dir | find /i "ab"
+<!--   -->> type C:\Windows\system.ini | find [
+<!--   -->> type C:\Windows\system.ini | find "["
 <!--   --></code></pre>
-        <p>zapoznaj się z konstrukcją funkcji <code>read</code> i <code>write</code>? Jakie przyjmują argumenty? Jakie wartości zwracają?</p>
+        <p>Skąd kojarzysz symbol <code>|</code>? Czy jego interpretacja w wierszu poleceń systemu Windows jest taka sama jak w systemach uniksopodobnych?</p>
+      </div>
+
+      <div class="command">
+        <p>Do sortowania wierszy standardowego wejścia służy polecenie zewnętrzne <code>sort</code>. Przyjmuje ono następujące przełączniki:</p>
+        <table class="noborder">
+          <tr><td><code>/+n</code></td><td>ignoruj pierwszych n-1 znaków w każdej linii</td></tr>
+          <tr><td><code>/R</code></td><td>odwróć porządek sortowania</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Posortuj zawartość katalogu <code>C:\Windows</code> według godziny ostatniej modyfikacji. Nie przejmuj się nagłówkami.</p>
 
         <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
 
         <div class="answer">
-          <p>Obie funkcje przyjmują za argumenty, kolejno, numer deskryptora, wskaźnik i rozmiar danych oraz zwracają rozmiar odczytanych/zapisanych danych.</p>
+          <pre><code class="no-highlight">dir C:\Windows | sort /+13</code></pre>
+        </div>
+      </div>
+
+      <div class="command">
+        <p>Windowsowym odpowiednikiem uniksowego programu <code>more</code> jest program o takiej samej nazwie. Dzieli on standardowe wejście na strony, umożliwiając ich przeglądanie. Najpopularniejsze przełączniki to:</p>
+        <table class="noborder">
+          <tr><td><code>/C</code></td><td>wyczyść ekran przed wyświetleniem pierwszej strony tekstu</td></tr>
+          <tr><td><code>/S</code></td><td>połącz sąsiednie puste wiersze w jeden</td></tr>
+        </table>
+      </div>
+
+      <div class="exercise">
+        <p>Korzystając z programu <code>more</code>, przejrzyj zawartość dowolnego pliku. Czy program <code>more</code> przyjmuje jakieś argumenty?</p>
+      </div>
+
+      <h1>Kilka poleceń związanych z obsługą sieci (i nie tylko)</h1>
+
+      <div class="command">
+        <p>Program <code>ipconfig</code> pozwala (w pewnym ograniczonym zakresie) zarządzać interfejsami sieciowymi komputera oraz wyświetlać informacje o ich statusach.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Zapoznaj się z pomocą programu <code>ipconfig</code>. Jakie operacje można wykonać za jego pomocą? Zwróć uwagę na fakt, że dostęp do pomocy nie jest możliwy z wykorzystaniem polecenia <code>help</code>. Skorzystaj więc z drugiej poznanej metody dostępu do niej.</p>
+      </div>
+
+      <div class="command">
+        <p>Program <code>ping</code> pozwala wysłać do zdalnego hosta żądanie <code>ECHO_REQUEST</code> w ramach protokołu <code>ICMP</code>. Przydatne opcje:</p>
+        <table class="noborder">
+          <tr><td><code>-t</code></td><td>wyślij nieskończenie wiele żądań</td></tr>
+          <tr><td><code>-n X</code></td><td>wyślij <code>X</code> żądań</td></tr>
+          <tr><td><code>-i X</code></td><td>ustaw wartość pola TTL na <code>X</code></td></tr>
+          <tr><td><code>-w X</code></td><td>ustaw odstęp pomiędzy kolejnymi żądaniami na <code>X</code> milisekund</td></tr>
+          <tr><td><code>-4</code></td><td>wymuś korzystanie z protokołu IP w wersji 4</td></tr>
+          <tr><td><code>-6</code></td><td>wymuś korzystanie z protokołu IP w wersji 6</td></tr>
+        </table>
+        <div class="notice">
+          <p>Zwróć uwagę, że program <code>ping</code> oczekuje opcji poprzedzonych znakiem łącznika.</p>
         </div>
       </div>
 
       <div class="exercise">
-        <p>Zapoznaj się z poniższym kodem źródłowym:</p>
-        <pre><code class="c"><!--
-       -->#include &lt;unistd.h&gt;
-<!--   -->
-<!--   -->#define BUFSIZ 128
-<!--   -->
-<!--   -->int main(){
-<!--   -->    char buf[BUFSIZ];
-<!--   -->    int n;
-<!--   -->
-<!--   -->    while ((n = read(0, buf, BUFSIZ)) > 0)
-<!--   -->        write(1, buf, n);
-<!--   -->    return 0;
-<!--   -->}
+        <p>Wyślij do wybranego serwera 10 żądań <code>ECHO_REQUEST</code> w odstępach 2-sekundowych.</p>
+      </div>
+
+      <div class="command">
+        <p>Program <code>net</code> to, wbrew pozorom, nie jest narzędzie do zarządzania siecią. Pozwala ono na kompleksowe zarządzanie systemem operacyjnym Windows, w tym na zarządzanie użytkownikami, grupami, uprawnieniami do plików, podstawowymi zasadami bezpieczeństwa itp.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Korzystając z progresywnej pomocy programu <code>net</code>, dowiedz się, jakie możliwości daje ten program. W tym celu możesz wykonać polecenia:</p>
+        <pre><code class="cmd"><!--
+       -->> net /?
+<!--   -->> net accounts /?
+<!--   -->> net computer /?
 <!--   --></code></pre>
-        <p>Co robi ten program? Przeanalizuj jego kod linia po linii. Czy znasz program, który zachowuje się podobnie?</p>
+        <p>Czy ta pomoc jest przydatna?</p>
       </div>
 
       <div class="exercise">
-        <p>Zapoznaj się z konstrukcją funkcji <code>creat</code>, <code>open</code>, <code>lseek</code> oraz <code>close</code>. Jakie nagłówki są niezbędne do tego, aby skorzystać z każdej z nich?</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <p>Funkcje <code>open</code> i <code>creat</code> wymagają nagłówków <code>sys/types.h</code>, <code>sys/stat.h</code> oraz <code>fcntl.h</code>, <code>close</code> nagłówka <code>unistd.h</code>, a <code>lseek</code> nagłówków <code>sys/types.h</code> oraz <code>unistd.h</code>.</p>
-        </div>
-      </div>
-
-      <p>Funkcja <code>creat</code> zwraca deskryptor utworzonego pliku lub -1, jeśli tworzenie pliku zakończyło się niepowodzeniem. Jako argumenty przyjmuje ścieżkę do pliku i wartość typu <code>mode_t</code>, określającą parametry trybu. Tę ostatnią tworzy się wykorzystując sumę logiczną stałych (flag) zdefiniowanych w pliku nagłówkowym <code>sys/stat.h</code>.</p>
-
-      <div class="exercise">
-        <p>Korzystając z podręcznika funkcji <code>creat</code>, zapoznaj się z flagami trybu (o nazwach rozpoczynających się od <code>S_</code>). Następnie zinterpretuj poniższe wywołania funkcji <code>creat</code>:</p>
-        <ul>
-          <li><code>int f = creat("plik.txt", S_IRUSR | S_IRGRP);</code></li>
-          <li><code>int f = creat("plik.txt", S_IRWXU | S_IRUSR);</code></li>
-          <li><code>int f = creat("plik.txt", (mode_t) 0644);</code></li>
-          <li><code>int f = creat("plik.txt", 0644);</code></li>
-        </ul>
-        <p>Jak działa operator <code>|</code>? Czy w którymś przypadku flagi się pokrywają (tzn. pominięcie którejś nie wpłynie na wartość sumy logicznej)? Dlaczego trzecie i czwarte wywołanie są równoważne? Czy pominięcie wiodącego zera wpłynie na interpretację wartości? Dlaczego?</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <p>Trzecie i czwarte wywołania są równoważne, bo rzutowanie typu i tak się odbywa. Wiodące zero jest niezbędne, bowiem wskazuje wyraźnie na to, że liczba jest zapisana w postaci ósemkowej, a nie dziesiętnej.</p>
-        </div>
-      </div>
-
-      <div class="exercise">
-        <p>Określ, jak zostanie zinterpretowany ostatni argument wywołania funkcji <code>creat</code>, jeśli napiszemy</p>
-        <pre><code class="c">int f = creat("plik.txt", 420);</code></pre>
-        <p>Dlaczego?</p>
-      </div>
-
-      <div class="exercise">
-        <p>Czy wartość maski uprawnień, określonej za pomocą polecenia <code>umask</code>, ma wpływ na uprawnienia do tworzonych plików?</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <p>Tak, uprawnienia określone jako argument są filtrowane przez dopełnienie maski.</p>
-        </div>
-      </div>
-
-      <p>Funkcja <code>open</code> zwraca deskryptor otwartego pliku lub -1, jeśli pliku nie udało się otworzyć. Jako argumenty przyjmuje ścieżkę do pliku, flagi związane z obsługą pliku i (opcjonalnie) argument związany z trybem dostępu do pliku. Podobnie jak w przypadku trybu, flagi związane z obsługą pliku konstruuje się jako sumę logiczną stałych (flag) zdefiniowanych w pliku nagłówkowym <code>fcntl.h</code>.</p>
-
-      <div class="exercise">
-        <p>Korzystając z podręcznika funkcji <code>open</code>, zapoznaj się z następującymi flagami (o nazwach rozpoczynających się od <code>O_</code>), związanymi z obsługą pliku:</p>
-        <ul>
-          <li><code>O_CREAT</code>,</li>
-          <li><code>O_APPEND</code>,</li>
-          <li><code>O_RDONLY</code>,</li>
-          <li><code>O_RDWR</code>,</li>
-          <li><code>O_WRONLY</code>.</li>
-        </ul>
-        <p>Następnie zinterpretuj poniższe wywołania funkcji <code>open</code>:</p>
-        <ul>
-          <li><code>int f = open("plik.txt", O_RDWR);</code></li>
-          <li><code>int f = open("plik.txt", O_WRONLY | O_APPEND);</code></li>
-          <li><code>int f = open("plik.txt", O_RDWR | O_CREAT, S_IRUSR | S_IRGRP);</code></li>
-          <li><code>int f = open("plik.txt", O_RDONLY | O_CREAT, 0644);</code></li>
-        </ul>
-        <p>Kiedy wartość trzeciego argumentu jest brana pod uwagę?</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <p>Trzeci argument jest brany pod uwagę w chwili tworzenia pliku, to znaczy wtedy, gdy przekazana jako drugi argument wartość wskazuje na wykorzystanie flagi <code>O_CREAT</code>.</p>
-        </div>
-      </div>
-
-      <div class="exercise">
-        <p>Utwórz plik o nazwie <code>plik.txt</code> i zawartości równej <code>xxxxxxxxxx</code> (10 razy <code>x</code>). Następnie skompiluj i uruchom następujący program:</p>
-        <pre><code class="c"><!--
-       -->#include &lt;sys/types.h&gt;
-<!--   -->#include &lt;sys/stat.h&gt;
-<!--   -->#include &lt;fcntl.h&gt;
-<!--   -->#include &lt;unistd.h&gt;
-<!--   -->
-<!--   -->#define BUFSIZ 5
-<!--   -->
-<!--   -->int main(){
-<!--   -->    char t[BUFSIZ];
-<!--   -->    int f = open("plik.txt", O_RDWR);
-<!--   -->    read(f, t, BUFSIZ);
-<!--   -->    write(f, "X", 1);
-<!--   -->    return 0;
-<!--   -->}
-<!--   --></code></pre>
-        <p>Jak wygląda zawartość pliku <code>plik.txt</code> po jego wykonaniu?</p>
-      </div>
-
-      <p>Do poruszania się wewnątrz pliku służy funkcja <code>lseek</code>. Przyjmuje ona trzy argumenty: deskryptor pliku, dodatnią lub ujemną wartość przesunięcia (w bajtach, typu <code>off_t</code>) oraz jeden z warunków przesunięcia &ndash; <code>SEEK_SET</code> (przesunięcie względem początku pliku), <code>SEEK_CUR</code> (przesunięcie względem bieżącej pozycji w pliku) lub <code>SEEK_END</code> (przesunięcie względem końca pliku).</p>
-
-      <div class="exercise exercise-star">
-        <p>Dowiedz się, jak na działanie funkcji <code>lseek</code> wpływają warunki przesunięcia <code>SEEK_DATA</code> oraz <code>SEEK_HOLE</code>.</p>
-      </div>
-
-      <p>Ostatnią z prezentowanych funkcji jest <code>close</code>. Przyjmuje ona jeden argument &ndash; deskryptor pliku, który chcemy zamknąć. Jeśli operacja zakończy się powodzeniem, zwracana jest wartość 0.</p>
-
-      <div class="howitworks">
-        <p>System operacyjny dba o to, aby programy nie nadwyrężały komunikacji z plikami. Dlatego też liczba kanałów komunikacji z plikami, z których może jednocześnie korzystać program jest ograniczona. To dobry powód, aby zamykać pliki, z których nie będzie się już korzystać.</p>
-      </div>
-
-      <div class="exercise">
-        <p>Zapoznaj się z zawartością pliku źródłowego <code>cp.c</code>, dostępnego <a href="files/cp.c">tutaj</a>. Przeanalizuj, w jaki sposób wykorzystane są w nim funkcje systemowe, skompiluj go, a następnie wypróbuj. Jak działa funkcja <code>perror</code>?</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <p><i>The perror() function produces a message on standard error describing
-                 the last error encountered during a call to a system or library
-                 function.</i></p>
-        </div>
-      </div>
-
-      <div class="exercise">
-        <p>Napisz program, który wypisuje na ekranie zawartość plików, których nazwy wskazano jako argumenty. Jeśli odczytanie pliku nie jest możliwe, należy wyświetlić odpowiedni błąd.</p>
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <pre><code class="c"><!--
-         -->#include &lt;sys/types.h&gt;
-<!--     -->#include &lt;sys/stat.h&gt;
-<!--     -->#include &lt;fcntl.h&gt;
-<!--     -->#include &lt;unistd.h&gt;
-<!--     -->#include &lt;errno.h&gt;
-<!--     -->
-<!--     -->#define BUFSIZ 128
-<!--     -->
-<!--     -->int main(int argc, char *argv[]){
-<!--     -->    char buf[BUFSIZ];
-<!--     -->    int f,i,n;
-<!--     -->
-<!--     -->    for(i=1; i&lt;argc; i++){
-<!--     -->        if((f = open(argv[i], O_RDONLY)) &gt; 0){
-<!--     -->            while ((n = read(f, buf, BUFSIZ)) &gt; 0)
-<!--     -->                write(1, buf, n);
-<!--     -->            close(f);
-<!--     -->        } else {
-<!--     -->            perror(argv[i]);
-<!--     -->        }
-<!--     -->    }
-<!--     -->    return 0;
-<!--     -->}
-<!--     --></code></pre>
-        </div>
-      </div>
-
-      <h2>Struktura procesów</h2>
-
-      <p>Z wcześniejszych zajęć pamiętamy, że jedną z charakterystycznych cech systemów uniksopodobnych jest hierarchiczna struktura procesów. Fakt, że procesy tworzą strukturę drzewa sprawia, że każdy z nich nie tylko identyfikuje się jednoznacznie wartością PID, ale także (z&nbsp;wyjątkiem procesu <code>init</code>) ma dokładnie jednego rodzica.</p>
-
-      <p>W nagłówku <code>unistd.h</code> zadeklarowane są funkcje <code>getpid</code> oraz <code>getppid</code>, obie typu <code>pid_t</code> zdefiniowanego w nagłówku <code>sys/types.h</code>. Zwracają one, odpowiednio, identyfikator bieżącego procesu i jego rodzica.</p>
-
-      <div class="exercise">
-        <p>Przeanalizuj następujący kod źródłowy:</p>
-        <pre><code class="c"><!--
-       -->#include &lt;sys/types.h&gt;
-<!--   -->#include &lt;unistd.h&gt;
-<!--   -->#include &lt;stdio.h&gt;
-<!--   -->
-<!--   -->int main(){
-<!--   -->    printf("PID: %d, PPID: %d\n", getpid(), getppid());
-<!--   -->    return 0;
-<!--   -->}
-<!--   --></code></pre>
-        <p>Co robi ten program? Sprawdź, jak zmieni się efekt jego działania z każdym kolejnym jego uruchomieniem. Jaki proces jest związany z wartością zwracaną przez funkcję <code>getppid</code>?</p>
-      </div>
-
-      <p>Do duplikowania procesu służy funkcja <code>fork</code> zadeklarowana w nagłówku <code>unistd.h</code>. Tworzy ona dokładną kopię procesu (wraz ze wszystkimi zmiennymi, zarówno lokalnymi jak i globalnymi), umieszcza go w hierarchii procesów w pozycji dziecka procesu wywołującego, a następnie w obu instancjach zwraca wartość: w procesie macierzystym PID nowego procesu-dziecka, a w utworzonym procesie wartość zero. Jeśli proces duplikacji zakończy się niepowodzeniem, funkcja <code>fork</code> zwróci wartość ujemną.</p>
-
-      <div class="exercise">
-        <p>Przeanalizuj następujący kod źródłowy:</p>
-        <pre><code class="c"><!--
-       -->#include &lt;sys/types.h&gt;
-<!--   -->#include &lt;unistd.h&gt;
-<!--   -->#include &lt;stdio.h&gt;
-<!--   -->
-<!--   -->int main(){
-<!--   -->    int pid;
-<!--   -->
-<!--   -->    if((pid = fork()) >= 0){
-<!--   -->        if(pid == 0){
-<!--   -->            printf("Dziecko - PPID: %d\n", PID: %d,
-<!--   -->                   getppid(), getpid());
-<!--   -->        } else {
-<!--   -->            printf("Rodzic - PPID: %d, PID: %d, CPID: %d\n",
-<!--   -->                   getppid(), getpid(), pid);
-<!--   -->        }
-<!--   -->    } else {
-<!--   -->        perror("fork");
-<!--   -->    }
-<!--   -->
-<!--   -->    return 0;
-<!--   -->}
-<!--   --></code></pre>
-        <p>Co robi ten program? Przetestuj jego działanie.</p>
-      </div>
-
-      <div class="exercise">
-        <p>Korzystając z zasobów internetu, dowiedz się, jakie mogą być praktyczne zastosowania funkcji <code>fork</code>.<sup>[1]</sup></p>
-        <p class="footnote">Jeśli jesteś leniwy, wejdź po prostu na stronę <a href="http://stackoverflow.com/questions/985051/what-is-the-purpose-of-fork">http://stackoverflow.com/questions/985051/what-is-the-purpose-of-fork</a>.</p>
-      </div>
-
-      <div class="exercise exercise-star-star">
-        <p>Co by się stało, gdyby proces rodzica zakończył się przed procesem dziecka? Czy wówczas proces potomny zostałby automatycznie unicestwiony? Jeśli nie, to jaki byłby wówczas identyfikator jego rodzica? Dowiedz się, czym jest (w rozumieniu procesów) sierota i jak tworzy się procesy demonów.</p>
+        <p>Korzystając z zasobów udostępnianych w internecie przez firmę Microsoft, zapoznaj się z dokładnym opisem działania poszczególnych poleceń z grupy <code>net</code>.</p>
       </div>
 
     </article>
 
     <footer id="main-footer">
         <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
-        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+        <p>&copy; 2016&ndash2017 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
     </footer>
 </div>
 

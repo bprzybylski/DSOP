@@ -14,13 +14,15 @@
     <script type="text/javascript" src="js/html5.js"></script>
     <![endif]-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
     <script>
       MathJax.Hub.Config({
         tex2jax: {
           inlineMath: [['$','$'], ['\\(','\\)']],
-          processEscapes: true
-        }
+          processEscapes: true,
+          delayStartupUntil: onload
+        },
+        TeX: { equationNumbers: {autoNumber: "AMS"} }
       });
     </script>
     <script type="text/javascript" src="js/js.js"></script>
@@ -38,297 +40,215 @@
 
     <article id="cw06">
 
-      <h1>Ćwiczenia</h1>
-
-      <div class="exercise">
-        <p>Napisz skrypt, który wypisze przekazane argumenty w odwrotnej kolejności.</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <pre><code class="bash"><!--
-         -->#!/bin/bash
-<!--     -->
-<!--     -->if [ $# -eq 0 ]; then exit 1; fi
-<!--     -->
-<!--     -->for ((i=$#;i>0;i--))
-<!--     -->do
-<!--     -->    eval echo -n "\$$i "
-<!--     -->done
-<!--     -->
-<!--     -->echo
-<!--     --></code></pre>
-          <pre><code class="bash"><!--
-         -->#!/bin/bash
-<!--     -->
-<!--     -->if [ $# -eq 0 ]; then exit 1; fi
-<!--     -->
-<!--     -->for i in `eval echo {$#..1}`
-<!--     -->do
-<!--     -->    eval echo -n "\$$i "
-<!--     -->done
-<!--     -->
-<!--     -->echo
-<!--     --></code></pre>
-          <pre><code class="bash"><!--
-         -->#!/bin/bash
-<!--     -->
-<!--     -->if [ $# -eq 0 ]; then exit 1; fi
-<!--     -->
-<!--     -->while [ $# -ge 1 ]
-<!--     -->do
-<!--     -->    wynik="$1 $wynik"
-<!--     -->    shift
-<!--     -->done
-<!--     -->
-<!--     -->echo $wynik
-<!--     --></code></pre>
-        </div>
+      <div class="notice">
+        <p>Materiał do tych i kolejnych ćwiczeń zakłada, że umiesz swobodnie pisać programy w języku ANSI C. Jeśli nie czujesz się w tym zbyt pewnie, powtórz sobie materiał z zajęć z <i>Podstaw programowania</i> lub poczytaj literaturę we własnym zakresie.</p>
       </div>
 
-      <div class="exercise">
-        <p>W katalogu <a href="http://bprzybylski.github.io/DSOP/files/suma">http://bprzybylski.github.io/DSOP/files/suma</a> znajduje się 100 plików o nazwach od <code>001.txt</code> do <code>100.txt</code>, zawierających po jednej liczbie z przedziału od 0 do 100. Napisz skrypt, który wypisze sumę liczb z tych plików. Aby pobrać zawartość pliku ze zdalnego serwera, wykorzystaj program <code>curl</code>.</p>
+      <h1>Proces kompilacji programu w języku C</h1>
 
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <pre><code class="bash"><!--
-         -->#!/bin/bash
-<!--     -->
-<!--     -->suma=0
-<!--     -->
-<!--     -->for i in {001..100}.txt
-<!--     -->do
-<!--     -->    k=`curl http://bprzybylski.github.io/dsop/files/suma/$i 2> /dev/null`
-<!--     -->    suma=$((suma+k))
-<!--     -->done
-<!--     -->echo $suma
-<!--     --></code></pre>
-          <div class="notice">
-            <p>Ten skrypt będzie się wykonywał bardzo długo. Pobranie stu plików wymaga dużo komunikacji między serwerem a klientem, nawet jeśli pliki nie są zbyt duże.</p>
-          </div>
-        </div>
+      <div class="howitworks">
+        <p>Proces kompilacji programu w języku C składa się zwykle z czterech etapów:<sup>[1]</sup>
+        <ol>
+          <li><b>Prekompilacja</b> (preprocessing). W czasie tego etapu przetwarzane są instrukcje preprocesora związane z dołączaniem plików, kompilacją warunkową czy makrami.</li>
+          <li><b>Kompilacja</b> (compilation). W czasie tego etapu kod przetworzony przez preprocesor jest przekształcany na kod źródłowy w języku assemblera.</li>
+          <li><b>Assemblacja</b> (assembly). W czasie tego etapu tworzone są pliki obiektów, zbudowane z przetworzonego na język maszynowy kodu assemblera.</li>
+          <li><b>Linkowanie/konsolidacja</b> (linking). W czasie tego etapu pliki obiektów i bibliotek łączone są tak, że powstaje jeden wykonywalny plik, w którym odwołania do elementów zdefiniowanych w innych plikach obiektów mogą być realizowane.</li>
+        </ol>
+        <p>W praktyce, wiele funkcji jest wspólnych dla różnych programów (rozważmy chociażby funkcję <code>printf</code> z biblioteki standardowej). Na szczęście współczesne systemy dobrze radzą sobie z tzw. <i>dynamicznym linkowaniem</i>, którego idea polega na tym, że niektóre obiekty nie są dołączane do programu w procesie konsolidacji (<i>statyczne linkowanie</i>), lecz dopiero w czasie jego uruchamiania.</p>
+        <p class="footnote">[1] Zwięzłe, ale szczegółowe wyjaśnienie zagadnień związanych z kompilacją można znaleźć choćby na stronie <a href="http://www.tenouk.com/ModuleW.html">http://www.tenouk.com/ModuleW.html</a>.</p>
       </div>
 
+      <p>W przeszłości do kompilowania programów w języku C wykorzystywano uniksowy kompilator języka C o nazwie <code>cc</code>. Dziś jednak o wiele większą popularność zdobywa pakiet <code>gcc</code> (ang. <i>GNU Compiler Collection</i>), umożliwiający kompilację programów w różnych językach. Z niego będziemy korzystać w czasie tych i kolejnych ćwiczeń. Okazuje się, że w większości instalacji systemu GNU/Linux polecenia <code>cc</code> i <code>gcc</code> odwołują się do tego samego programu. Warto jednak zdawać sobie sprawę z historii polecenia <code>cc</code>.</p>
+
       <div class="exercise">
-        <p>Napisz skrypt, który przyjmuje jako argumenty rozszerzenie źródłowe i docelowe, a następnie zmienia rozszerzenia plików w bieżącym katalogu zgodnie z przekazanymi parametrami i wypisuje raport zmian na ekranie. Przykładowe wywołanie:</p>
-        <pre><code class="no-highlight"><!--
-       -->$ ./rozszerzenia.sh log txt
-<!--   -->plik.log => plik.txt
-<!--   -->raport.log => raport.txt
+        <p>Utwórz plik źródłowy <code>program.c</code> o treści:</p>
+        <pre><code class="c"><!--
+       -->#include &lt;stdio.h&gt;
+<!--   -->
+<!--   -->main(){
+<!--   -->    printf("Hello World\n");
+<!--   -->}
 <!--   --></code></pre>
-        <p>Wykorzystaj program <code>basename</code>. Załóż, że istnieje co najmniej jeden plik źródłowy.</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <pre><code class="bash"><!--
-         -->#!/bin/bash
-<!--     -->
-<!--     --># $1 - rozszerzenie zrodlowe
-<!--     --># $2 - rozszerzenie docelowe
-<!--     -->
-<!--     -->for f in *.$1
-<!--     -->do
-<!--     -->    basename=`basename "$f" .$1`
-<!--     -->    mv "$f" "$basename".$2
-<!--     -->    echo "$f => $basename.$2"
-<!--     -->done
-<!--     --></code></pre>
-        </div>
-      </div>
-
-      <div class="exercise exercise-star">
-        <p>Rozszerz skrypt z poprzedniego ćwiczenia tak, aby w momencie, gdy plik docelowy istnieje, pytał użytkownika czy chce go zastąpić.</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <pre><code class="bash"><!--
-         -->#!/bin/bash
-<!--     -->
-<!--     --># $1 - rozszerzenie zrodlowe
-<!--     --># $2 - rozszerzenie docelowe
-<!--     -->
-<!--     -->for f in *.$1
-<!--     -->do
-<!--     -->    basename=`basename "$f" .$1`
-<!--     -->    if [ -f "$basename.$2" ]
-<!--     -->    then
-<!--     -->        echo -n "Plik $basename.$2 istnieje.
-<!--     -->                 Czy chcesz go zastapic? [T] "
-<!--     -->        read t
-<!--     -->        if [ "$t" = "T" ]
-<!--     -->        then
-<!--     -->            mv "$f" "$basename.$2"
-<!--     -->            echo "$f => $basename.$2"
-<!--     -->        fi
-<!--     -->    else
-<!--     -->        mv "$f" "$basename.$2"
-<!--     -->        echo "$f => $basename.$2"
-<!--     -->    fi
-<!--     -->done
-<!--     --></code></pre>
-        </div>
+        <p>Skompiluj program, wykonując polecenie</p>
+        <pre><code class="no-highlight">$ gcc program.c</code></pre>
+        <p>Następnie uruchom go, wykonując polecenie</p>
+        <pre><code class="no-highlight">$ ./a.out</code></pre>
+        <p>Dlaczego ostatnie z poleceń rozpoczyna się od ciągu <code>./</code>?</p>
       </div>
 
       <div class="exercise">
-        <p>Pseudozmienna <code>$RANDOM</code> zwraca losową wartość całkowitą dodatnią za każdym razem, gdy jest wywoływana. Wykorzystaj ją, aby napisać skrypt, w którym użytkownik zgaduje wylosowaną liczbę z przedziału od 100 do 1000. Skrypt powinien naprowadzać użytkownika na prawidłowe rozwiązanie, wypisując komunikaty "Więcej" lub "Mniej", w zależności od wprowadzonej liczby. Gdy użytkownik wprowadzi dobry wynik, skrypt powinien zakończyć działanie.</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <pre><code class="bash"><!--
-         -->#!/bin/bash
-<!--     -->
-<!--     -->liczba=$((100+($RANDOM%901)))
-<!--     -->
-<!--     -->echo -n "Podaj liczbe: "
-<!--     -->read n
-<!--     -->
-<!--     -->while [ $n -ne $liczba ]
-<!--     -->do
-<!--     -->    if [ $n -lt $liczba ]
-<!--     -->    then
-<!--     -->        echo "Wiecej"
-<!--     -->    elif [ $n -gt $liczba ]
-<!--     -->    then
-<!--     -->        echo "Mniej"
-<!--     -->    fi
-<!--     -->    echo -n "Sprobuj jeszcze raz: "
-<!--     -->    read n
-<!--     -->done
-<!--     --></code></pre>
-        </div>
+        <p>Sprawdź co się stanie, jeśli nie dołączysz do pliku źródłowego deklaracji zawartych w nagłówku <code>stdio.h</code>. Czy wówczas program się skompiluje?</p>
       </div>
 
       <div class="exercise">
-        <p>Zaimplementuj algorytm Euklidesa (z dzieleniem) wyznaczania NWD dwóch liczb dodatnich. Skrypt powinien pobierać dane ze standardowego wejścia, w którym każdy wiersz zbudowany jest z dwóch liczb oddzielonych znakiem odstępu.</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <pre><code class="bash"><!--
-         -->#!/bin/bash
-<!--     -->
-<!--     -->while read a b
-<!--     -->do
-<!--     -->    r=$((a%b))
-<!--     -->    while [ $r -ne 0 ]
-<!--     -->    do
-<!--     -->        a=$b b=$r r=$((a%b))
-<!--     -->    done
-<!--     -->    echo $b
-<!--     -->done
-<!--     --></code></pre>
-        </div>
+        <p>Korzystając z opcji <code>-o</code> programu <code>gcc</code>, zapisz efekt działania kompilatora do pliku o nazwie <code>aplikacja</code>.</p>
       </div>
 
-      <div class="exercise">
-        <p>Napisz skrypt, który przekształca przekazane liczby dziesiętne do postaci dwójkowej. Skrypt powinien obsługiwać zarówno więcej niż jeden argument, jak i (jeśli nie przekazano żadnych argumentów) liczby przekazywane na standardowe wejście (po jednej w linii).</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <pre><code class="bash"><!--
-         -->#!/bin/bash
-<!--     -->
-<!--     -->if [ $# -eq 0 ]
-<!--     -->then
-<!--     -->  while read l
-<!--     -->  do
-<!--     -->    arg=$arg" "$l
-<!--     -->  done
-<!--     -->fi
-<!--     -->
-<!--     -->for l in $*$arg
-<!--     -->do
-<!--     -->  str=""
-<!--     -->  if ([ "$l" -eq "$l" ] &amp;&amp; [ $l -gt 0 ]) &amp;> /dev/null
-<!--     -->  then
-<!--     -->    while [ $l -gt 0 ]
-<!--     -->    do
-<!--     -->        str="$((l%2))$str"
-<!--     -->        l=$((l/2))
-<!--     -->    done
-<!--     -->    echo $str
-<!--     -->  else
-<!--     -->    echo "Argumentem powinna byc liczba dodatnia" 1>&amp;2
-<!--     -->  fi
-<!--     -->done
-<!--     --></code></pre>
-        </div>
-      </div>
-
-      <div class="exercise">
-        <p>Zmodyfikuj skrypt z poprzedniego ćwiczenia tak, aby pierwszy argument określał zawsze podstawę systemu liczbowego (z przedziału od 2 do 10).</p>
-      </div>
-
-      <div class="exercise exercise-star">
-        <p>Zmodyfikuj skrypt z poprzedniego ćwiczenia tak, aby przetwarzał liczby zaraz po ich wczytaniu (nie czekając na koniec wejścia). Wykorzystaj funkcje powłoki Bash.</p>
-      </div>
-
-      <div class="exercise">
-        <p>Plik <a href="files/dist.male.first">dist.male.first</a> zawiera opublikowane przez Amerykańskie Biuro Cenzusowe statystyki dotyczące częstości występowania imion wśród obywateli USA płci męskiej (stan na rok 1990). Kolumny oznaczają kolejno: imię, częstość (w procentach), częstość (kumulatywna, w procentach) i miejsce w rankingu. Napisz skrypt, który wypisze na wyjściu tę listę w postaci tabeli w języku <code>HTML</code>, posortowanej alfabetycznie według imion. W tabeli uwzględnij kolumny: imię, częstość oraz miejsce w rankingu.</p>
-      </div>
-
-      <div class="exercise">
-        <p>Zmodyfikuj skrypt z poprzedniego ćwiczenia tak, aby przyjmował dwa argumenty: nazwę przetwarzanego pliku oraz nazwę docelowego pliku <code>HTML</code>. Następnie wygeneruj tabelę w języku <code>HTML</code> dla statystyk częstości występowania imion żeńskich. Wykorzystaj plik <a href="files/dist.female.first">dist.female.first</a>.</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <pre><code class="bash"><!--
-         -->#!/bin/bash
-<!--     -->
-<!--     -->echo "&lt;table&gt;" &gt; $2
-<!--     -->cat $1 |  sort -k 1 | while read line
-<!--     -->do
-<!--     -->    line=($line)
-<!--     -->    echo "&lt;tr&gt;&lt;td&gt;${line[0]}&lt;/td&gt;&lt;td&gt;${line[1]}&lt;/td&gt;
-<!--     -->          &lt;td&gt;${line[3]}&lt;/td&gt;&lt;/tr&gt;"
-<!--     -->done &gt;&gt; $2
-<!--     -->echo "&lt;/table&gt;" &gt;&gt; $2
-<!--     --></code></pre>
-        </div>
-      </div>
-
-      <div class="exercise exercise-star">
-        <p>Zmodyfikuj skrypt z poprzedniego ćwiczenia tak, aby imiona nie były zapisane drukowanymi literami, a w postaci klasycznej, tj. pierwsza litera wielka, pozostałe małe.</p>
-
-        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
-
-        <div class="answer">
-          <p>Zainspiruj się następującym fragmentem kodu:</p>
-          <pre><code class="bash">${name:0:1}$(tr '[:upper:]' '[:lower:]' <<< ${name:1})</code></pre>
-        </div>
-      </div>
-
-      <h2>Praktyczne ćwiczenia</h2>
-
-      <p>Ten paragraf zawiera kilka ćwiczeń, dzięki którym przetestujesz swoje umiejętności na praktycznych problemach, z którymi możesz się spotkać w przyszłej pracy zawodowej (lub nie).</p>
-
-      <div class="exercise">
-        <p>Plik <a href="files/access_log.log">access_log.log</a> zawiera przykładowe dane zapisane na dysku przez serwer <a href="http://apache.org">Apache</a>.</p>
+      <div class="howitworks">
+        <p>W przypadku języka C przyjęło się, że:</p>
         <ul>
-          <li>Wyświetl adresy wszystkich hostów, które próbowały pobrać z serwera plik <code>/dccstats/stats-hashes.1week.png</code>.</li>
-          <li>Przerób rozwiązanie z poprzedniego punktu na użyteczny i uniwersalny skrypt powłoki Bash.</li>
+          <li>kod źródłowy programu przechowuje się w pliku o rozszerzeniu <code>.c</code>,</li>
+          <li>przetworzony przez preprocesor kod przechowuje się w pliku o rozszerzeniu <code>.i</code>,</li>
+          <li>kod assemblera przechowuje się w pliku o rozszerzeniu <code>.s</code>,</li>
+          <li>plik obiektu ma rozszerzenie <code>.o</code>.</li>
         </ul>
       </div>
 
-      <div class="exercise exercise-star">
-        <p>Napisz skrypt powłoki Bash, który będzie można uruchamiać cyklicznie za pomocą oprogramowania <code>cron</code>. Skrypt powinien sprawdzać, czy na którymś z dysków jest mniej niż <code>X</code> procent wolnego miejsca, a jeśli tak, to powinien wysłać e-mail z ostrzeżeniem na wskazany adres. Postaraj się, aby skrypt był jak najbardziej uniwersalny.</p>
+      <div class="exercise">
+        <p>Sprawdź efekt działania kompilatora <code>gcc</code> w poszczególnych etapach kompilacji. W tym celu użyj:</p>
+        <ul>
+          <li>opcji <code>-c</code>, aby zakończyć działanie kompilatora na procesie assemblacji,</li>
+          <li>opcji <code>-S</code>, aby zakończyć działanie kompilatora na procesie kompilacji,</li>
+          <li>opcji <code>-E</code>, aby zakończyć działanie kompilatora na procesie prekompilacji.</li>
+        </ul>
+        <p>Jakie są domyślne nazwy plików, do których kompilator zapisuje efekt swojej pracy w poszczególnych przypadkach? Sprawdź, czy da się wpłynąć na te nazwy korzystając z opcji <code>-o</code>. Czy zawsze kompilator zapisuje dane do pliku? Jeśli nie, to jak sobie z tym poradzić?</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>W przypadku opcji <code>-E</code> kompilator wypisuje dane na wyjściu. Można je przekierować do odpowiedniego pliku standardowym przekierowaniem strumienia danych. W przypadku skorzystania z opcji <code>--save-temps</code> efekty poszczególnych etapów kompilacji są zachowywane.</p>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <p>Usuń wszystkie pliki związane z kompilacją pliku <code>program.c</code>, poza nim samym. Następnie skompiluj plik <code>program.c</code>, wywołując program <code>gcc</code> z opcją <code>--save-temps</code>. Skomentuj efekty.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Utwórz pliki <code>hw.c</code>, <code>gb.c</code> oraz <code>app.c</code> o treściach, kolejno:</p>
+        <pre><code class="c"><!--
+       -->#include &lt;stdio.h&gt;
+<!--   -->
+<!--   -->int helloworld(){
+<!--   -->    printf("Hello World\n");
+<!--   -->    return 0;
+<!--   -->}
+<!--   --></code></pre>
+        <pre><code class="c"><!--
+       -->#include &lt;stdio.h&gt;
+<!--   -->
+<!--   -->int goodbye(){
+<!--   -->    printf("Good bye\n");
+<!--   -->    return 0;
+<!--   -->}
+<!--   --></code></pre>
+        <pre><code class="c"><!--
+       -->int helloworld();
+<!--   -->int goodbye();
+<!--   -->
+<!--   -->int main(){
+<!--   -->    helloworld();
+<!--   -->    goodbye();
+<!--   -->    return 0;
+<!--   -->}
+<!--   --></code></pre>
+        <p>Następnie wykonaj polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->$ gcc app.c
+<!--   -->$ gcc -c app.c
+<!--   -->$ gcc -c hw.c
+<!--   -->$ gcc hw.o gb.c app.o
+<!--   --></code></pre>
+        <p>Które z poleceń nie zadziałały? Dlaczego? Zastanów się nad znaczeniem pozostałych.</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Pierwsze polecenie zakończyło się niepoprawnie. Kompilator nie potrafił znaleźć definicji funkcji <code>helloworld</code> oraz <code>goodbye</code>.</p>
+        </div>
+      </div>
+
+      <h1>Dołączanie bibliotek</h1>
+
+      <div class="howitworks">
+        <p>W czasie pisania programu możemy korzystać z funkcji pochodzących z pewnych bibliotek, takich jak biblioteka standardowa (<code>libc</code>) czy biblioteka funkcji matematycznych (<code>libm</code>). Wymaga to dołączenia odpowiednich plików nagłówkowych (zwykle z rozszerzeniem <code>.h</code>), zawierających między innymi deklaracje funkcji bibliotecznych.<sup>[1]</sup></p>
+
+        <p>Aby proces konsolidacji zakończył się powodzeniem, konieczne jest także poinformowanie kompilatora o tym, jakie biblioteki mają brać w nim udział. Kompilator <code>gcc</code>, o ile nie zdecydowano inaczej, zawsze dołącza w procesie konsolidacji bibliotekę <code>libc</code>, zawierającą definicje funkcji zadeklarowanych w wielu plikach nagłówkowych, np. <code>stdlib.h</code> oraz <code>stdio.h</code>.</p>
+
+        <p>Same biblioteki dzielimy jednak w ogólności na <i>statyczne</i> i <i>dynamiczne</i>. W przypadku tych pierwszych, wykorzystywane funkcje są dołączane na stałe do pliku wynikowego. Biblioteki dynamiczne umożliwiają współdzielenie swoich zasobów pomiędzy różnymi procesami, a tym samym zapewniają lepsze zarządzanie pamięcią. System operacyjny dołącza wówczas wymagane definicje do programu w momencie jego uruchamiania. Przyjęło się, że biblioteki statyczne są plikami o rozszerzeniu <code>.a</code>, a dynamiczne <code>.so</code>.</p>
+
+        <p class="footnote">[1] Należy ostrożnie obchodzić się z pojęciami <i>deklaracji</i> i <i>definicji</i> zmiennych i funkcji. Pliki nagłówkowe zawierają deklaracje funkcji (a czasem też stałych), zaś biblioteki ich definicje.</p>
+
+        <div class="exercise">
+          <p>Sprójrz na <i>Ćwiczenie 8.1</i>. Odwoływaliśmy się w nim do funkcji <code>printf</code>, a jednak nigdzie jej nie definiowaliśmy. Gdzie została zadeklarowana? Gdzie była zdefiniowana? Dlaczego udało się skompilować program bez dołączania dodatkowych bibliotek?</p>
+        </div>
+      </div>
+
+      <p>Aby dołączyć bibliotekę do programu, należy skorzystać z opcji <code>-l</code> programu <code>gcc</code>. Opcję tę można wywołać wielokrotnie, wskazując każdorazowo nazwę jednej biblioteki (z pominięciem przedrostka <code>lib</code>). Przyjęło się, że jeśli nazwa biblioteki jest jednoznakowa, to umieszcza się ją za opcją <code>-l</code> bez dodatkowego znaku odstępu, tworząc np. zbitkę <code>-lm</code> (dla biblioteki <code>libm</code>). Program <code>gcc</code> poprawnie interpretuje takie wywołania.</p>
+
+      <div class="exercise">
+        <p>Utwórz plik źródłowy <code>sin.c</code> o następującej treści:</p>
+        <pre><code class="c"><!--
+       -->#include &lt;stdio.h&gt;
+<!--   -->#include &lt;math.h&gt; // plik nagłówkowy math.h deklaruje stałe oraz
+<!--   -->                  // funkcje zdefiniowane w bibliotece
+<!--   -->                  // matematycznej (libm)
+<!--   -->
+<!--   -->main(){
+<!--   -->    int x = 5;
+<!--   -->    printf("sin(%d)=%f\n", x, sin(x));
+<!--   -->}
+<!--   --></code></pre>
+        <p>Spróbuj go skompilować, wykonując polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->$ gcc -o sin sin.c
+<!--   -->$ gcc -l m -o sin sin.c
+<!--   -->$ gcc -lm -o sin sin.c
+<!--   --></code></pre>
+        <p>Skomentuj efekty.</p>
       </div>
 
       <div class="exercise exercise-star">
-        <p>Napisz skrypt, który wykonuje kopię zapasową wszystkich tych plików ze wskazanych katalogów, które zostały utworzone lub zmodyfikowane w ciągu 7 dni od chwili uruchomienia skryptu. Skrypt powinien generować archiwum <code>tar.gz</code>, które następnie powinno być wysyłane (dowolną metodą) na inną maszynę.</p>
+        <p>Korzystając z programu <code>ldd</code> sprawdź, z jakich bibliotek dynamicznych korzysta skompilowany przed chwilą program.</p>
+      </div>
+
+      <div class="exercise exercise-star-star">
+        <p>Wypełnij plik <code>hellobye.c</code> treścią:</p>
+        <pre><code class="c"><!--
+       -->#include &lt;stdio.h&gt;
+<!--   -->
+<!--   -->int helloworld(){
+<!--   -->    printf("Hello World\n");
+<!--   -->    return 0;
+<!--   -->}
+<!--   -->
+<!--   -->int goodbye(){
+<!--   -->    printf("Good bye\n");
+<!--   -->    return 0;
+<!--   -->}
+<!--   --></code></pre>
+        <p>Aby utworzyć z niego bibliotekę dynamiczną, wykonaj następujące polecenia:</p>
+        <pre><code class="no-highlight"><!--
+       -->$ gcc -c -fPIC hellobye.c
+<!--   -->$ gcc -shared -o libhellobye.so hellobye.o
+<!--   --></code></pre>
+        <p>Utwórz plik <code>hello.c</code> o treści:</p>
+        <pre><code class="c"><!--
+       -->int helloworld();
+<!--   -->int goodbye();
+<!--   -->
+<!--   -->int main(){
+<!--   -->    helloworld();
+<!--   -->    goodbye();
+<!--   -->    return 0;
+<!--   -->}
+<!--   --></code></pre>
+        <p>i skompiluj go z wykorzystaniem utworzonej biblioteki dynamicznej <code>libhellobye.so</code>, wykonując polecenie:</p>
+        <pre><code class="no-highlight">$ gcc -L . -l hellobye hello.c</code></pre>
+        <p>Za co odpowiada opcja <code>-L</code>? Dlaczego program nie uruchomi się? Zmodyfikuj wartość zmiennej systemowej <code>LD_LIBRARY_PATH</code> w taki sposób, aby możliwe było uruchomienie programu. Usuń plik biblioteki i sprawdź, czy program dalej będzie działać.</p>
+
+        <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
+
+        <div class="answer">
+          <p>Program nie uruchomi się, bo poszukuje bibliotek dynamicznych w określonych katalogach. Katalog bieżący nie należy do tego zbioru. Aby możliwe było przeszukiwanie lokalnego katalogu, należy ustawić wartość zmiennej <code>LD_LIBRARY_PATH</code> na <code>.</code>. Zmienna ta pozwala ustalić, oddzielone przecinkami, ścieżki, które powinny być przeszukiwane przed standardowymi lokalizacjami. Opcja <code>fPIC</code> (ang. <i>Position Independent Code</i>) programu <code>gcc</code> wprowadza odpowiednie zarządzanie pamięcią.</p>
+        </div>
       </div>
 
     </article>
 
     <footer id="main-footer">
         <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
-        <p>&copy; 2016 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+        <p>&copy; 2016&ndash2017 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
     </footer>
 </div>
 

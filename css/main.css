@@ -152,7 +152,6 @@ article#cw09{ counter-reset: cwiczenia 9; }
 article#cw10{ counter-reset: cwiczenia 10; }
 article#cw11{ counter-reset: cwiczenia 11; }
 article#cw12{ counter-reset: cwiczenia 12; }
-article#cw13{ counter-reset: cwiczenia 13; }
 
 article h1{
   counter-increment: section;
@@ -160,6 +159,7 @@ article h1{
   font-size: 1.5em;
   font-weight: bold;
   margin-bottom: 0.5em;
+  line-height: 1.5em;
 }
 
 article h2{
@@ -167,6 +167,7 @@ article h2{
   font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 1em;
+  line-height: 1.5em;
 }
 
 article h1::before,
@@ -189,6 +190,11 @@ article h2::before{
   width: 4em;
   margin-right: 1.25em;
   margin-left: -6.25em;
+}
+
+article.no-num h1::before,
+article.no-num h2::before{
+  display: none;
 }
 
 article p{
@@ -279,6 +285,10 @@ article .titbit::before{ content: "Ciekawostka"; }
 article .titbit-star::before{ content: "\2605  Ciekawostka"; }
 article .titbit-star-star::before{ content: "\2605\2605  Ciekawostka"; }
 article .notice::before{  content: "Uwaga"; }
+
+article.no-num .exercise::before{ content: "Ćwiczenie " counter(cwiczenie); }
+article.no-num .exercise-star::before{ content: "\2605  Ćwiczenie " counter(cwiczenie); }
+article.no-num .exercise-star-star::before{ content: "\2605\2605  Ćwiczenie " counter(cwiczenie); }
 
 article .test{
   background-color: #F8F8F8;

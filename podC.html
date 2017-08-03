@@ -33,30 +33,38 @@
 <body>
 <div id="wrapper">
     <header id="main-header">
-        <h1>Wskazówki początkowe</h1>
+        <h1>Zestaw pośredni C</h1>
         <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
         <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
     </header>
 
-    <article>
+    <article class="no-num">
 
-        <h1>Drukowanie materiałów</h1>
+      <h1>Ćwiczenia powtórzeniowe</h1>
 
-        <p>Wszystkie materiały zebrane na tej stronie są przystosowane do drukowania, a zastosowane arkusze styli <code>CSS</code> modyfikują ustawienia drukarki. Dzięki temu wydrukowane materiały wyglądają estetycznie. Ważne jest, aby drukując materiały z tej strony (korzystając ze standardowych narzędzi drukowania udostępnianych przez przeglądarkę) nie zapomnieć:</p>
-        <ul>
-          <li>wyłączyć drukowania nagłówków i stopek,</li>
-          <li>ustawić marginesów strony na <i>domyślne</i>.</li>
-        </ul>
-        <p>Przykładowe ustawienia dla przeglądarki Chrome wraz z podglądem dobrze sformatowanego wydruku pokazano poniżej.</p>
-        <p><img src="img/printing.png" alt="" /></p>
+      <div class="exercise">
+        <p>Napisz w języku C program, który wypisuje na standardowym wyjściu przekazane do niego argumenty w odwrotnej kolejności.</p>
+      </div>
 
-        <h1>Przydatna literatura uzupełniająca</h1>
+      <div class="exercise">
+        <p>Napisz program, który wypisuje na standardowym wyjściu sumę liczb przekazanych do niego przez standardowe wejście (po jednej liczbie w wierszu).</p>
+      </div>
 
-        <ul>
- 	        <li>W. E. Shotts Jr, <em>Linux. Wprowadzenie do wiersza poleceń</em>, Helion S.A., Gliwice 2015 <em>(oryginalna wersja angielska do pobrania w formie pliku <code>pdf</code> na <a href="http://linuxcommand.org/tlcl.php">stronie autora</a>)</em></li>
- 	        <li>B. W. Kernighan, D. M. Ritchie, <em>Język ANSI C</em>, Wydawnictwa Naukowo-Techniczne, Warszawa 2003 <em>(proszę uważać na wersję wydaną przez wydawnictwo Helion — jest mizernie przetłumaczona)</em></li>
- 	        <li>R. Sokół, <em>DOS. Leksykon kieszonkowy</em>, Wydawnictwa Helion, Gliwice 2005</li>
-        </ul>
+      <div class="exercise">
+        <p>Zdefiniuj funkcję <code>toInt</code>, która przyjmuje jako argument ciąg znaków i przekształca go do postaci liczbowej, a uzyskaną w ten sposób wartość zwraca. Znaki niebędące cyframi powinny być przez funkcję ignorowane. Jeśli przekazany ciąg znaków nie zawiera w sobie żadnej cyfry, funkcja powinna zwrócić wartość 0. Pamiętaj, że liczby mogą być ujemne. Rozwiązanie umieść w pliku <code>toInt.c</code>. Przygotuj także odpowiedni plik nagłówkowy o nazwie <code>toInt.h</code>, który będzie zawierał deklarację funkcji <code>toInt</code>.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Wykorzystaj pliki z poprzedniego zadania do napisania programu, który wypisuje na standardowym wyjściu sumę liczb przekazanych do niego jako argumenty. Przygotuj także plik <code>Makefile</code>, który pozwoli uniknąć zbędnej kompilacji fragmentów kodu.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz program, który przyjmuje co najmniej dwa argumenty będące ścieżkami do plików. Jeśli do programu przekazano $n$ argumentów, to zawartość plików o ścieżkach reprezentowanych przez argumenty od $1$ do $n-1$ powinna zostać dopisana na końcu pliku, do którego ścieżka znajduje się w ostatnim argumencie. Jeśli plik docelowy nie istnieje, powinien zostać utworzony. Jeśli plik źródłowy nie istnieje, należy wypisać komunikat błędu na standardowym wyjściu.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Napisz program <code>moresleep</code>, który działa jak program <code>sleep</code> z tą różnicą, że dla argumentu $n$ kończy swoje działanie po $n+10$ sekundach. Możesz wykorzystać program <code>sleep</code>.</p>
+      </div>
 
     </article>
 
