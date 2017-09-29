@@ -141,18 +141,18 @@ article{
   counter-reset: subsection;
 }
 
-article#cw01{ counter-reset: cwiczenia 1; }
-article#cw02{ counter-reset: cwiczenia 2; }
-article#cw03{ counter-reset: cwiczenia 3; }
-article#cw04{ counter-reset: cwiczenia 4; }
-article#cw05{ counter-reset: cwiczenia 5; }
-article#cw06{ counter-reset: cwiczenia 6; }
-article#cw07{ counter-reset: cwiczenia 7; }
-article#cw08{ counter-reset: cwiczenia 8; }
-article#cw09{ counter-reset: cwiczenia 9; }
-article#cw10{ counter-reset: cwiczenia 10; }
-article#cw11{ counter-reset: cwiczenia 11; }
-article#cw12{ counter-reset: cwiczenia 12; }
+article#m01{ counter-reset: modul 1; }
+article#m02{ counter-reset: modul 2; }
+article#m03{ counter-reset: modul 3; }
+article#m04{ counter-reset: modul 4; }
+article#m05{ counter-reset: modul 5; }
+article#m06{ counter-reset: modul 6; }
+article#m07{ counter-reset: modul 7; }
+article#m08{ counter-reset: modul 8; }
+article#m09{ counter-reset: modul 9; }
+article#m10{ counter-reset: modul 10; }
+article#m11{ counter-reset: modul 11; }
+article#m12{ counter-reset: modul 12; }
 
 article h1{
   counter-increment: section;
@@ -180,14 +180,14 @@ article h2::before{
 }
 
 article h1::before{
-  content: counter(cwiczenia) "." counter(section);
+  content: counter(modul) "." counter(section);
   width: 3em;
   margin-right: 1em;
   margin-left: -5em;
 }
 
 article h2::before{
-  content: counter(cwiczenia) "." counter(section) "." counter(subsection);
+  content: counter(modul) "." counter(section) "." counter(subsection);
   width: 4em;
   margin-right: 1.25em;
   margin-left: -6.25em;
@@ -273,9 +273,9 @@ article .notice::before{
   margin-bottom: 1em;
 }
 
-article .exercise::before{ content: "Ćwiczenie " counter(cwiczenia) "." counter(cwiczenie); }
-article .exercise-star::before{ content: "\2605  Ćwiczenie " counter(cwiczenia) "." counter(cwiczenie); }
-article .exercise-star-star::before{ content: "\2605\2605  Ćwiczenie " counter(cwiczenia) "." counter(cwiczenie); }
+article .exercise::before{ content: "Ćwiczenie " counter(modul) "." counter(cwiczenie); }
+article .exercise-star::before{ content: "\2605  Ćwiczenie " counter(modul) "." counter(cwiczenie); }
+article .exercise-star-star::before{ content: "\2605\2605  Ćwiczenie " counter(modul) "." counter(cwiczenie); }
 article .task::before{ content: "Zadanie " counter(zadanie); }
 article .command::before{  content: "Polecenie"; }
 article .example::before{  content: "Przykład"; }
