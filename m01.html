@@ -107,16 +107,16 @@
         </div>
 
         <p>Większość instalacji systemów uniksopodobnych wyposażonych jest w program <code>ssh</code>, umożliwiający nawiązanie połączenia z użyciem protokołu <code>ssh</code>. Gdybyśmy chcieli się połączyć z wydziałowym serwerem studenckim, moglibyśmy napisać
-        <pre><code class="no-highlight">$ ssh s123456@students.wmi.amu.edu.pl</code></pre>
-        wywołując w ten sposób program <code>ssh</code> z argumentem <code>s123456@students.wmi.amu.edu.pl</code>. Jeśli login aktualnie zalogowanego użytkownika pokrywa się z loginem użytkownika, na którego konto chcemy się zalogować zdalnie, można pominąć prefiks adresu, pisząc po prostu</p>
-        <pre><code class="no-highlight">$ ssh students.wmi.amu.edu.pl</code></pre>
+        <pre><code class="no-highlight">$ ssh s123456@lts.wmi.amu.edu.pl</code></pre>
+        wywołując w ten sposób program <code>ssh</code> z argumentem <code>s123456@lts.wmi.amu.edu.pl</code>. Jeśli login aktualnie zalogowanego użytkownika pokrywa się z loginem użytkownika, na którego konto chcemy się zalogować zdalnie, można pominąć prefiks adresu, pisząc po prostu</p>
+        <pre><code class="no-highlight">$ ssh lts.wmi.amu.edu.pl</code></pre>
 
         <div class="titbit">
           <p>Każde połączenie przychodzące do zdalnej maszyny okupuje tak zwany <i>pseudoterminal</i> (oznaczany zwykle symbolem <code>pts/x</code>, gdzie <code>x</code> jest liczbowym identyfikatorem), czyli dodatkowe, programowe środowisko obsługi wejścia/wyjścia. Związane jest to z zasadą, że z&nbsp;jednego terminala (ale też z jednej konsoli, czy to fizycznej, czy wirtualnej) może korzystać w danym momencie tylko jeden użytkownik.</p>
         </div>
 
         <div class="exercise">
-          <p>Korzystając z konsoli wirtualnej lub emulatora konsoli połącz się z&nbsp;serwerem <code>students.wmi.amu.edu.pl</code>. Spróbuj zrobić to samo z komputera znajdującego się poza wydziałową siecią komputerową. Dlaczego logowanie z sieci wydziałowej nie wymaga podania danych logowania?</p>
+          <p>Korzystając z konsoli wirtualnej lub emulatora konsoli połącz się z&nbsp;serwerem <code>lts.wmi.amu.edu.pl</code>. Spróbuj zrobić to samo z komputera znajdującego się poza wydziałową siecią komputerową. Dlaczego logowanie z sieci wydziałowej nie wymaga podania danych logowania?</p>
           <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
 
           <div class="answer">
@@ -125,7 +125,7 @@
         </div>
 
         <div class="notice">
-          <p>Wszystkie ćwiczenia od tego momentu wykonuj na zdalnym serwerze <code>students.wmi.amu.edu.pl</code> z wykorzystaniem protokołu <code>ssh</code>. Chociaż zdecydowana większość poleceń działa identycznie również w lokalnych instalacjach systemów uniksopodobnych, niektóre ćwiczenia wykorzystują strukturę lub ustawienia lokalne serwera <code>students</code>.</p>
+          <p>Wszystkie ćwiczenia od tego momentu wykonuj na zdalnym serwerze <code>lts.wmi.amu.edu.pl</code> z wykorzystaniem protokołu <code>ssh</code>. Chociaż zdecydowana większość poleceń działa identycznie również w lokalnych instalacjach systemów uniksopodobnych, niektóre ćwiczenia wykorzystują strukturę lub ustawienia lokalne serwera <code>students</code>.</p>
         </div>
 
         <div class="exercise">
@@ -151,7 +151,7 @@
         <p>Cóż, komputery z systemem Windows nie są wyposażone w oprogramowanie do nawiązywania połączeń przy użyciu protokołu <code>ssh</code>. Na szczęście istnieją narzędzia, które można do tego wykorzystać, a najpopularniejszym z nich jest PuTTY.</p>
 
         <div class="exercise">
-          <p>Korzystając z programu PuTTY, połącz się z serwerem <code>students.wmi.amu.edu.pl</code> za pomocą protokołu <code>ssh</code>.</p>
+          <p>Korzystając z programu PuTTY, połącz się z serwerem <code>lts.wmi.amu.edu.pl</code> za pomocą protokołu <code>ssh</code>.</p>
         </div>
 
         <h1>Dokumentacja poleceń</h1>
