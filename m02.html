@@ -250,6 +250,15 @@
           </div>
         </div>
 
+        <div class="exercise">
+          <p>W wyniku działania pewnego polecenia otrzymano na wyjściu następujący ciąg znaków:</p>
+          <pre><code class="no-highlight">drwx------ 6 adam ludzie 4096 Oct  8 16:11 muchomorek/</code></pre>
+          <ol style="list-style-type: lower-latin;">
+            <li>Podaj pełną treść polecenia, które mogło zwrócić taki wynik. Załóż, że element o nazwie <code>muchomorek</code> znajduje się w bieżącym katalogu roboczym.</li>
+            <li>Jakie polecenie należy wykonać, aby dodać członkom grupy <code>ludzie</code> prawo do odczytu i wykonania elementu <code>muchomorek</code>, a pozostałym użytkownikom prawo do jego odczytu? Zaproponuj co najmniej dwa rozwiązania wykorzystujące notację liczbową i symboliczną.</li>
+          </ol>
+        </div>
+
         <h2>Zmiana właściciela &ndash; polecenia <code>chown</code> i <code>chgrp</code></h2>
 
         <div class="howitworks">
@@ -314,6 +323,14 @@
 <!--     -->$ umask u+r
 <!--     --></code></pre>
           <p>Jaka maska będzie stosowana po pierwszym, a jaka po drugim wywołaniu? Jakie wnioski można z tego wynieść?</p>
+        </div>
+
+        <div class="exercise">
+          <p>W ramach eksperymentu utworzono katalog <code>zwirek</code>. Okazało się, że domyślne uprawnienia do niego są równe <code>r-xrw---x</code>.</p>
+          <ol style="list-style-type: lower-latin;">
+            <li>Jaki będzie efekt wywołania polecenia <code>umask</code>?</li>
+            <li>Jakie polecenie należy wykonać, aby domyślne uprawnienia do nowo tworzonych katalogów były równe <code>rwxr-xr--</code>?</li>
+          </ol>
         </div>
 
         <h1>Dowiązania</h1>
@@ -1075,35 +1092,6 @@
 <!--       -->$ time "ls" &amp;> /dev/null
 <!--       --></code></pre>
           </div>
-        </div>
-
-        <h1>Zadanie domowe</h1>
-
-        <div class="task">
-          <p>W wyniku działania pewnego polecenia otrzymano na wyjściu następujący ciąg znaków:</p>
-          <pre><code class="no-highlight">drwx------ 6 adam ludzie 4096 Oct  8 16:11 muchomorek/</code></pre>
-          <ol style="list-style-type: lower-latin;">
-            <li>Podaj pełną treść polecenia, które mogło zwrócić taki wynik. Załóż, że element o nazwie <code>muchomorek</code> znajduje się w bieżącym katalogu roboczym.</li>
-            <li>Jakie polecenie należy wykonać, aby dodać członkom grupy <code>ludzie</code> prawo do odczytu i wykonania elementu <code>muchomorek</code>, a pozostałym użytkownikom prawo do jego odczytu? Zaproponuj co najmniej dwa rozwiązania wykorzystujące notację liczbową i symboliczną.</li>
-          </ol>
-        </div>
-
-        <div class="task">
-          <p>W ramach eksperymentu utworzono katalog <code>zwirek</code>. Okazało się, że domyślne uprawnienia do niego są równe <code>r-xrw---x</code>.</p>
-          <ol style="list-style-type: lower-latin;">
-            <li>Jaki będzie efekt wywołania polecenia <code>umask</code>?</li>
-            <li>Jakie polecenie należy wykonać, aby domyślne uprawnienia do nowo tworzonych katalogów były równe <code>rwxr-xr--</code>?</li>
-          </ol>
-        </div>
-
-        <div class="task">
-          <p>Wykonaj poniższe zadania:</p>
-          <ol style="list-style-type: lower-latin;">
-            <li>Odpowiedz, ile elementów znajdujących się w katalogu <code>/dev</code> jest dowiązaniami symbolicznymi?</li>
-            <li>Plik <code>~/.bash_history</code> zawiera historię wykonywanych poleceń w kolejności od najdawniej wykonanego. Wypisz, począwszy od najświeższego, 3 wykonane ostatnio polecenia rozpoczynające się od słowa <code>cat</code> lub <code>ls</code>.</li>
-            <li>Wyświetl, posortowaną malejąco według nazw, szczegółową listę ośmiu największych plików regularnych, znajdujących się w katalogu <code>/usr/bin</code>.</li>
-            <li>Posortuj szczegółową listę elementów z katalogu <code>/etc</code> malejąco według liczby dowiązań stałych. Jeśli dwa lub więcej elementów ma taką samą liczbę dowiązań stałych, powinny być posortowane według rozmiaru malejąco. Uwzględnij tylko te elementy, które mogą być odczytane przez osoby inne niż właściciel i członkowie wskazanej grupy.</li>
-          </ol>
         </div>
 
     </article>
