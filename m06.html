@@ -170,7 +170,7 @@
         <p class="footnote">[1] Należy ostrożnie obchodzić się z pojęciami <i>deklaracji</i> i <i>definicji</i> zmiennych i funkcji. Pliki nagłówkowe zawierają deklaracje funkcji (a czasem też stałych), zaś biblioteki ich definicje.</p>
 
         <div class="exercise">
-          <p>Sprójrz na <i>Ćwiczenie 8.1</i>. Odwoływaliśmy się w nim do funkcji <code>printf</code>, a jednak nigdzie jej nie definiowaliśmy. Gdzie została zadeklarowana? Gdzie była zdefiniowana? Dlaczego udało się skompilować program bez dołączania dodatkowych bibliotek?</p>
+          <p>Sprójrz na <i>Ćwiczenie 6.1</i>. Odwoływaliśmy się w nim do funkcji <code>printf</code>, a jednak nigdzie jej nie definiowaliśmy. Gdzie została zadeklarowana? Gdzie była zdefiniowana? Dlaczego udało się skompilować program bez dołączania dodatkowych bibliotek?</p>
         </div>
       </div>
 
@@ -193,7 +193,8 @@
         <pre><code class="no-highlight"><!--
        -->$ gcc -o sin sin.c
 <!--   -->$ gcc -l m -o sin sin.c
-<!--   -->$ gcc -lm -o sin sin.c
+<!--   -->$ gcc -o sin sin.c -l m
+<!--   -->$ gcc -o sin sin.c -lm
 <!--   --></code></pre>
         <p>Skomentuj efekty.</p>
       </div>
