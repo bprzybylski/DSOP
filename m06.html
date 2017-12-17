@@ -235,7 +235,7 @@
 <!--   -->}
 <!--   --></code></pre>
         <p>i skompiluj go z wykorzystaniem utworzonej biblioteki dynamicznej <code>libhellobye.so</code>, wykonując polecenie:</p>
-        <pre><code class="no-highlight">$ gcc -L . -l hellobye hello.c</code></pre>
+        <pre><code class="no-highlight">$ gcc -L . hello.c -l hellobye</code></pre>
         <p>Za co odpowiada opcja <code>-L</code>? Dlaczego program nie uruchomi się? Zmodyfikuj wartość zmiennej systemowej <code>LD_LIBRARY_PATH</code> w taki sposób, aby możliwe było uruchomienie programu. Usuń plik biblioteki i sprawdź, czy program dalej będzie działać.</p>
 
         <p><a href="#" class="button button-blue" rel="answer">Zobacz odpowiedź</a></p>
