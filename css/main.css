@@ -153,6 +153,7 @@ article#m09{ counter-reset: modul 9; }
 article#m10{ counter-reset: modul 10; }
 article#m11{ counter-reset: modul 11; }
 article#m12{ counter-reset: modul 12; }
+article#m13{ counter-reset: modul 13; }
 
 article h1{
   counter-increment: section;

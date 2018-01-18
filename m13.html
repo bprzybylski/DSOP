@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html moznomarginboxes mozdisallowselectionprint>
+<head>
+    <title>DSOP LI0 &mdash; Systemy operacyjne &mdash; Materiały do zajęć</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="index,follow"/>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen:400&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+          delayStartupUntil: onload
+        },
+        TeX: { equationNumbers: {autoNumber: "AMS"} }
+      });
+    </script>
+    <script type="text/javascript" src="js/js.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/arduino-light.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<div id="wrapper">
+    <header id="main-header">
+        <h1>Moduł 13</h1>
+        <h2>Materiały do zajęć z <i>Systemów operacyjnych</i> prowadzonych na Wydziale Matematyki i&nbsp;Informatyki Uniwersytetu im. Adama Mickiewicza w Poznaniu.</h2>
+        <h3><a href="index.html" class="button button-grey">&laquo; Wróć do spisu materiałów</a></h3>
+    </header>
+
+    <article id="m13">
+
+      <h1>Wprowadzenie do powłoki PowerShell</h1>
+
+      <p>Windows PowerShell jest specjalistyczną powłoką tekstową systemu Windows, która zastępuje powoli (o ile jeszcze nie zastąpiła) standardową powłokę systemu Windows, zwaną <i>wierszem poleceń</i>. Jej pierwsza wersja została opublikowana w 2006 roku.</p>
+
+      <p>System Windows udostępnia kilka podobnych interfejsów dla powłoki PowerShell. Ich nazwy to: <i>PowerShell</i> (program wirtualnego terminala), <i>PowerShell ISE</i> (z ang. <i>Integrated Scripting Environment</i>) oraz <i>PowerShell (x86)</i> (wersja zachowująca wsteczną kompatybilność).</p>
+
+      <p>Aby uruchomić powłokę PowerShell na komputerze z systemem Windows, wciśnij kombinację klawiszy <kbd>Win</kbd> + <kbd>R</kbd>, a następnie wprowadź polecenie <code>powershell</code> i wciśnij klawisz <kbd>Enter</kbd>. W otwartym oknie powłoki PowerShell wyświetli się informacja początkowa i znak zachęty, podobny do tego znanego z powłoki Bash, np.</p>
+
+      <pre><code class="no-highlight"><!--
+       -->Windows PowerShell
+<!--   -->Copyright (C) 2016 Microsoft Corporation. All rights reserved.
+
+<!--   -->C:\Users\bap></code></pre>
+
+      <h2>Podstawowe polecenia</h2>
+
+      <p>Każde polecenie (określane też nazwą <i>cmdlet</i>) powłoki PowerShell ma pełną nazwę i nazwy skrócone, wygodniejsze w użyciu. Na przykład, polecenie <code>Get-ChildItem</code> jest odpowiednikiem uniksowego polecenia <code>ls</code>. W powłoce PowerShell można się do niego odwołać na kilka różnych, ale równoważnych sposobów, to znaczy: <code>Get-ChildItem</code>, <code>gci</code> albo <code>ls</code>.</p>
+
+      <div class="notice">
+        <p>Wszyscy wiemy, co robi program <code>ls</code> znany z systemów uniksopodobnych. W przypadku powłoki PowerShell, polecenie <code>ls</code> jest aliasem do polecenia <code>Get-ChildItem</code> i zachowuje się zgoła inaczej.</p>
+        <pre><code class="no-highlight"><!--
+         -->PS C:\Users\bap> ls
+
+
+<!--     -->    Directory: C:\Users\bap
+
+
+<!--     -->Mode                LastWriteTime         Length Name
+<!--     -->----                -------------         ------ ----
+<!--     -->d-r---       05.01.2018     08:22                Contacts
+<!--     -->d-r---       07.10.2017     20:02                Desktop
+<!--     -->d-r---       18.01.2018     12:24                Documents
+<!--     -->d-r---       07.10.2017     20:02                Downloads
+<!--     -->d-r---       05.01.2018     08:22                Favorites
+<!--     -->d-r---       05.01.2018     08:22                Links
+<!--     -->d-r---       07.10.2017     20:02                Music
+<!--     -->d-r---       07.10.2017     20:02                Pictures
+<!--     -->d-r---       05.01.2018     08:22                Saved Games
+<!--     -->d-r---       05.01.2018     08:22                Searches
+<!--     -->d-r---       07.10.2017     20:02                Videos
+
+
+<!--     -->PS C:\Users\bap></code></pre>
+      </div>
+
+      <p>Poniżej znajduje się tabela, która prezentuje podstawowe polecenia powłoki PowerShell, ich aliasy oraz odpowiedniki w systemach uniksopodobnych.</p>
+
+      <table>
+        <tr><th>Cmdlet</th><th style="width: 16em;">Aliasy</th><th style="width: 16em;">Odpowiednik w systemach uniksopodobnych/powłoce Bash</th></tr>
+        <tr><td><code>Get-ChildItem</code></td><td><code>gci</code>, <code>ls</code></td><td><code>ls</code></td></tr>
+        <tr><td><code>Set-Location</code></td><td><code>sl</code>, <code>cd</code></td><td><code>cd</code></td></tr>
+        <tr><td><code>Set-Location</code></td><td><code>sl</code>, <code>cd</code></td><td><code>cd</code></td></tr>
+        <tr><td><code>New-Item</code></td><td><code>ni</code>, <code>mkdir</code> (wywołanie z parametrem <code>-ItemType dir</code>)</td><td><code>touch</code>, <code>mkdir</code></td></tr>
+        <tr><td><code>Remove-Item</code></td><td><code>rm</code></td><td><code>rm</code></td></tr>
+        <tr><td><code>Move-Item</code></td><td><code>mv</code></td><td><code>mv</code></td></tr>
+        <tr><td><code>Copy-Item</code></td><td><code>cp</code></td><td><code>cp</code></td></tr>
+        <tr><td><code>Write-Output</code></td><td><code>write</code>, <code>echo</code></td><td><code>echo</code></td></tr>
+        <tr><td><code>Get-Content</code></td><td><code>gc</code>, <code>cat</code></td><td><code>cat</code></td></tr>
+        <tr><td><code>Get-Help</code></td><td></td><td><code>man</code></td></tr>
+      </table>
+
+      <div class="exercise">
+        <p>Wykorzystaj polecenie <code>Get-Help</code>, aby uzyskać informacje o wszystkich poleceniach wymienionych w powyższej tabeli. W tym celu wykonaj na przykład polecenie</p>
+        <pre><code class="cmd"><!--
+       -->> Get-Help -online Get-Content
+<!--   --></code></pre>
+        <p>Opcja <code>-online</code> pozwala przeszukiwać repozytoria online w poszukiwaniu dokumentacji polecenia.</p>
+      </div>
+
+      <div class="exercise">
+        <p>Wykonaj poniższe polecenia i zastanów się nad ich efektami. Jakie istotne różnice widać pomiędzy implementacją poleceń w powłoce PowerShell a programami powłoki Bash?</p>
+        <pre><code class="cmd"><!--
+       -->> sl ..
+<!--   -->> sl ~
+<!--   -->> mkdir a, b, c
+<!--   -->> sl a
+<!--   -->> write > plik-1.txt
+<!--   -->> write a b c
+<!--   -->> write a, b, c
+<!--   -->> write a, b, c, d, e, f, g, h > plik-2.txt
+<!--   -->> gc
+<!--   -->> gc plik-1.txt
+<!--   -->> gc plik-*.txt
+<!--   -->> gc plik-2.txt -tail 5
+<!--   -->> gc plik-2.txt -totalcount 5
+<!--   -->> gc plik-2.txt | measure -l -w -c
+<!--   -->> gc plik-2.txt | measure -line -word -character
+<!--   -->> gc plik-*.txt | measure -line -word -character
+<!--   --></code></pre>
+        <p>Zapoznaj się z innymi opcjami poznanych poleceń i przetestuj je w praktyce.</p>
+      </div>
+
+    </article>
+
+    <footer id="main-footer">
+        <p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="img/cc-by-nc-sa.png" /></a></p>
+        <p>&copy; 2016&ndash2017 Bartłomiej Przybylski. Wszystkie materiały zebrane na tej stronie udostępniane są na licencji Creative Commons Uznanie autorstwa-Użycie niekomercyjne-Na tych samych warunkach 4.0 Międzynarodowe.</p>
+    </footer>
+</div>
+
+</body>
+</html>
